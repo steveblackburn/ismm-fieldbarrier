@@ -169,14 +169,7 @@ public class BootRecord {
    * Print messages when delivering hardware exceptions to threads?
    * Set by -X:verboseSignalHandling
    */
-  public
-
-
-
-
-
-
-  int verboseSignalHandling = 0;
+  public int verboseSignalHandling = 0;
 
   // RVM startoff
   //
