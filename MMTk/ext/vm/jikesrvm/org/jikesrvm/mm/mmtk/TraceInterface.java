@@ -62,7 +62,7 @@ public final class TraceInterface extends org.mmtk.vm.TraceInterface {
     allocCallMethods[0] = "postAlloc".getBytes();
     allocCallMethods[1] = "traceAlloc".getBytes();
     allocCallMethods[2] = "allocateScalar".getBytes();
-    allocCallMethods[3] = "allocateArray".getBytes();
+    allocCallMethods[3] = "allocateJTOCArray".getBytes();
     allocCallMethods[4] = "clone".getBytes();
     allocCallMethods[5] = "alloc".getBytes();
     allocCallMethods[6] = "buildMultiDimensionalArray".getBytes();

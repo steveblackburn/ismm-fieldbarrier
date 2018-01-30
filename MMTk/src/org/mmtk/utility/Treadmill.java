@@ -170,11 +170,6 @@ public final class Treadmill {
   }
 
   @Inline
-  public static Address nodeToPayload(Address payload) {
-    return DoublyLinkedList.nodeToPayload(payload);
-  }
-
-  @Inline
   public static Address midPayloadToNode(Address payload) {
     return DoublyLinkedList.midPayloadToNode(payload);
   }

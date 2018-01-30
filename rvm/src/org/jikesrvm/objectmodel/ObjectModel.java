@@ -12,9 +12,8 @@
  */
 package org.jikesrvm.objectmodel;
 
-import static org.jikesrvm.objectmodel.JavaHeaderConstants.ADDRESS_BASED_HASHING;
-import static org.jikesrvm.objectmodel.JavaHeaderConstants.ARRAY_LENGTH_OFFSET;
-import static org.jikesrvm.objectmodel.JavaHeaderConstants.HASHCODE_BYTES;
+import static org.jikesrvm.objectmodel.JavaHeaderConstants.*;
+import static org.jikesrvm.runtime.JavaSizeConstants.BITS_IN_DOUBLE;
 import static org.jikesrvm.runtime.JavaSizeConstants.BYTES_IN_INT;
 
 import org.jikesrvm.VM;
@@ -913,6 +912,9 @@ public class ObjectModel {
       }
     }
     int align = getAlignment(klass);
+    int padbytes = (size + 3) >> 2; // Gen.FIELD_BARRIER_USE_BYTE ? (bytes + 3) >> 2 : (bytes + 31) >> 5;
+    size += padbytes;
+    size = size + ((-size) & ((1<<LOG_MIN_ALIGNMENT) - 1));
     int offset = getOffsetForAlignment(klass, needsIdentityHash);
     Address ptr = bootImage.allocateDataStorage(size, align, offset);
     Address ref = JavaHeader.initializeScalarHeader(bootImage, ptr, tib, size, needsIdentityHash, identityHashValue);
@@ -973,7 +975,9 @@ public class ObjectModel {
   @Interruptible
   public static Address allocateArray(BootImageInterface bootImage, RVMArray array, int numElements, boolean needsIdentityHash, int identityHashValue, int alignCode) {
     int align = getAlignment(array);
-    return allocateArray(bootImage, array, numElements, needsIdentityHash, identityHashValue, align, alignCode);
+    int pad = numElements; // Gen.FIELD_BARRIER_USE_BYTE ? (bytes + 3) >> 2 : (bytes + 31) >> 5;
+
+    return allocateArray(bootImage, array, numElements, needsIdentityHash, identityHashValue, align, pad, alignCode);
   }
 
   /**
@@ -991,7 +995,7 @@ public class ObjectModel {
    * @return Address of object in bootimage (in bytes)
    */
   @Interruptible
-  public static Address allocateArray(BootImageInterface bootImage, RVMArray array, int numElements, boolean needsIdentityHash, int identityHashValue, int align, int alignCode) {
+  public static Address allocateArray(BootImageInterface bootImage, RVMArray array, int numElements, boolean needsIdentityHash, int identityHashValue, int align, int pad, int alignCode) {
     TIB tib = array.getTypeInformationBlock();
     int size = array.getInstanceSize(numElements);
     if (needsIdentityHash) {
@@ -1005,6 +1009,8 @@ public class ObjectModel {
     }
     int offset = getOffsetForAlignment(array, needsIdentityHash);
     int padding = AlignmentEncoding.padding(alignCode);
+    size += pad;
+    size = size + ((-size) & ((1<<LOG_MIN_ALIGNMENT) - 1));
     Address ptr = bootImage.allocateDataStorage(size + padding, align, offset);
     ptr = AlignmentEncoding.adjustRegion(alignCode, ptr);
     Address ref = JavaHeader.initializeArrayHeader(bootImage, ptr, tib, size, numElements, needsIdentityHash, identityHashValue);

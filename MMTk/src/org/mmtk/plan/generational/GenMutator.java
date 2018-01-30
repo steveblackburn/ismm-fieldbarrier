@@ -16,6 +16,7 @@ import org.mmtk.plan.*;
 import org.mmtk.policy.CopyLocal;
 import org.mmtk.policy.Space;
 import org.mmtk.utility.HeaderByte;
+import org.mmtk.utility.Log;
 import org.mmtk.utility.deque.*;
 import org.mmtk.utility.alloc.Allocator;
 import org.mmtk.utility.statistics.Stats;
@@ -86,11 +87,34 @@ import org.vmmagic.unboxed.*;
   @Override
   @Inline
   public Address alloc(int bytes, int align, int offset, int allocator, int site) {
+    int padbytes = 0;
+    if (Gen.USE_FIELD_BARRIER) {
+      padbytes = Gen.FIELD_BARRIER_USE_BYTE ? (bytes + 3) >> 2 : (bytes + 31) >> 5;
+     // return size + ((-size) & ((1 << JavaHeader.LOG_MIN_ALIGNMENT) - 1));
+
+    //  int pad = (padbytes + (MIN_ALIGNMENT - 1)) & ~(MIN_ALIGNMENT - 1);
+     // bytes += pad;
+   //   Log.write("alloc: b: ");Log.write(bytes);Log.write(" o: ");Log.write(offset); Log.write(" p: "); Log.write(padbytes);
+    //  padbytes = padbytes + ((-padbytes) & (MIN_ALIGNMENT - 1));
+    //  offset += padbytes;
+      bytes += padbytes;
+      bytes = bytes + ((-bytes) & (MIN_ALIGNMENT - 1));
+
+  //    Log.write(" b: "); Log.write(bytes); Log.write(" a: "); Log.writeln(MIN_ALIGNMENT);
+      if (VM.VERIFY_ASSERTIONS) {
+
+        VM.assertions._assert((offset & (MIN_ALIGNMENT - 1)) == 0);
+      }
+    }
     if (allocator == Gen.ALLOC_NURSERY) {
       if (Stats.GATHER_MARK_CONS_STATS) Gen.nurseryCons.inc(bytes);
-      return nursery.alloc(bytes, align, offset);
+      Address rtn = nursery.alloc(bytes, align, offset);//.plus(padbytes);
+    //  Log.write("r: "); Log.writeln(rtn);
+      return rtn;
     }
-    return super.alloc(bytes, align, offset, allocator, site);
+    Address rtn = super.alloc(bytes, align, offset, allocator, site);//.plus(padbytes);
+    //Log.write("R: "); Log.writeln(rtn);
+    return rtn;
   }
 
   @Override
@@ -98,6 +122,7 @@ import org.vmmagic.unboxed.*;
   public void postAlloc(ObjectReference ref, ObjectReference typeRef,
       int bytes, int allocator) {
     if (allocator != Gen.ALLOC_NURSERY) {
+     // Log.write("pa: "); Log.writeln(ref);
       super.postAlloc(ref, typeRef, bytes, allocator);
     }
   }

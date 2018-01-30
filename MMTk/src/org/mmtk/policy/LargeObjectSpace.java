@@ -15,6 +15,7 @@ package org.mmtk.policy;
 import static org.mmtk.utility.Constants.LOG_BYTES_IN_PAGE;
 
 import org.mmtk.plan.TransitiveClosure;
+import org.mmtk.utility.Log;
 import org.mmtk.utility.heap.FreeListPageResource;
 import org.mmtk.utility.heap.VMRequest;
 import org.mmtk.utility.HeaderByte;
@@ -225,6 +226,7 @@ public final class LargeObjectSpace extends BaseLargeObjectSpace {
     if (HeaderByte.NEEDS_UNLOGGED_BIT) newValue |= HeaderByte.UNLOGGED_BIT;
     VM.objectModel.writeAvailableByte(object, newValue);
     Address cell = VM.objectModel.objectStartRef(object);
+    //Log.write("sr: "); Log.writeln(cell);
     treadmill.addToTreadmill(Treadmill.midPayloadToNode(cell), alloc);
   }
 

@@ -15,6 +15,7 @@ package org.jikesrvm.tools.bootImageWriter;
 import static org.jikesrvm.HeapLayoutConstants.BOOT_IMAGE_CODE_START;
 import static org.jikesrvm.HeapLayoutConstants.BOOT_IMAGE_DATA_START;
 import static org.jikesrvm.HeapLayoutConstants.BOOT_IMAGE_RMAP_START;
+import static org.jikesrvm.objectmodel.JavaHeaderConstants.LOG_MIN_ALIGNMENT;
 import static org.jikesrvm.runtime.JavaSizeConstants.BYTES_IN_BOOLEAN;
 import static org.jikesrvm.runtime.JavaSizeConstants.BYTES_IN_BYTE;
 import static org.jikesrvm.runtime.JavaSizeConstants.BYTES_IN_CHAR;
@@ -1014,7 +1015,7 @@ public class BootImageWriter {
       if (VM.BuildForIA32) {
         // Force 16byte alignment of the JTOC on Intel
         int[] slots = Statics.getSlotsAsIntArray();
-        jtocImageAddress = bootImage.allocateArray(RVMArray.IntArray, slots.length, false, 0, 16, AlignmentEncoding.ALIGN_CODE_NONE);
+        jtocImageAddress = bootImage.allocateJTOCArray(RVMArray.IntArray, slots.length, false, 0, 16, AlignmentEncoding.ALIGN_CODE_NONE);
         BootImageMap.Entry jtocEntry = BootImageMap.findOrCreateEntry(slots);
         jtocEntry.imageAddress = jtocImageAddress;
       }
@@ -1455,7 +1456,12 @@ public class BootImageWriter {
       RVMClass rvmBRType = getRvmType(bootRecord.getClass()).asClass();
       RVMArray intArrayType =  RVMArray.IntArray;
       // allocate storage for boot record
-      bootImage.allocateDataStorage(rvmBRType.getInstanceSize(),
+      int size = rvmBRType.getInstanceSize();
+    int padbytes = (size + 3) >> 2; // Gen.FIELD_BARRIER_USE_BYTE ? (bytes + 3) >> 2 : (bytes + 31) >> 5;
+    size += padbytes;
+    size = size + ((-size) & ((1<<LOG_MIN_ALIGNMENT) - 1));
+
+      bootImage.allocateDataStorage(size,
                                     ObjectModel.getAlignment(rvmBRType),
                                     ObjectModel.getOffsetForAlignment(rvmBRType, false));
       // allocate storage for JTOC (force 16byte alignment of the JTOC on Intel)
@@ -1463,6 +1469,7 @@ public class BootImageWriter {
                                                           VM.BuildForIA32 ? 16 : ObjectModel.getAlignment(intArrayType),
                                                           ObjectModel.getOffsetForAlignment(intArrayType, false));
       bootImage.resetAllocator();
+      say("jtocAddress: "+jtocAddress);
       bootRecord.tocRegister = jtocAddress.plus(intArrayType.getInstanceSize(Statics.middleOfTable));
 
       // set up some stuff we need for compiling
