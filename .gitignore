@@ -1,4 +1,6 @@
-jikesrvm.iml
+# intellij
+*.iml
+/.idea
 
 # Local configuration
 /.ant.properties
