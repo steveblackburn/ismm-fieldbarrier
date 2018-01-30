@@ -15,6 +15,7 @@ package org.jikesrvm.tools.bootImageWriter;
 import static org.jikesrvm.HeapLayoutConstants.BOOT_IMAGE_CODE_START;
 import static org.jikesrvm.HeapLayoutConstants.BOOT_IMAGE_DATA_START;
 import static org.jikesrvm.HeapLayoutConstants.BOOT_IMAGE_RMAP_START;
+import static org.jikesrvm.mm.mminterface.MemoryManagerConstants.USE_FIELD_BARRIER_FOR_PUTFIELD;
 import static org.jikesrvm.objectmodel.JavaHeaderConstants.LOG_MIN_ALIGNMENT;
 import static org.jikesrvm.runtime.JavaSizeConstants.BYTES_IN_BOOLEAN;
 import static org.jikesrvm.runtime.JavaSizeConstants.BYTES_IN_BYTE;
@@ -1457,10 +1458,11 @@ public class BootImageWriter {
       RVMArray intArrayType =  RVMArray.IntArray;
       // allocate storage for boot record
       int size = rvmBRType.getInstanceSize();
-    int padbytes = (size + 3) >> 2; // Gen.FIELD_BARRIER_USE_BYTE ? (bytes + 3) >> 2 : (bytes + 31) >> 5;
-    size += padbytes;
-    size = size + ((-size) & ((1<<LOG_MIN_ALIGNMENT) - 1));
-
+      if (USE_FIELD_BARRIER_FOR_PUTFIELD) {
+        int padbytes = (size + 3) >> 2; // Gen.FIELD_BARRIER_USE_BYTE ? (bytes + 3) >> 2 : (bytes + 31) >> 5;
+        size += padbytes;
+        size = size + ((-size) & ((1 << LOG_MIN_ALIGNMENT) - 1));
+      }
       bootImage.allocateDataStorage(size,
                                     ObjectModel.getAlignment(rvmBRType),
                                     ObjectModel.getOffsetForAlignment(rvmBRType, false));
@@ -1469,7 +1471,6 @@ public class BootImageWriter {
                                                           VM.BuildForIA32 ? 16 : ObjectModel.getAlignment(intArrayType),
                                                           ObjectModel.getOffsetForAlignment(intArrayType, false));
       bootImage.resetAllocator();
-      say("jtocAddress: "+jtocAddress);
       bootRecord.tocRegister = jtocAddress.plus(intArrayType.getInstanceSize(Statics.middleOfTable));
 
       // set up some stuff we need for compiling

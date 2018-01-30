@@ -305,4 +305,12 @@ import org.vmmagic.pragma.*;
   public int maxNumGCThreads() {
     return Integer.MAX_VALUE;
   }
+
+  public boolean useFieldBarrierForPutfield() { return false; }
+
+  public boolean useFieldBarrierForAAStore() { return false; }
+
+  public boolean useFieldBarrier() { return false; }
+
+  public boolean fieldBarrierUseByte() { return false; }
 }

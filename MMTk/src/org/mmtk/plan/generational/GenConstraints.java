@@ -92,4 +92,16 @@ public class GenConstraints extends StopTheWorldConstraints {
         (int)fracAvailable;
   }
 
+  @Override
+  public boolean useFieldBarrierForPutfield() { return Gen.USE_FIELD_BARRIER_FOR_PUTFIELD; }
+
+  @Override
+  public boolean useFieldBarrierForAAStore() { return Gen.USE_FIELD_BARRIER_FOR_AASTORE; }
+
+  @Override
+  public boolean useFieldBarrier() { return Gen.USE_FIELD_BARRIER; }
+
+  @Override
+  public boolean fieldBarrierUseByte() { return Gen.FIELD_BARRIER_USE_BYTE; }
+
 }

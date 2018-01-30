@@ -12,6 +12,9 @@
  */
 package org.jikesrvm.objectmodel;
 
+import static org.jikesrvm.mm.mminterface.MemoryManagerConstants.USE_FIELD_BARRIER;
+import static org.jikesrvm.mm.mminterface.MemoryManagerConstants.USE_FIELD_BARRIER_FOR_AASTORE;
+import static org.jikesrvm.mm.mminterface.MemoryManagerConstants.USE_FIELD_BARRIER_FOR_PUTFIELD;
 import static org.jikesrvm.objectmodel.JavaHeaderConstants.*;
 import static org.jikesrvm.runtime.JavaSizeConstants.BITS_IN_DOUBLE;
 import static org.jikesrvm.runtime.JavaSizeConstants.BYTES_IN_INT;
@@ -912,9 +915,11 @@ public class ObjectModel {
       }
     }
     int align = getAlignment(klass);
-    int padbytes = (size + 3) >> 2; // Gen.FIELD_BARRIER_USE_BYTE ? (bytes + 3) >> 2 : (bytes + 31) >> 5;
-    size += padbytes;
-    size = size + ((-size) & ((1<<LOG_MIN_ALIGNMENT) - 1));
+    if (USE_FIELD_BARRIER_FOR_PUTFIELD) {
+      int padbytes = (size + 3) >> 2; // Gen.FIELD_BARRIER_USE_BYTE ? (bytes + 3) >> 2 : (bytes + 31) >> 5;
+      size += padbytes;
+      size = size + ((-size) & ((1 << LOG_MIN_ALIGNMENT) - 1));
+    }
     int offset = getOffsetForAlignment(klass, needsIdentityHash);
     Address ptr = bootImage.allocateDataStorage(size, align, offset);
     Address ref = JavaHeader.initializeScalarHeader(bootImage, ptr, tib, size, needsIdentityHash, identityHashValue);
@@ -975,7 +980,7 @@ public class ObjectModel {
   @Interruptible
   public static Address allocateArray(BootImageInterface bootImage, RVMArray array, int numElements, boolean needsIdentityHash, int identityHashValue, int alignCode) {
     int align = getAlignment(array);
-    int pad = numElements; // Gen.FIELD_BARRIER_USE_BYTE ? (bytes + 3) >> 2 : (bytes + 31) >> 5;
+    int pad = USE_FIELD_BARRIER_FOR_AASTORE ? numElements : 0; // Gen.FIELD_BARRIER_USE_BYTE ? (bytes + 3) >> 2 : (bytes + 31) >> 5;
 
     return allocateArray(bootImage, array, numElements, needsIdentityHash, identityHashValue, align, pad, alignCode);
   }
@@ -1009,8 +1014,10 @@ public class ObjectModel {
     }
     int offset = getOffsetForAlignment(array, needsIdentityHash);
     int padding = AlignmentEncoding.padding(alignCode);
-    size += pad;
-    size = size + ((-size) & ((1<<LOG_MIN_ALIGNMENT) - 1));
+    if (USE_FIELD_BARRIER_FOR_AASTORE) {
+      size += pad;
+      size = size + ((-size) & ((1 << LOG_MIN_ALIGNMENT) - 1));
+    }
     Address ptr = bootImage.allocateDataStorage(size + padding, align, offset);
     ptr = AlignmentEncoding.adjustRegion(alignCode, ptr);
     Address ref = JavaHeader.initializeArrayHeader(bootImage, ptr, tib, size, numElements, needsIdentityHash, identityHashValue);
