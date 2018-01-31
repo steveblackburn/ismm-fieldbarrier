@@ -76,7 +76,7 @@ public class StickyImmixMutator extends ImmixMutator {
   @Override
   @Inline
   public final void objectReferenceWrite(ObjectReference src, Address slot,
-      ObjectReference tgt, Word metaDataA, Word metaDataB, int mode) {
+      ObjectReference tgt, Word metaDataA, Word metaDataB, int mode, int markoffset) {
     if (HeaderByte.isUnlogged(src))
       logSource(src);
     VM.barriers.objectReferenceWrite(src, tgt, metaDataA, metaDataB, mode);
@@ -113,7 +113,7 @@ public class StickyImmixMutator extends ImmixMutator {
   @Inline
   public boolean objectReferenceTryCompareAndSwap(ObjectReference src, Address slot,
                                                ObjectReference old, ObjectReference tgt, Word metaDataA,
-                                               Word metaDataB, int mode) {
+                                               Word metaDataB, int mode, int markOffset) {
     if (HeaderByte.isUnlogged(src))
       logSource(src);
     return VM.barriers.objectReferenceTryCompareAndSwap(src,old,tgt,metaDataA,metaDataB,mode);

@@ -206,7 +206,7 @@ public class RCBaseMutator extends StopTheWorldMutator {
   @Inline
   public void objectReferenceWrite(ObjectReference src, Address slot,
                            ObjectReference tgt, Word metaDataA,
-                           Word metaDataB, int mode) {
+                           Word metaDataB, int mode, int markoffset) {
     if (RCHeader.logRequired(src)) {
       coalescingWriteBarrierSlow(src);
     }
@@ -217,7 +217,7 @@ public class RCBaseMutator extends StopTheWorldMutator {
   @Inline
   public boolean objectReferenceTryCompareAndSwap(ObjectReference src, Address slot,
                                                ObjectReference old, ObjectReference tgt, Word metaDataA,
-                                               Word metaDataB, int mode) {
+                                               Word metaDataB, int mode, int markOffset) {
     if (RCHeader.logRequired(src)) {
       coalescingWriteBarrierSlow(src);
     }

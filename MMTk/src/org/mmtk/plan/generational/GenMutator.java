@@ -89,18 +89,17 @@ import org.vmmagic.unboxed.*;
   public Address alloc(int bytes, int align, int offset, int allocator, int site) {
     int padbytes = 0;
     if (Gen.USE_FIELD_BARRIER) {
-      padbytes = Gen.FIELD_BARRIER_USE_BYTE ? (bytes + 3) >> 2 : (bytes + 31) >> 5;
+      padbytes = (Gen.FIELD_BARRIER_USE_BYTE ? (bytes + 3) >> 2 : (bytes + 31) >> 5);
      // return size + ((-size) & ((1 << JavaHeader.LOG_MIN_ALIGNMENT) - 1));
 
     //  int pad = (padbytes + (MIN_ALIGNMENT - 1)) & ~(MIN_ALIGNMENT - 1);
      // bytes += pad;
-   //   Log.write("alloc: b: ");Log.write(bytes);Log.write(" o: ");Log.write(offset); Log.write(" p: "); Log.write(padbytes);
+    //     Log.write("alloc: b: ");Log.write(bytes);Log.write(" o: ");Log.write(offset); Log.write(" p: "); Log.write(padbytes);
     //  padbytes = padbytes + ((-padbytes) & (MIN_ALIGNMENT - 1));
     //  offset += padbytes;
       bytes += padbytes;
       bytes = bytes + ((-bytes) & (MIN_ALIGNMENT - 1));
-
-  //    Log.write(" b: "); Log.write(bytes); Log.write(" a: "); Log.writeln(MIN_ALIGNMENT);
+      //   Log.write(" b: "); Log.write(bytes); Log.write(" a: "); Log.writeln(MIN_ALIGNMENT);
       if (VM.VERIFY_ASSERTIONS) {
 
         VM.assertions._assert((offset & (MIN_ALIGNMENT - 1)) == 0);
@@ -109,11 +108,11 @@ import org.vmmagic.unboxed.*;
     if (allocator == Gen.ALLOC_NURSERY) {
       if (Stats.GATHER_MARK_CONS_STATS) Gen.nurseryCons.inc(bytes);
       Address rtn = nursery.alloc(bytes, align, offset);//.plus(padbytes);
-    //  Log.write("r: "); Log.writeln(rtn);
+   //    Log.write("r: "); Log.writeln(rtn);
       return rtn;
     }
     Address rtn = super.alloc(bytes, align, offset, allocator, site);//.plus(padbytes);
-    //Log.write("R: "); Log.writeln(rtn);
+   //   Log.write("R: "); Log.writeln(rtn);
     return rtn;
   }
 
@@ -149,8 +148,13 @@ import org.vmmagic.unboxed.*;
    * @param mode The mode of the store (eg putfield, putstatic etc)
    */
   @Inline
-  private void fastPath(ObjectReference src, Address slot, ObjectReference tgt, int mode) {
+  private void fastPath(ObjectReference src, Address slot, ObjectReference tgt, int mode, int markOffset) {
     if (Gen.GATHER_WRITE_BARRIER_STATS) Gen.wbFast.inc();
+    if (Gen.USE_FIELD_BARRIER_FOR_AASTORE && mode == ARRAY_ELEMENT && markOffset != 0) {
+      Address mark = src.toAddress().plus(markOffset);
+   //   Log.write(src.toAddress()); Log.write("->"); Log.write(slot); Log.write("->"); Log.writeln(mark);
+    //  mark.store((byte) 1);
+    }
     if ((mode == ARRAY_ELEMENT && USE_OBJECT_BARRIER_FOR_AASTORE) ||
         (mode == INSTANCE_FIELD && USE_OBJECT_BARRIER_FOR_PUTFIELD)) {
       if (HeaderByte.isUnlogged(src)) {
@@ -177,8 +181,8 @@ import org.vmmagic.unboxed.*;
   @Inline
   public final void objectReferenceWrite(ObjectReference src, Address slot,
       ObjectReference tgt, Word metaDataA,
-      Word metaDataB, int mode) {
-    fastPath(src, slot, tgt, mode);
+      Word metaDataB, int mode, int markOffset) {
+    fastPath(src, slot, tgt, mode, markOffset);
     VM.barriers.objectReferenceWrite(src, tgt, metaDataA, metaDataB, mode);
   }
 
@@ -225,10 +229,10 @@ import org.vmmagic.unboxed.*;
   @Override
   @Inline
   public boolean objectReferenceTryCompareAndSwap(ObjectReference src, Address slot, ObjectReference old, ObjectReference tgt,
-      Word metaDataA, Word metaDataB, int mode) {
+      Word metaDataA, Word metaDataB, int mode, int markOffset) {
     boolean result = VM.barriers.objectReferenceTryCompareAndSwap(src, old, tgt, metaDataA, metaDataB, mode);
     if (result)
-      fastPath(src, slot, tgt, mode);
+      fastPath(src, slot, tgt, mode, markOffset);
     return result;
   }
 
