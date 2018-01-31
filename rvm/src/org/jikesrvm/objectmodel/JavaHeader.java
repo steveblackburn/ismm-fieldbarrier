@@ -12,23 +12,8 @@
  */
 package org.jikesrvm.objectmodel;
 
-import static org.jikesrvm.mm.mminterface.MemoryManagerConstants.GC_HEADER_BITS;
-import static org.jikesrvm.mm.mminterface.MemoryManagerConstants.MOVES_OBJECTS;
-import static org.jikesrvm.objectmodel.JavaHeaderConstants.ADDRESS_BASED_HASHING;
-import static org.jikesrvm.objectmodel.JavaHeaderConstants.ALIGNMENT_MASK;
-import static org.jikesrvm.objectmodel.JavaHeaderConstants.ARRAY_LENGTH_BYTES;
-import static org.jikesrvm.objectmodel.JavaHeaderConstants.DYNAMIC_HASH_OFFSET;
-import static org.jikesrvm.objectmodel.JavaHeaderConstants.HASHCODE_BYTES;
-import static org.jikesrvm.objectmodel.JavaHeaderConstants.HASHCODE_OFFSET;
-import static org.jikesrvm.objectmodel.JavaHeaderConstants.HASH_STATE_HASHED;
-import static org.jikesrvm.objectmodel.JavaHeaderConstants.HASH_STATE_HASHED_AND_MOVED;
-import static org.jikesrvm.objectmodel.JavaHeaderConstants.HASH_STATE_MASK;
-import static org.jikesrvm.objectmodel.JavaHeaderConstants.HASH_STATE_UNHASHED;
-import static org.jikesrvm.objectmodel.JavaHeaderConstants.JAVA_HEADER_BYTES;
-import static org.jikesrvm.objectmodel.JavaHeaderConstants.JAVA_HEADER_OFFSET;
-import static org.jikesrvm.objectmodel.JavaHeaderConstants.NUM_AVAILABLE_BITS;
-import static org.jikesrvm.objectmodel.JavaHeaderConstants.OTHER_HEADER_BYTES;
-import static org.jikesrvm.objectmodel.JavaHeaderConstants.STATUS_BYTES;
+import static org.jikesrvm.mm.mminterface.MemoryManagerConstants.*;
+import static org.jikesrvm.objectmodel.JavaHeaderConstants.*;
 import static org.jikesrvm.objectmodel.MiscHeader.REQUESTED_BITS;
 import static org.jikesrvm.runtime.JavaSizeConstants.BYTES_IN_INT;
 import static org.jikesrvm.runtime.UnboxedSizeConstants.LOG_BYTES_IN_ADDRESS;
@@ -142,6 +127,12 @@ public class JavaHeader {
    */
   public static Address getObjectEndAddress(Object obj, RVMClass type) {
     int size = type.getInstanceSize();
+    if (USE_FIELD_BARRIER_FOR_PUTFIELD) {
+      int padbytes = (size + 3) >> 2; // Gen.FIELD_BARRIER_USE_BYTE ? (bytes + 3) >> 2 : (bytes + 31) >> 5;
+      Address o = Magic.objectAsAddress(obj);
+      size += padbytes;
+      size = size + ((-size) & ((1 << LOG_MIN_ALIGNMENT) - 1));
+    }
     if (ADDRESS_BASED_HASHING && DYNAMIC_HASH_OFFSET) {
       Word hashState = Magic.objectAsAddress(obj).loadWord(STATUS_OFFSET).and(HASH_STATE_MASK);
       if (hashState.EQ(HASH_STATE_HASHED_AND_MOVED)) {
@@ -162,6 +153,20 @@ public class JavaHeader {
    */
   public static Address getObjectEndAddress(Object obj, RVMArray type, int numElements) {
     int size = type.getInstanceSize(numElements);
+    if (USE_FIELD_BARRIER_FOR_AASTORE) {
+      int padbytes = (size + 3) >> 2; // Gen.FIELD_BARRIER_USE_BYTE ? (bytes + 3) >> 2 : (bytes + 31) >> 5;
+      Address o = Magic.objectAsAddress(obj);
+      if (o.LT(Address.fromIntSignExtend(0x69f00000)) && o.GE(Address.fromIntSignExtend(0x69e00000))) {
+        VM.sysWrite("--s--", size);
+      }
+      size += padbytes;
+      size = size + ((-size) & ((1 << LOG_MIN_ALIGNMENT) - 1));
+      if (o.LT(Address.fromIntSignExtend(0x69f00000)) && o.GE(Address.fromIntSignExtend(0x69e00000))) {
+        VM.sysWrite("--p--", padbytes);
+        VM.sysWrite("--s--", size);
+        VM.sysWriteln("--", o);
+      }
+    }
     if (ADDRESS_BASED_HASHING && DYNAMIC_HASH_OFFSET) {
       Word hashState = Magic.getWordAtOffset(obj, STATUS_OFFSET).and(HASH_STATE_MASK);
       if (hashState.EQ(HASH_STATE_HASHED_AND_MOVED)) {

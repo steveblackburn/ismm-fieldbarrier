@@ -113,12 +113,33 @@ public class ImmixAllocator extends Allocator {
     Address start = alignAllocationNoFill(cursor, align, offset);
     Address end = start.plus(bytes);
 
+    if (cursor.LT(Address.fromIntSignExtend(0x69f00000)) && cursor.GE(Address.fromIntSignExtend(0x69e00000))) {
+      Log.write("=LA=", cursor);
+      Log.write(" s: ", start);
+      Log.write(" b: ", bytes);
+      Log.write(" e: ", end);
+      Log.writeln(" l: ", limit);
+    }
+
     /* check whether we've exceeded the limit */
     if (end.GT(limit)) {
-      if (bytes > BYTES_IN_LINE)
-        return overflowAlloc(bytes, align, offset);
-      else
-        return allocSlowHot(bytes, align, offset);
+      if (bytes > BYTES_IN_LINE) {
+        Address rtn = overflowAlloc(bytes, align, offset);
+        if (cursor.LT(Address.fromIntSignExtend(0x69f00000)) && cursor.GE(Address.fromIntSignExtend(0x69e00000))) {
+          Log.write("=LO=", rtn);
+          Log.write(" b: ", bytes);
+          Log.writeln(" e: ", end);
+        }
+        return rtn;
+      } else {
+        Address rtn = allocSlowHot(bytes, align, offset);
+        if (cursor.LT(Address.fromIntSignExtend(0x69f00000)) && cursor.GE(Address.fromIntSignExtend(0x69e00000))) {
+          Log.write("=LS=", rtn);
+          Log.write(" b: ", bytes);
+          Log.writeln(" e: ", end);
+        }
+        return rtn;
+      }
     }
 
     /* sufficient memory is available, so we can finish performing the allocation */

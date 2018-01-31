@@ -21,8 +21,12 @@ import org.mmtk.utility.deque.*;
 import org.mmtk.utility.alloc.Allocator;
 import org.mmtk.utility.statistics.Stats;
 import org.mmtk.vm.VM;
+
+import static org.mmtk.plan.Plan.*;
+import static org.mmtk.plan.generational.Gen.NURSERY;
 import static org.mmtk.plan.generational.Gen.USE_OBJECT_BARRIER_FOR_AASTORE;
 import static org.mmtk.plan.generational.Gen.USE_OBJECT_BARRIER_FOR_PUTFIELD;
+import static org.mmtk.plan.generational.immix.GenImmix.IMMIX;
 import static org.mmtk.utility.Constants.*;
 
 import org.vmmagic.pragma.*;
@@ -87,24 +91,7 @@ import org.vmmagic.unboxed.*;
   @Override
   @Inline
   public Address alloc(int bytes, int align, int offset, int allocator, int site) {
-    int padbytes = 0;
-    if (Gen.USE_FIELD_BARRIER) {
-      padbytes = (Gen.FIELD_BARRIER_USE_BYTE ? (bytes + 3) >> 2 : (bytes + 31) >> 5);
-     // return size + ((-size) & ((1 << JavaHeader.LOG_MIN_ALIGNMENT) - 1));
 
-    //  int pad = (padbytes + (MIN_ALIGNMENT - 1)) & ~(MIN_ALIGNMENT - 1);
-     // bytes += pad;
-    //     Log.write("alloc: b: ");Log.write(bytes);Log.write(" o: ");Log.write(offset); Log.write(" p: "); Log.write(padbytes);
-    //  padbytes = padbytes + ((-padbytes) & (MIN_ALIGNMENT - 1));
-    //  offset += padbytes;
-      bytes += padbytes;
-      bytes = bytes + ((-bytes) & (MIN_ALIGNMENT - 1));
-      //   Log.write(" b: "); Log.write(bytes); Log.write(" a: "); Log.writeln(MIN_ALIGNMENT);
-      if (VM.VERIFY_ASSERTIONS) {
-
-        VM.assertions._assert((offset & (MIN_ALIGNMENT - 1)) == 0);
-      }
-    }
     if (allocator == Gen.ALLOC_NURSERY) {
       if (Stats.GATHER_MARK_CONS_STATS) Gen.nurseryCons.inc(bytes);
       Address rtn = nursery.alloc(bytes, align, offset);//.plus(padbytes);
@@ -153,7 +140,26 @@ import org.vmmagic.unboxed.*;
     if (Gen.USE_FIELD_BARRIER_FOR_AASTORE && mode == ARRAY_ELEMENT && markOffset != 0) {
       Address mark = src.toAddress().plus(markOffset);
    //   Log.write(src.toAddress()); Log.write("->"); Log.write(slot); Log.write("->"); Log.writeln(mark);
-    //  mark.store((byte) 1);
+        if (
+                Space.isInSpace(IMMIX, slot))
+/*                !(Space.isInSpace(IMMORTAL, slot) ||
+                        Space.isInSpace(VM_SPACE, slot) ||
+                        Space.isInSpace(META, slot) ||
+                        Space.isInSpace(LOS, slot) ||
+                        Space.isInSpace(SANITY, slot) ||
+                        Space.isInSpace(NON_MOVING, slot) ||
+                        Space.isInSpace(SMALL_CODE, slot) ||
+                        Space.isInSpace(LARGE_CODE, slot) ||
+                        Space.isInSpace(NURSERY, slot))
+               ) */{
+
+         if (slot.LT(Address.fromIntSignExtend(0x69f00000)) && slot.GE(Address.fromIntSignExtend(0x69e00000))) {
+           Log.write("--", src);
+           Log.write("-->", mark);
+           Log.writeln();
+           mark.store((byte) 1);
+         }
+        }
     }
     if ((mode == ARRAY_ELEMENT && USE_OBJECT_BARRIER_FOR_AASTORE) ||
         (mode == INSTANCE_FIELD && USE_OBJECT_BARRIER_FOR_PUTFIELD)) {

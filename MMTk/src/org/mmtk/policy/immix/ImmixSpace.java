@@ -505,6 +505,12 @@ public final class ImmixSpace extends Space {
         markLines(object);
       trace.processNode(object);
     }
+    if (ForwardingWord.isForwardedOrBeingForwarded(object)) {
+      Log.writeln("=F==>",object);
+    }
+    if (!HeaderByte.isUnlogged(object)) {
+      Log.writeln("=L==>",object);
+    }
     if (VM.VERIFY_ASSERTIONS) VM.assertions._assert(!ForwardingWord.isForwardedOrBeingForwarded(object));
     if (VM.VERIFY_ASSERTIONS  && HeaderByte.NEEDS_UNLOGGED_BIT) VM.assertions._assert(HeaderByte.isUnlogged(object));
   }

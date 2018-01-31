@@ -16,6 +16,8 @@ import static org.jikesrvm.HeapLayoutConstants.BOOT_IMAGE_CODE_SIZE;
 import static org.jikesrvm.HeapLayoutConstants.BOOT_IMAGE_CODE_START;
 import static org.jikesrvm.HeapLayoutConstants.BOOT_IMAGE_DATA_SIZE;
 import static org.jikesrvm.HeapLayoutConstants.BOOT_IMAGE_DATA_START;
+import static org.jikesrvm.mm.mminterface.MemoryManagerConstants.FIELD_BARRIER_USE_BYTE;
+import static org.jikesrvm.mm.mminterface.MemoryManagerConstants.USE_FIELD_BARRIER;
 import static org.jikesrvm.objectmodel.TIBLayoutConstants.IMT_METHOD_SLOTS;
 import static org.jikesrvm.runtime.ExitStatus.EXIT_STATUS_BOGUS_COMMAND_LINE_ARG;
 import static org.mmtk.utility.Constants.MIN_ALIGNMENT;
@@ -496,6 +498,10 @@ public final class MemoryManager {
    */
   @Inline
   public static Object allocateScalar(int size, TIB tib, int allocator, int align, int offset, int site) {
+    if (USE_FIELD_BARRIER) {
+      int pad = (FIELD_BARRIER_USE_BYTE ? (size + 3) >> 2 : (size + 31) >> 5);
+      size += pad;
+    }
     Selected.Mutator mutator = Selected.Mutator.get();
     allocator = mutator.checkAllocator(org.jikesrvm.runtime.Memory.alignUp(size, MIN_ALIGNMENT), align, allocator);
     Address region = allocateSpace(mutator, size, align, offset, allocator, site);
@@ -562,6 +568,10 @@ public final class MemoryManager {
   @Inline
   private static Object allocateArrayInternal(int numElements, int size, TIB tib, int allocator,
                                               int align, int offset, int site) {
+    if (USE_FIELD_BARRIER) {
+      int pad = (FIELD_BARRIER_USE_BYTE ? (size + 3) >> 2 : (size + 31) >> 5);
+      size += pad;
+    }
     Selected.Mutator mutator = Selected.Mutator.get();
     allocator = mutator.checkAllocator(org.jikesrvm.runtime.Memory.alignUp(size, MIN_ALIGNMENT), align, allocator);
     Address region = allocateSpace(mutator, size, align, offset, allocator, site);

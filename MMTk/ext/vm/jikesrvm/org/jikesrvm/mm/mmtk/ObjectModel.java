@@ -12,8 +12,11 @@
  */
 package org.jikesrvm.mm.mmtk;
 
+import static org.jikesrvm.mm.mminterface.MemoryManagerConstants.*;
 import static org.jikesrvm.objectmodel.JavaHeaderConstants.ARRAY_BASE_OFFSET;
 import static org.jikesrvm.objectmodel.JavaHeaderConstants.GC_HEADER_OFFSET;
+import static org.jikesrvm.objectmodel.JavaHeaderConstants.LOG_MIN_ALIGNMENT;
+import static org.mmtk.utility.Constants.MIN_ALIGNMENT;
 
 import org.jikesrvm.classloader.Atom;
 import org.jikesrvm.classloader.RVMArray;
@@ -24,6 +27,8 @@ import org.jikesrvm.mm.mminterface.MemoryManager;
 import org.jikesrvm.objectmodel.TIB;
 import org.jikesrvm.runtime.Magic;
 import org.mmtk.plan.CollectorContext;
+import org.mmtk.utility.Conversions;
+import org.mmtk.utility.Log;
 import org.mmtk.utility.alloc.Allocator;
 import org.mmtk.vm.VM;
 import org.vmmagic.pragma.Inline;
@@ -58,11 +63,22 @@ import org.vmmagic.unboxed.Word;
     int align = org.jikesrvm.objectmodel.ObjectModel.getAlignment(type, from.toObject());
     int offset = org.jikesrvm.objectmodel.ObjectModel.getOffsetForAlignment(type, from);
     CollectorContext context = VM.activePlan.collector();
-    allocator = context.copyCheckAllocator(from, bytes, align, allocator);
-    Address region = MemoryManager.allocateSpace(context, bytes, align, offset,
+    int pad = 0;
+    if (USE_FIELD_BARRIER_FOR_PUTFIELD) {
+      pad = (FIELD_BARRIER_USE_BYTE ? (bytes + 3) >> 2 : (bytes + 31) >> 5);
+      pad = (pad + (MIN_ALIGNMENT - 1)) & ~(MIN_ALIGNMENT - 1);
+    }
+    allocator = context.copyCheckAllocator(from, bytes+pad, align, allocator);
+    Address region = MemoryManager.allocateSpace(context, bytes+pad, align, offset,
                                                 allocator, from);
     Object toObj = org.jikesrvm.objectmodel.ObjectModel.moveObject(region, from.toObject(), bytes, type);
     ObjectReference to = ObjectReference.fromObject(toObj);
+    if (region.LT(Address.fromIntSignExtend(0x69f00000)) && region.GE(Address.fromIntSignExtend(0x69e00000))) {
+      Log.write("=CS=", region);
+      Log.write("-", to);
+      Log.writeln("->", region.plus(bytes));
+      Log.writeln("->", region.plus(bytes+pad));
+    }
     context.postCopy(to, ObjectReference.fromObject(tib), bytes, allocator);
     return to;
   }
@@ -74,8 +90,13 @@ import org.vmmagic.unboxed.Word;
     int align = org.jikesrvm.objectmodel.ObjectModel.getAlignment(type, from.toObject());
     int offset = org.jikesrvm.objectmodel.ObjectModel.getOffsetForAlignment(type, from);
     CollectorContext context = VM.activePlan.collector();
-    allocator = context.copyCheckAllocator(from, bytes, align, allocator);
-    Address region = MemoryManager.allocateSpace(context, bytes, align, offset,
+    int pad = 0;
+    if (USE_FIELD_BARRIER_FOR_AASTORE) {
+      pad = (FIELD_BARRIER_USE_BYTE ? (bytes + 3) >> 2 : (bytes + 31) >> 5);
+      pad = (pad + (MIN_ALIGNMENT - 1)) & ~(MIN_ALIGNMENT - 1);
+    }
+    allocator = context.copyCheckAllocator(from, bytes+pad, align, allocator);
+    Address region = MemoryManager.allocateSpace(context, bytes+pad, align, offset,
                                                 allocator, from);
     Object toObj = org.jikesrvm.objectmodel.ObjectModel.moveObject(region, from.toObject(), bytes, type);
     ObjectReference to = ObjectReference.fromObject(toObj);
@@ -85,6 +106,20 @@ import org.vmmagic.unboxed.Word;
       // immediately.
       int dataSize = bytes - org.jikesrvm.objectmodel.ObjectModel.computeHeaderSize(Magic.getObjectType(toObj));
       org.jikesrvm.runtime.Memory.sync(to.toAddress(), dataSize);
+      if (region.LT(Address.fromIntSignExtend(0x69f00000)) && region.GE(Address.fromIntSignExtend(0x69e00000))) {
+        Log.write("=CD=", region);
+      }
+    } else {
+      if (region.LT(Address.fromIntSignExtend(0x69f00000)) && region.GE(Address.fromIntSignExtend(0x69e00000))) {
+        Log.write("=CA=", region);
+      }
+    }
+    if (region.LT(Address.fromIntSignExtend(0x69f00000)) && region.GE(Address.fromIntSignExtend(0x69e00000))) {
+      Log.write("-", to);
+      Log.write("-", bytes);
+      Log.write("-", bytes+pad);
+      Log.write("->", region.plus(bytes));
+      Log.writeln("->", region.plus(bytes+pad));
     }
     return to;
   }
