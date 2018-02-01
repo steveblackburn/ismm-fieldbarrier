@@ -242,7 +242,7 @@ public final class RVMArray extends RVMType {
   @Uninterruptible
   public int getInstanceSize(int numelts) {
     int size = getInstanceSizeNoPad(numelts);
-    if (USE_FIELD_BARRIER_FOR_AASTORE) {
+    if (USE_FIELD_BARRIER_FOR_AASTORE && referenceOffsets == REFARRAY_OFFSET_ARRAY) {
       int padbytes = numelts; // Gen.FIELD_BARRIER_USE_BYTE ? (bytes + 3) >> 2 : (bytes + 31) >> 5;
       size += padbytes;
       size = size + ((-size) & ((1 << LOG_MIN_ALIGNMENT) - 1));

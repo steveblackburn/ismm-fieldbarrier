@@ -12,6 +12,8 @@
  */
 package org.jikesrvm.objectmodel;
 
+import static org.jikesrvm.mm.mminterface.MemoryManagerConstants.USE_FIELD_BARRIER_FOR_PUTFIELD;
+import static org.jikesrvm.objectmodel.JavaHeaderConstants.LOG_MIN_ALIGNMENT;
 import static org.jikesrvm.runtime.JavaSizeConstants.BYTES_IN_LONG;
 import static org.jikesrvm.runtime.UnboxedSizeConstants.BYTES_IN_ADDRESS;
 
@@ -146,7 +148,14 @@ public abstract class FieldLayout {
      */
     klass.setFieldLayoutContext(fieldLayout);
 
-    klass.setInstanceSizeInternal(ObjectModel.computeScalarHeaderSize(klass) + fieldLayout.getObjectSize());
+    int size = fieldLayout.getObjectSize();
+    if (USE_FIELD_BARRIER_FOR_PUTFIELD) {
+      int padbytes = (size + 3) >> 2; // Gen.FIELD_BARRIER_USE_BYTE ? (bytes + 3) >> 2 : (bytes + 31) >> 5;
+      size += padbytes;
+      size = size + ((-size) & ((1 << LOG_MIN_ALIGNMENT) - 1));
+    }
+
+    klass.setInstanceSizeInternal(ObjectModel.computeScalarHeaderSize(klass) + size);
     klass.setAlignment(fieldLayout.getAlignment());
   }
 

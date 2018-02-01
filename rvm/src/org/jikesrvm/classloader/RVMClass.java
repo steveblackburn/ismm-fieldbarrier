@@ -829,17 +829,9 @@ public final class RVMClass extends RVMType {
   @Uninterruptible
   public int getInstanceSize() {
     if (VM.VerifyAssertions) VM._assert(isResolved());
-    if (USE_FIELD_BARRIER_FOR_PUTFIELD) {
-      int size = instanceSize;
-      int padbytes = (size + 3) >> 2; // Gen.FIELD_BARRIER_USE_BYTE ? (bytes + 3) >> 2 : (bytes + 31) >> 5;
-      size += padbytes;
-      size = size + ((-size) & ((1 << LOG_MIN_ALIGNMENT) - 1));
-      return size;
-    } else {
-      return instanceSize;
-    }
+    return instanceSize;
   }
-  
+
   /**
    * Set the size of the instance. Only meant to be called from
    * ObjectModel et al. must be called when lock on class object
