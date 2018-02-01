@@ -111,13 +111,7 @@ import org.vmmagic.unboxed.Word;
    * @return The size (in bytes) of the given object.
    */
   static int getObjectSize(ObjectReference object) {
-    TIB tib = org.jikesrvm.objectmodel.ObjectModel.getTIB(object);
-    RVMType type = Magic.objectAsType(tib.getType());
-
-    if (type.isClassType())
-      return org.jikesrvm.objectmodel.ObjectModel.bytesRequiredWhenCopied(object.toObject(), type.asClass());
-    else
-      return org.jikesrvm.objectmodel.ObjectModel.bytesRequiredWhenCopied(object.toObject(), type.asArray(), Magic.getArrayLength(object.toObject()));
+      return org.jikesrvm.objectmodel.ObjectModel.bytesRequiredWhenCopied(object);
   }
 
   /**
