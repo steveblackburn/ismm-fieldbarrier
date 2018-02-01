@@ -30,6 +30,8 @@ import static org.jikesrvm.classloader.ClassLoaderConstants.CLASS_LOADED;
 import static org.jikesrvm.classloader.ClassLoaderConstants.CLASS_RESOLVED;
 import static org.jikesrvm.classloader.ClassLoaderConstants.CP_MEMBER;
 import static org.jikesrvm.classloader.ClassLoaderConstants.CP_UTF;
+import static org.jikesrvm.mm.mminterface.MemoryManagerConstants.USE_FIELD_BARRIER_FOR_PUTFIELD;
+import static org.jikesrvm.objectmodel.JavaHeaderConstants.LOG_MIN_ALIGNMENT;
 import static org.jikesrvm.runtime.JavaSizeConstants.BYTES_IN_DOUBLE;
 import static org.jikesrvm.runtime.JavaSizeConstants.BYTES_IN_INT;
 import static org.jikesrvm.runtime.JavaSizeConstants.BYTES_IN_LONG;
@@ -827,18 +829,17 @@ public final class RVMClass extends RVMType {
   @Uninterruptible
   public int getInstanceSize() {
     if (VM.VerifyAssertions) VM._assert(isResolved());
-    return instanceSize;
+    if (USE_FIELD_BARRIER_FOR_PUTFIELD) {
+      int size = instanceSize;
+      int padbytes = (size + 3) >> 2; // Gen.FIELD_BARRIER_USE_BYTE ? (bytes + 3) >> 2 : (bytes + 31) >> 5;
+      size += padbytes;
+      size = size + ((-size) & ((1 << LOG_MIN_ALIGNMENT) - 1));
+      return size;
+    } else {
+      return instanceSize;
+    }
   }
-
-  /**
-   * @return total size, in bytes, of an instance of this class (including
-   * object header). Doesn't perform any verification.
-   */
-  @Uninterruptible
-  public int getInstanceSizeInternal() {
-    return instanceSize;
-  }
-
+  
   /**
    * Set the size of the instance. Only meant to be called from
    * ObjectModel et al. must be called when lock on class object

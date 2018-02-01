@@ -915,11 +915,6 @@ public class ObjectModel {
       }
     }
     int align = getAlignment(klass);
-    if (USE_FIELD_BARRIER_FOR_PUTFIELD) {
-      int padbytes = (size + 3) >> 2; // Gen.FIELD_BARRIER_USE_BYTE ? (bytes + 3) >> 2 : (bytes + 31) >> 5;
-      size += padbytes;
-      size = size + ((-size) & ((1 << LOG_MIN_ALIGNMENT) - 1));
-    }
     int offset = getOffsetForAlignment(klass, needsIdentityHash);
     Address ptr = bootImage.allocateDataStorage(size, align, offset);
     Address ref = JavaHeader.initializeScalarHeader(bootImage, ptr, tib, size, needsIdentityHash, identityHashValue);

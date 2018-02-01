@@ -63,13 +63,8 @@ import org.vmmagic.unboxed.Word;
     int align = org.jikesrvm.objectmodel.ObjectModel.getAlignment(type, from.toObject());
     int offset = org.jikesrvm.objectmodel.ObjectModel.getOffsetForAlignment(type, from);
     CollectorContext context = VM.activePlan.collector();
-    int pad = 0;
-    if (USE_FIELD_BARRIER_FOR_PUTFIELD) {
-      pad = (FIELD_BARRIER_USE_BYTE ? (bytes + 3) >> 2 : (bytes + 31) >> 5);
-      pad = (pad + (MIN_ALIGNMENT - 1)) & ~(MIN_ALIGNMENT - 1);
-    }
-    allocator = context.copyCheckAllocator(from, bytes+pad, align, allocator);
-    Address region = MemoryManager.allocateSpace(context, bytes+pad, align, offset,
+    allocator = context.copyCheckAllocator(from, bytes, align, allocator);
+    Address region = MemoryManager.allocateSpace(context, bytes, align, offset,
                                                 allocator, from);
     Object toObj = org.jikesrvm.objectmodel.ObjectModel.moveObject(region, from.toObject(), bytes, type);
     ObjectReference to = ObjectReference.fromObject(toObj);

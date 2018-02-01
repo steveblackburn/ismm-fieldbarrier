@@ -127,12 +127,6 @@ public class JavaHeader {
    */
   public static Address getObjectEndAddress(Object obj, RVMClass type) {
     int size = type.getInstanceSize();
-    if (USE_FIELD_BARRIER_FOR_PUTFIELD) {
-      int padbytes = (size + 3) >> 2; // Gen.FIELD_BARRIER_USE_BYTE ? (bytes + 3) >> 2 : (bytes + 31) >> 5;
-      Address o = Magic.objectAsAddress(obj);
-      size += padbytes;
-      size = size + ((-size) & ((1 << LOG_MIN_ALIGNMENT) - 1));
-    }
     if (ADDRESS_BASED_HASHING && DYNAMIC_HASH_OFFSET) {
       Word hashState = Magic.objectAsAddress(obj).loadWord(STATUS_OFFSET).and(HASH_STATE_MASK);
       if (hashState.EQ(HASH_STATE_HASHED_AND_MOVED)) {
