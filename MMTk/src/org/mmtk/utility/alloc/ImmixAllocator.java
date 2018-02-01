@@ -276,9 +276,19 @@ public class ImmixAllocator extends Allocator {
             tmp = tmp.plus(1);
           }
         }
-        if (VM.VERIFY_ASSERTIONS && bytes <= BYTES_IN_LINE) {
+        if (VM.VERIFY_ASSERTIONS && alignAllocationNoFill(Address.zero(), align, offset).toInt() + bytes <= BYTES_IN_LINE) {   // BUG FIX -- prior to this we failed when allocating array totalling 256 bytes, with 8 byte alignment (the 12 byte offset tripped the allocation into the next line, causing the assertion below to erroneously fail.  Once accounting for offset and alignment, a 256 byte array object will take 260 bytes of space.
           Address start = alignAllocationNoFill(cursor, align, offset);
           Address end = start.plus(bytes);
+          if (!end.LE(limit)) {
+            Log.write("======> s: ",start);
+            Log.write(" c: ", cursor);
+            Log.write(" c: ", (cursor.toInt()+7) & ~7);
+            Log.write(" a: ", align);
+            Log.write(" o: ", offset);
+            Log.write(" b: ", bytes);
+            Log.write(" e: ", end);
+            Log.writeln(" l: ", limit);
+          }
           VM.assertions._assert(end.LE(limit));
         }
         VM.memory.zero(false, cursor, limit.diff(cursor).toWord().toExtent());
