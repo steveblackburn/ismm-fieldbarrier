@@ -275,7 +275,7 @@ public class BootImage implements BootImageInterface {
   public Address allocateJTOCArray(RVMArray array, int numElements, boolean needsIdentityHash, int identityHashValue, int align, int alignCode) {
     numObjects++;
     BootImageWriter.logAllocation(array, array.getInstanceSize(numElements));
-    return ObjectModel.allocateArray(this, array, numElements, needsIdentityHash, identityHashValue, align, 0, alignCode);
+    return ObjectModel.allocateArray(this, array, numElements, needsIdentityHash, identityHashValue, align, alignCode);
   }
 
   /**

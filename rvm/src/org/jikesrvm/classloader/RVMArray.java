@@ -15,6 +15,9 @@ package org.jikesrvm.classloader;
 import static org.jikesrvm.VM.NOT_REACHED;
 import static org.jikesrvm.classloader.ClassLoaderConstants.*;
 import static org.jikesrvm.mm.mminterface.Barriers.*;
+import static org.jikesrvm.mm.mminterface.MemoryManagerConstants.USE_FIELD_BARRIER_FOR_AASTORE;
+import static org.jikesrvm.mm.mminterface.MemoryManagerConstants.USE_FIELD_BARRIER_FOR_PUTFIELD;
+import static org.jikesrvm.objectmodel.JavaHeaderConstants.LOG_MIN_ALIGNMENT;
 import static org.jikesrvm.runtime.JavaSizeConstants.BYTES_IN_BOOLEAN;
 import static org.jikesrvm.runtime.JavaSizeConstants.BYTES_IN_CHAR;
 import static org.jikesrvm.runtime.JavaSizeConstants.BYTES_IN_DOUBLE;
@@ -238,6 +241,24 @@ public final class RVMArray extends RVMType {
   @Pure
   @Uninterruptible
   public int getInstanceSize(int numelts) {
+    int size = getInstanceSizeNoPad(numelts);
+    if (USE_FIELD_BARRIER_FOR_AASTORE) {
+      int padbytes = numelts; // Gen.FIELD_BARRIER_USE_BYTE ? (bytes + 3) >> 2 : (bytes + 31) >> 5;
+      size += padbytes;
+      size = size + ((-size) & ((1 << LOG_MIN_ALIGNMENT) - 1));
+    }
+    return size;
+  }
+
+  /**
+   * Total size, in bytes, of an instance of this array type (including object header).
+   * @param numelts number of array elements in the instance
+   * @return size in bytes
+   */
+  @Inline
+  @Pure
+  @Uninterruptible
+  public int getInstanceSizeNoPad(int numelts) {
     return ObjectModel.computeArrayHeaderSize(this) + (numelts << getLogElementSize());
   }
 

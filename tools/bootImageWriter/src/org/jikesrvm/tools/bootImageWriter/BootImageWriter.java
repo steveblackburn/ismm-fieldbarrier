@@ -1464,7 +1464,7 @@ public class BootImageWriter {
                                                           VM.BuildForIA32 ? 16 : ObjectModel.getAlignment(intArrayType),
                                                           ObjectModel.getOffsetForAlignment(intArrayType, false));
       bootImage.resetAllocator();
-      bootRecord.tocRegister = jtocAddress.plus(intArrayType.getInstanceSize(Statics.middleOfTable));
+      bootRecord.tocRegister = jtocAddress.plus(intArrayType.getInstanceSizeNoPad(Statics.middleOfTable));
 
       // set up some stuff we need for compiling
       ArchitectureFactory.initOutOfLineMachineCode();
