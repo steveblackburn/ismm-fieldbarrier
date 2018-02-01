@@ -156,16 +156,8 @@ public class JavaHeader {
     if (USE_FIELD_BARRIER_FOR_AASTORE) {
       int padbytes = (size + 3) >> 2; // Gen.FIELD_BARRIER_USE_BYTE ? (bytes + 3) >> 2 : (bytes + 31) >> 5;
       Address o = Magic.objectAsAddress(obj);
-      if (o.LT(Address.fromIntSignExtend(0x69f00000)) && o.GE(Address.fromIntSignExtend(0x69e00000))) {
-        VM.sysWrite("--s--", size);
-      }
       size += padbytes;
       size = size + ((-size) & ((1 << LOG_MIN_ALIGNMENT) - 1));
-      if (o.LT(Address.fromIntSignExtend(0x69f00000)) && o.GE(Address.fromIntSignExtend(0x69e00000))) {
-        VM.sysWrite("--p--", padbytes);
-        VM.sysWrite("--s--", size);
-        VM.sysWriteln("--", o);
-      }
     }
     if (ADDRESS_BASED_HASHING && DYNAMIC_HASH_OFFSET) {
       Word hashState = Magic.getWordAtOffset(obj, STATUS_OFFSET).and(HASH_STATE_MASK);

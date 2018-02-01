@@ -139,10 +139,10 @@ import org.vmmagic.unboxed.*;
     if (Gen.GATHER_WRITE_BARRIER_STATS) Gen.wbFast.inc();
     if (Gen.USE_FIELD_BARRIER_FOR_AASTORE && mode == ARRAY_ELEMENT && markOffset != 0) {
       Address mark = src.toAddress().plus(markOffset);
-   //   Log.write(src.toAddress()); Log.write("->"); Log.write(slot); Log.write("->"); Log.writeln(mark);
         if (
-                Space.isInSpace(IMMIX, slot))
-/*                !(Space.isInSpace(IMMORTAL, slot) ||
+                true )
+/*      Space.isInSpace(IMMIX, slot))
+                !(Space.isInSpace(IMMORTAL, slot) ||
                         Space.isInSpace(VM_SPACE, slot) ||
                         Space.isInSpace(META, slot) ||
                         Space.isInSpace(LOS, slot) ||
@@ -153,12 +153,9 @@ import org.vmmagic.unboxed.*;
                         Space.isInSpace(NURSERY, slot))
                ) */{
 
-         if (slot.LT(Address.fromIntSignExtend(0x69f00000)) && slot.GE(Address.fromIntSignExtend(0x69e00000))) {
-           Log.write("--", src);
-           Log.write("-->", mark);
-           Log.writeln();
+
            mark.store((byte) 1);
-         }
+
         }
     }
     if ((mode == ARRAY_ELEMENT && USE_OBJECT_BARRIER_FOR_AASTORE) ||

@@ -73,12 +73,6 @@ import org.vmmagic.unboxed.Word;
                                                 allocator, from);
     Object toObj = org.jikesrvm.objectmodel.ObjectModel.moveObject(region, from.toObject(), bytes, type);
     ObjectReference to = ObjectReference.fromObject(toObj);
-    if (region.LT(Address.fromIntSignExtend(0x69f00000)) && region.GE(Address.fromIntSignExtend(0x69e00000))) {
-      Log.write("=CS=", region);
-      Log.write("-", to);
-      Log.writeln("->", region.plus(bytes));
-      Log.writeln("->", region.plus(bytes+pad));
-    }
     context.postCopy(to, ObjectReference.fromObject(tib), bytes, allocator);
     return to;
   }
@@ -106,20 +100,6 @@ import org.vmmagic.unboxed.Word;
       // immediately.
       int dataSize = bytes - org.jikesrvm.objectmodel.ObjectModel.computeHeaderSize(Magic.getObjectType(toObj));
       org.jikesrvm.runtime.Memory.sync(to.toAddress(), dataSize);
-      if (region.LT(Address.fromIntSignExtend(0x69f00000)) && region.GE(Address.fromIntSignExtend(0x69e00000))) {
-        Log.write("=CD=", region);
-      }
-    } else {
-      if (region.LT(Address.fromIntSignExtend(0x69f00000)) && region.GE(Address.fromIntSignExtend(0x69e00000))) {
-        Log.write("=CA=", region);
-      }
-    }
-    if (region.LT(Address.fromIntSignExtend(0x69f00000)) && region.GE(Address.fromIntSignExtend(0x69e00000))) {
-      Log.write("-", to);
-      Log.write("-", bytes);
-      Log.write("-", bytes+pad);
-      Log.write("->", region.plus(bytes));
-      Log.writeln("->", region.plus(bytes+pad));
     }
     return to;
   }

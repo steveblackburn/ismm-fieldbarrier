@@ -113,33 +113,13 @@ public class ImmixAllocator extends Allocator {
     Address start = alignAllocationNoFill(cursor, align, offset);
     Address end = start.plus(bytes);
 
-    if (cursor.LT(Address.fromIntSignExtend(0x69f00000)) && cursor.GE(Address.fromIntSignExtend(0x69e00000))) {
-      Log.write("=LA=", cursor);
-      Log.write(" s: ", start);
-      Log.write(" b: ", bytes);
-      Log.write(" e: ", end);
-      Log.writeln(" l: ", limit);
-    }
 
     /* check whether we've exceeded the limit */
     if (end.GT(limit)) {
-      if (bytes > BYTES_IN_LINE) {
-        Address rtn = overflowAlloc(bytes, align, offset);
-        if (cursor.LT(Address.fromIntSignExtend(0x69f00000)) && cursor.GE(Address.fromIntSignExtend(0x69e00000))) {
-          Log.write("=LO=", rtn);
-          Log.write(" b: ", bytes);
-          Log.writeln(" e: ", end);
-        }
-        return rtn;
-      } else {
-        Address rtn = allocSlowHot(bytes, align, offset);
-        if (cursor.LT(Address.fromIntSignExtend(0x69f00000)) && cursor.GE(Address.fromIntSignExtend(0x69e00000))) {
-          Log.write("=LS=", rtn);
-          Log.write(" b: ", bytes);
-          Log.writeln(" e: ", end);
-        }
-        return rtn;
-      }
+      if (bytes > BYTES_IN_LINE)
+        return overflowAlloc(bytes, align, offset);
+      else
+        return allocSlowHot(bytes, align, offset);
     }
 
     /* sufficient memory is available, so we can finish performing the allocation */
@@ -279,16 +259,6 @@ public class ImmixAllocator extends Allocator {
         if (VM.VERIFY_ASSERTIONS && alignAllocationNoFill(Address.zero(), align, offset).toInt() + bytes <= BYTES_IN_LINE) {   // BUG FIX -- prior to this we failed when allocating array totalling 256 bytes, with 8 byte alignment (the 12 byte offset tripped the allocation into the next line, causing the assertion below to erroneously fail.  Once accounting for offset and alignment, a 256 byte array object will take 260 bytes of space.
           Address start = alignAllocationNoFill(cursor, align, offset);
           Address end = start.plus(bytes);
-          if (!end.LE(limit)) {
-            Log.write("======> s: ",start);
-            Log.write(" c: ", cursor);
-            Log.write(" c: ", (cursor.toInt()+7) & ~7);
-            Log.write(" a: ", align);
-            Log.write(" o: ", offset);
-            Log.write(" b: ", bytes);
-            Log.write(" e: ", end);
-            Log.writeln(" l: ", limit);
-          }
           VM.assertions._assert(end.LE(limit));
         }
         VM.memory.zero(false, cursor, limit.diff(cursor).toWord().toExtent());
