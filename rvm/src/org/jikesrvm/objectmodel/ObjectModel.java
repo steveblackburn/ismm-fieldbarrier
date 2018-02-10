@@ -234,10 +234,13 @@ public class ObjectModel {
     Address start = ref.minus(GC_HEADER_OFFSET);
     Address end = start.plus(size);
     Address cursor;
-    if (isScalar)
+    if (isScalar) {
       cursor = ref.plus(((RVMClass) type).getMarkStateOffset());
-    else
+    } else {
+      if (!(((RVMArray) type) == RVMArray.JavaLangObjectArray))
+        return;
       cursor = end.minus(numElements);
+    }
     while (cursor.LT(end)) {
       bootImage.setByte(cursor, (byte) 1);
       cursor = cursor.plus(1);

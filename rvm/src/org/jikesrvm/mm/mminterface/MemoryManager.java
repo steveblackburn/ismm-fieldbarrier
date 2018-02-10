@@ -1177,7 +1177,7 @@ public final class MemoryManager {
    */
   @Interruptible
   public static void initializeHeader(BootImageInterface bootImage, Address ref, TIB tib, int size) {
-    initializeHeader(bootImage, ref, tib, size, 0, false);
+    initializeHeader(bootImage, ref, tib, size, 0, true);
   }
   @Interruptible
   public static void initializeHeader(BootImageInterface bootImage, Address ref, TIB tib, int size,
