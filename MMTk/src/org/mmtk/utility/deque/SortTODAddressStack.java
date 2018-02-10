@@ -36,7 +36,7 @@ import org.vmmagic.pragma.*;
    * buffers when it has exhausted its own.
    */
   public SortTODAddressStack(SortTODSharedDeque queue) {
-    super(queue);
+    super("",queue);
   }
 
   /**

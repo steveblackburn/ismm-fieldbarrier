@@ -15,8 +15,6 @@ package org.jikesrvm.mm.mmtk;
 import static org.jikesrvm.mm.mminterface.MemoryManagerConstants.*;
 import static org.jikesrvm.objectmodel.JavaHeaderConstants.ARRAY_BASE_OFFSET;
 import static org.jikesrvm.objectmodel.JavaHeaderConstants.GC_HEADER_OFFSET;
-import static org.jikesrvm.objectmodel.JavaHeaderConstants.LOG_MIN_ALIGNMENT;
-import static org.mmtk.utility.Constants.MIN_ALIGNMENT;
 
 import org.jikesrvm.classloader.Atom;
 import org.jikesrvm.classloader.RVMArray;
@@ -27,7 +25,6 @@ import org.jikesrvm.mm.mminterface.MemoryManager;
 import org.jikesrvm.objectmodel.TIB;
 import org.jikesrvm.runtime.Magic;
 import org.mmtk.plan.CollectorContext;
-import org.mmtk.utility.Conversions;
 import org.mmtk.utility.Log;
 import org.mmtk.utility.alloc.Allocator;
 import org.mmtk.vm.VM;
@@ -298,8 +295,31 @@ import org.vmmagic.unboxed.Word;
     return type.isAcyclicReference();
   }
 
-  public void markAsUnlogged(ObjectReference object, int markOffset) {
-    object.toAddress().plus(markOffset).store((byte) 1);
+  public void markAsUnlogged(Word markReference) {
+    if (VM.VERIFY_ASSERTIONS) VM.assertions._assert(false);
+    markReference.toAddress().store((byte) 1);
+  }
+
+  public void markAllFieldsAsUnlogged(ObjectReference obj, ObjectReference tib) {
+    if (VM.VERIFY_ASSERTIONS) VM.assertions._assert(false);
+
+    // FIXME use the tib
+    RVMType type = Magic.objectAsType(((TIB) Magic.addressAsObject(tib.toAddress())).getType());
+    if ((type.isArrayType() && USE_FIELD_BARRIER_FOR_AASTORE && ((RVMArray) type).getElementType().isReferenceType()) ||
+            (!type.isArrayType() && USE_FIELD_BARRIER_FOR_PUTFIELD)) {
+      Address cursor = org.jikesrvm.objectmodel.ObjectModel.getObjectMarkBitsAddress(obj);
+      Address end = org.jikesrvm.objectmodel.ObjectModel.getObjectEndAddress(obj);
+      if (type.isArrayType()) {
+        Log.write((type.isArrayType() ? "a " : "s "));
+        Log.write("c: ", cursor);
+        Log.writeln(" e: ", end);
+      }
+      while (cursor.LT(end)) {
+        if (type.isArrayType()) Log.writeln("ul: ",cursor);
+        cursor.store((byte) 1);
+        cursor = cursor.plus(1);
+      }
+    }
   }
   public void markAsLogged(ObjectReference object, int markOffset) {
     object.toAddress().plus(markOffset).store((byte) 0);

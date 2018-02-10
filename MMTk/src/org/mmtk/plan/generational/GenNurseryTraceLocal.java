@@ -18,6 +18,7 @@ import org.mmtk.plan.TraceLocal;
 import org.mmtk.plan.Trace;
 import org.mmtk.utility.HeaderByte;
 import org.mmtk.utility.deque.*;
+import org.mmtk.vm.ObjectModel;
 import org.mmtk.vm.VM;
 
 import org.vmmagic.pragma.*;
@@ -39,6 +40,7 @@ public final class GenNurseryTraceLocal extends TraceLocal {
    *
    */
   private final ObjectReferenceDeque modbuf;
+  private final AddressPairDeque fieldbuf;
   private final AddressDeque remset;
   private final AddressPairDeque arrayRemset;
 
@@ -49,6 +51,7 @@ public final class GenNurseryTraceLocal extends TraceLocal {
   public GenNurseryTraceLocal(Trace trace, GenCollector plan) {
     super(Gen.SCAN_NURSERY, trace);
     this.modbuf = plan.modbuf;
+    this.fieldbuf = plan.fieldbuf;
     this.remset = plan.remset;
     this.arrayRemset = plan.arrayRemset;
   }
@@ -92,6 +95,13 @@ public final class GenNurseryTraceLocal extends TraceLocal {
       if (VM.DEBUG) VM.debugging.modbufEntry(obj);
       HeaderByte.markAsUnlogged(obj);
       scanObject(obj);
+    }
+    logMessage(5, "processing fieldbuf");
+    ObjectReference ref;
+    while (!(ref = fieldbuf.pop1().toObjectReference()).isNull()) {
+      if (VM.VERIFY_ASSERTIONS) VM.assertions._assert(false);
+      processNode(ref);
+      VM.objectModel.markAsUnlogged(fieldbuf.pop2().toWord());
     }
     logMessage(5, "processing remset");
     while (!remset.isEmpty()) {

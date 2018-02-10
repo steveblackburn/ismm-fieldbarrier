@@ -28,11 +28,6 @@ import org.vmmagic.pragma.*;
    */
 
   /**
-   *
-   */
-  public final String name;
-
-  /**
    * Constructor
    *
    * @param n the human-readable name of this queue
@@ -41,8 +36,7 @@ import org.vmmagic.pragma.*;
    * buffers when it has exhausted its own.
    */
   public AddressDeque(String n, SharedDeque queue) {
-    super(queue);
-    name = n;
+    super(n, queue);
   }
 
   /**

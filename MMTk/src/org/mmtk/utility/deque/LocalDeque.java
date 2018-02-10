@@ -33,14 +33,18 @@ import org.vmmagic.pragma.*;
    * Public instance methods
    */
 
+  String name;
+
   /**
    * Constructor
    *
+   * @param name human-readable name of the queue
    * @param queue The shared deque to which this local deque will append
    * its buffers (when full or flushed).
    */
-  LocalDeque(SharedDeque queue) {
+  LocalDeque(String name, SharedDeque queue) {
     super(queue);
+    this.name = name;
   }
 
   @Override

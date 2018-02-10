@@ -58,6 +58,7 @@ import org.vmmagic.unboxed.*;
   protected final CopyLocal nursery = new CopyLocal(Gen.nurserySpace);
 
   private final ObjectReferenceDeque modbuf;    /* remember modified scalars */
+  protected final AddressPairDeque fieldbuf;    /* remember modified fields and their mark bytes */
   protected final WriteBuffer remset;           /* remember modified array fields */
   protected final AddressPairDeque arrayRemset; /* remember modified array ranges */
 
@@ -76,6 +77,7 @@ import org.vmmagic.unboxed.*;
    */
   public GenMutator() {
     modbuf = new ObjectReferenceDeque("modbuf", global().modbufPool);
+    fieldbuf = new AddressPairDeque("fieldbuf", global().fieldbufPool);
     remset = new WriteBuffer(global().remsetPool);
     arrayRemset = new AddressPairDeque(global().arrayRemsetPool);
   }
@@ -142,6 +144,7 @@ import org.vmmagic.unboxed.*;
       if (true || VM.objectModel.isUnlogged(src, markOffset)) {
         if (Gen.GATHER_WRITE_BARRIER_STATS) Gen.wbFRSlow.inc();
         VM.objectModel.markAsLogged(src, markOffset);
+        // fieldbuf.insert(slot,src.toAddress().plus(markOffset));
       }
     }
     if ((mode == ARRAY_ELEMENT && USE_OBJECT_BARRIER_FOR_AASTORE) ||
@@ -244,6 +247,7 @@ import org.vmmagic.unboxed.*;
   @Override
   public final void flushRememberedSets() {
     modbuf.flushLocal();
+    fieldbuf.flushLocal();
     remset.flushLocal();
     arrayRemset.flushLocal();
     assertRemsetsFlushed();
@@ -253,6 +257,7 @@ import org.vmmagic.unboxed.*;
   public final void assertRemsetsFlushed() {
     if (VM.VERIFY_ASSERTIONS) {
       VM.assertions._assert(modbuf.isFlushed());
+      VM.assertions._assert(fieldbuf.isFlushed());
       VM.assertions._assert(remset.isFlushed());
       VM.assertions._assert(arrayRemset.isFlushed());
     }
@@ -275,6 +280,7 @@ import org.vmmagic.unboxed.*;
       if (global().traceFullHeap()) {
         super.collectionPhase(phaseId, primary);
         modbuf.flushLocal();
+        fieldbuf.flushLocal();
         remset.flushLocal();
         arrayRemset.flushLocal();
       } else {

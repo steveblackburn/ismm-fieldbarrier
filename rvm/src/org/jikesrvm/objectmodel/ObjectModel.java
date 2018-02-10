@@ -12,6 +12,7 @@
  */
 package org.jikesrvm.objectmodel;
 
+import static org.jikesrvm.mm.mminterface.MemoryManagerConstants.USE_FIELD_BARRIER;
 import static org.jikesrvm.objectmodel.JavaHeaderConstants.*;
 import static org.jikesrvm.runtime.JavaSizeConstants.BYTES_IN_INT;
 
@@ -221,6 +222,26 @@ public class ObjectModel {
     } else {
       int numElements = Magic.getArrayLength(obj);
       return getObjectEndAddress(obj, type.asArray(), numElements);
+    }
+  }
+
+  /**
+   * Get the pointer to the mark bits of an object (if any).
+   *
+   * @param obj the object in question
+   * @return first word after the object
+   */
+  public static Address getObjectMarkBitsAddress(Object obj) {
+    if (VM.VerifyAssertions) VM._assert(false);
+    if (VM.VerifyAssertions) VM._assert(USE_FIELD_BARRIER);
+    TIB tib = getTIB(obj);
+    RVMType type = tib.getType();
+    if (type.isClassType()) {
+      return Magic.objectAsAddress(obj).plus(((RVMClass)type).getMarkStateOffset());
+    } else {
+      // FIXME assert that this array of references
+      int numElements = Magic.getArrayLength(obj);
+      return Magic.objectAsAddress(obj).plus(numElements<<2);  // FIXME address width constant
     }
   }
 

@@ -29,19 +29,13 @@ import org.vmmagic.pragma.*;
    */
 
   /**
-   *
-   */
-  public final String name;
-
-  /**
    * @param n human-readable name of the queue
    * @param queue The shared queue to which this queue will append
    * its buffers (when full or flushed) and from which it will acquire new
    * buffers when it has exhausted its own.
    */
   public ObjectReferenceDeque(String n, SharedDeque queue) {
-    super(queue);
-    name = n;
+    super(n, queue);
   }
 
   /**

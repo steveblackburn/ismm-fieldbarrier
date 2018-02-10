@@ -134,6 +134,7 @@ public abstract class Gen extends StopTheWorld {
    *
    */
   public final SharedDeque modbufPool = new SharedDeque("modBufs",metaDataSpace, 1);
+  public final SharedDeque fieldbufPool = new SharedDeque("fieldBufs",metaDataSpace, 2);
   public final SharedDeque remsetPool = new SharedDeque("remSets",metaDataSpace, 1);
   public final SharedDeque arrayRemsetPool = new SharedDeque("arrayRemSets",metaDataSpace, 2);
 
@@ -214,6 +215,7 @@ public abstract class Gen extends StopTheWorld {
       nurserySpace.release();
       switchNurseryZeroingApproach(nurserySpace);
       modbufPool.clearDeque(1);
+      fieldbufPool.clearDeque(2);
       remsetPool.clearDeque(1);
       arrayRemsetPool.clearDeque(2);
       if (!traceFullHeap()) {

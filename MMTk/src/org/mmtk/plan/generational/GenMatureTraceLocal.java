@@ -38,6 +38,7 @@ public abstract class GenMatureTraceLocal extends TraceLocal {
    *
    */
   private final ObjectReferenceDeque modbuf;
+  private final AddressPairDeque fieldbuf;
   private final AddressDeque remset;
   private final AddressPairDeque arrayRemset;
 
@@ -55,6 +56,7 @@ public abstract class GenMatureTraceLocal extends TraceLocal {
   public GenMatureTraceLocal(int specializedScan, Trace trace, GenCollector plan) {
     super(specializedScan, trace);
     this.modbuf = plan.modbuf;
+    this.fieldbuf = plan.fieldbuf;
     this.remset = plan.remset;
     this.arrayRemset = plan.arrayRemset;
   }
@@ -66,6 +68,7 @@ public abstract class GenMatureTraceLocal extends TraceLocal {
   public GenMatureTraceLocal(Trace trace, GenCollector plan) {
     super(Gen.SCAN_MATURE, trace);
     this.modbuf = plan.modbuf;
+    this.fieldbuf = plan.fieldbuf;
     this.remset = plan.remset;
     this.arrayRemset = plan.arrayRemset;
   }
@@ -123,6 +126,11 @@ public abstract class GenMatureTraceLocal extends TraceLocal {
     ObjectReference obj;
     while (!(obj = modbuf.pop()).isNull()) {
       HeaderByte.markAsUnlogged(obj);
+    }
+    logMessage(5, "clearing fieldbuf");
+    Word markRef;
+    while (!fieldbuf.pop1().isZero()) {
+      VM.objectModel.markAsUnlogged(fieldbuf.pop2().toWord());
     }
     logMessage(5, "clearing remset");
     while (!remset.isEmpty()) {

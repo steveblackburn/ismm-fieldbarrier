@@ -34,8 +34,11 @@ import org.vmmagic.unboxed.Address;
    * its buffers (when full or flushed) and from which it will acquire new
    * buffers when it has exhausted its own.
    */
+  public AddressPairDeque(String name, SharedDeque queue) {
+    super(name, queue);
+  }
   public AddressPairDeque(SharedDeque queue) {
-    super(queue);
+    super("", queue);
   }
 
   /**

@@ -49,6 +49,7 @@ import org.vmmagic.pragma.*;
 
   // remembered set consumers
   protected final ObjectReferenceDeque modbuf;
+  protected final AddressPairDeque fieldbuf;
   protected final AddressDeque remset;
   protected final AddressPairDeque arrayRemset;
 
@@ -70,6 +71,7 @@ import org.vmmagic.pragma.*;
     arrayRemset = new AddressPairDeque(global().arrayRemsetPool);
     remset = new AddressDeque("remset", global().remsetPool);
     modbuf = new ObjectReferenceDeque("modbuf", global().modbufPool);
+    fieldbuf = new AddressPairDeque("fieldbuf", global().fieldbufPool);
     nurseryTrace = new GenNurseryTraceLocal(global().nurseryTrace, this);
   }
 
@@ -89,6 +91,7 @@ import org.vmmagic.pragma.*;
       los.prepare(true);
       global().arrayRemsetPool.prepareNonBlocking();
       global().remsetPool.prepareNonBlocking();
+      global().fieldbufPool.prepareNonBlocking();
       global().modbufPool.prepareNonBlocking();
       nurseryTrace.prepare();
       return;
@@ -121,6 +124,7 @@ import org.vmmagic.pragma.*;
         nurseryTrace.release();
         global().arrayRemsetPool.reset();
         global().remsetPool.reset();
+        global().fieldbufPool.reset();
         global().modbufPool.reset();
       }
       return;
