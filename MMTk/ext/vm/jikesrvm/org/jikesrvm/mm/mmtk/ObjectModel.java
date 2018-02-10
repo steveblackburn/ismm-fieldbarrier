@@ -298,6 +298,16 @@ import org.vmmagic.unboxed.Word;
     return type.isAcyclicReference();
   }
 
+  public void markAsUnlogged(ObjectReference object, int markOffset) {
+    object.toAddress().plus(markOffset).store((byte) 1);
+  }
+  public void markAsLogged(ObjectReference object, int markOffset) {
+    object.toAddress().plus(markOffset).store((byte) 0);
+  }
+  public boolean isUnlogged(ObjectReference object, int markOffset) {
+    return object.toAddress().plus(markOffset).loadByte() == 1;
+  }
+
   @Override
   public void dumpObject(ObjectReference object) {
     DebugUtil.dumpRef(object);

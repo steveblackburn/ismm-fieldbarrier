@@ -162,6 +162,9 @@ public final class RVMClass extends RVMType {
   /** Total size of per-instance data, in bytes  */
   private int instanceSize;
 
+  /** Offset from object reference to mark state, if any */
+  private int markStateOffset;
+
   /** The desired alignment for instances of this type. */
   private int alignment;
 
@@ -823,7 +826,7 @@ public final class RVMClass extends RVMType {
 
   /**
    * @return total size, in bytes, of an instance of this class
-   * (including object header). Note that the class must be resolved
+   * (including object header, and mark bits if any). Note that the class must be resolved
    * for this information to be available.
    */
   @Uninterruptible
@@ -832,16 +835,34 @@ public final class RVMClass extends RVMType {
     return instanceSize;
   }
 
+  @Uninterruptible
+  public int getMarkStateOffset() {
+    if (VM.VerifyAssertions) VM._assert(isResolved() && USE_FIELD_BARRIER_FOR_PUTFIELD);
+    return markStateOffset;
+  }
+
   /**
    * Set the size of the instance. Only meant to be called from
    * ObjectModel et al. must be called when lock on class object
    * is already held (ie from resolve).
    *
-   * @param size computed size for instances of this class
+   * @param size computed size for instances of this class, inclusive of header and mark bits (if any)
    */
   @Uninterruptible
   public void setInstanceSizeInternal(int size) {
     instanceSize = size;
+  }
+
+  /**
+   * Set the offset to the start of mark state (if any). Only meant to be called from
+   * ObjectModel et al. must be called when lock on class object
+   * is already held (ie from resolve).
+   *
+   * @param offset offset in bytes from object reference to start of mark state
+   */
+  @Uninterruptible
+  public void setInstanceMarkStateOffsetInternal(int offset) {
+    markStateOffset = offset;
   }
 
   /**

@@ -99,6 +99,7 @@ public abstract class Gen extends StopTheWorld {
   private static final Timer fullHeapTime = new Timer("majorGCTime", false, true);
   protected static final EventCounter wbFast;
   protected static final EventCounter wbSlow;
+  protected static final EventCounter wbFRSlow;
   public static final SizeCounter nurseryMark;
   public static final SizeCounter nurseryCons;
 
@@ -143,9 +144,11 @@ public abstract class Gen extends StopTheWorld {
     if (GATHER_WRITE_BARRIER_STATS) {
       wbFast = new EventCounter("wbFast");
       wbSlow = new EventCounter("wbSlow");
+      wbFRSlow = new EventCounter("wbFRSlow");
     } else {
       wbFast = null;
       wbSlow = null;
+      wbFRSlow = null;
     }
     if (Stats.GATHER_MARK_CONS_STATS) {
       nurseryMark = new SizeCounter("nurseryMark", true, true);

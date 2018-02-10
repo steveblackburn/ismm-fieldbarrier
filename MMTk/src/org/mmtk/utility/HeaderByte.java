@@ -65,4 +65,6 @@ public class HeaderByte {
     byte value = VM.objectModel.readAvailableByte(object);
     return (value & UNLOGGED_BIT) == UNLOGGED_BIT;
   }
+
+
 }

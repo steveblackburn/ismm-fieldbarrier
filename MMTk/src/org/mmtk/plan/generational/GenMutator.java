@@ -137,26 +137,12 @@ import org.vmmagic.unboxed.*;
   @Inline
   private void fastPath(ObjectReference src, Address slot, ObjectReference tgt, int mode, int markOffset) {
     if (Gen.GATHER_WRITE_BARRIER_STATS) Gen.wbFast.inc();
-    if (Gen.USE_FIELD_BARRIER_FOR_AASTORE && mode == ARRAY_ELEMENT && markOffset != 0) {
-      Address mark = src.toAddress().plus(markOffset);
-        if (
-                true )
-/*      Space.isInSpace(IMMIX, slot))
-                !(Space.isInSpace(IMMORTAL, slot) ||
-                        Space.isInSpace(VM_SPACE, slot) ||
-                        Space.isInSpace(META, slot) ||
-                        Space.isInSpace(LOS, slot) ||
-                        Space.isInSpace(SANITY, slot) ||
-                        Space.isInSpace(NON_MOVING, slot) ||
-                        Space.isInSpace(SMALL_CODE, slot) ||
-                        Space.isInSpace(LARGE_CODE, slot) ||
-                        Space.isInSpace(NURSERY, slot))
-               ) */{
-
-
-           mark.store((byte) 1);
-
-        }
+    if ((Gen.USE_FIELD_BARRIER_FOR_AASTORE && mode == ARRAY_ELEMENT) ||
+             (Gen.USE_FIELD_BARRIER_FOR_PUTFIELD && mode == INSTANCE_FIELD)) {
+      if (true || VM.objectModel.isUnlogged(src, markOffset)) {
+        if (Gen.GATHER_WRITE_BARRIER_STATS) Gen.wbFRSlow.inc();
+        VM.objectModel.markAsLogged(src, markOffset);
+      }
     }
     if ((mode == ARRAY_ELEMENT && USE_OBJECT_BARRIER_FOR_AASTORE) ||
         (mode == INSTANCE_FIELD && USE_OBJECT_BARRIER_FOR_PUTFIELD)) {

@@ -26,6 +26,9 @@ import static org.mmtk.utility.Constants.LOG_BYTES_IN_INT;
 import static org.mmtk.utility.Constants.LOG_BYTES_IN_SHORT;
 
 import org.jikesrvm.VM;
+import org.jikesrvm.classloader.RVMClass;
+import org.jikesrvm.objectmodel.ObjectModel;
+import org.jikesrvm.objectmodel.TIB;
 import org.jikesrvm.runtime.Magic;
 import org.jikesrvm.runtime.Memory;
 import org.vmmagic.pragma.Entrypoint;
@@ -1245,7 +1248,11 @@ public class Barriers {
       ObjectReference src = ObjectReference.fromObject(ref);
       int markOffset = 0;
       if (USE_FIELD_BARRIER_FOR_PUTFIELD) {
-        // FIXME
+        // FIXME: this needs to be hoisted to compile time
+        TIB tib = ObjectModel.getTIB(ref);
+        RVMClass type = (RVMClass) tib.getType();
+        markOffset = type.getMarkStateOffset();
+        markOffset += (4+offset.toInt()) >> 2;
       }
       Selected.Mutator.get().objectReferenceWrite(src, src.toAddress().plus(offset), ObjectReference.fromObject(value), offset.toWord(), Word.fromIntZeroExtend(locationMetadata), INSTANCE_FIELD, markOffset);
     } else if (VM.VerifyAssertions)

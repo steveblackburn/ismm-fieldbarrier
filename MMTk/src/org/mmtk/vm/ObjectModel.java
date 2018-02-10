@@ -239,6 +239,11 @@ public abstract class ObjectModel {
    */
   public abstract void dumpObject(ObjectReference object);
 
+
+  public abstract void markAsUnlogged(ObjectReference object, int markOffset);
+  public abstract void markAsLogged(ObjectReference object, int markOffset);
+  public abstract boolean isUnlogged(ObjectReference object, int markOffset);
+
   /*
    * NOTE: The following methods must be implemented by subclasses of this
    * class, but are internal to the VM<->MM interface glue, so are never
