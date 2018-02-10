@@ -96,7 +96,7 @@ public class CMSMutator extends ConcurrentMutator {
   public void postAlloc(ObjectReference ref, ObjectReference typeRef,
       int bytes, int allocator) {
     switch (allocator) {
-      case CMS.ALLOC_DEFAULT: CMS.msSpace.initializeHeader(ref, true); break;
+      case CMS.ALLOC_DEFAULT: CMS.msSpace.initializeHeader(ref, typeRef, true); break;
       default:
         super.postAlloc(ref, typeRef, bytes, allocator);
         break;

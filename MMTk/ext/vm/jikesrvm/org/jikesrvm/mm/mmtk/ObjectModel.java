@@ -296,30 +296,11 @@ import org.vmmagic.unboxed.Word;
   }
 
   public void markAsUnlogged(Word markReference) {
-    if (VM.VERIFY_ASSERTIONS) VM.assertions._assert(false);
     markReference.toAddress().store((byte) 1);
   }
 
   public void markAllFieldsAsUnlogged(ObjectReference obj, ObjectReference tib) {
-    if (VM.VERIFY_ASSERTIONS) VM.assertions._assert(false);
-
-    // FIXME use the tib
-    RVMType type = Magic.objectAsType(((TIB) Magic.addressAsObject(tib.toAddress())).getType());
-    if ((type.isArrayType() && USE_FIELD_BARRIER_FOR_AASTORE && ((RVMArray) type).getElementType().isReferenceType()) ||
-            (!type.isArrayType() && USE_FIELD_BARRIER_FOR_PUTFIELD)) {
-      Address cursor = org.jikesrvm.objectmodel.ObjectModel.getObjectMarkBitsAddress(obj);
-      Address end = org.jikesrvm.objectmodel.ObjectModel.getObjectEndAddress(obj);
-      if (type.isArrayType()) {
-        Log.write((type.isArrayType() ? "a " : "s "));
-        Log.write("c: ", cursor);
-        Log.writeln(" e: ", end);
-      }
-      while (cursor.LT(end)) {
-        if (type.isArrayType()) Log.writeln("ul: ",cursor);
-        cursor.store((byte) 1);
-        cursor = cursor.plus(1);
-      }
-    }
+    org.jikesrvm.objectmodel.ObjectModel.setAllMarkBits(obj, tib);
   }
   public void markAsLogged(ObjectReference object, int markOffset) {
     object.toAddress().plus(markOffset).store((byte) 0);

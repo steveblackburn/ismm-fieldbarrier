@@ -16,8 +16,7 @@ import static org.jikesrvm.HeapLayoutConstants.BOOT_IMAGE_CODE_SIZE;
 import static org.jikesrvm.HeapLayoutConstants.BOOT_IMAGE_CODE_START;
 import static org.jikesrvm.HeapLayoutConstants.BOOT_IMAGE_DATA_SIZE;
 import static org.jikesrvm.HeapLayoutConstants.BOOT_IMAGE_DATA_START;
-import static org.jikesrvm.mm.mminterface.MemoryManagerConstants.FIELD_BARRIER_USE_BYTE;
-import static org.jikesrvm.mm.mminterface.MemoryManagerConstants.USE_FIELD_BARRIER;
+import static org.jikesrvm.mm.mminterface.MemoryManagerConstants.*;
 import static org.jikesrvm.objectmodel.TIBLayoutConstants.IMT_METHOD_SLOTS;
 import static org.jikesrvm.runtime.ExitStatus.EXIT_STATUS_BOGUS_COMMAND_LINE_ARG;
 import static org.mmtk.utility.Constants.MIN_ALIGNMENT;
@@ -1175,14 +1174,18 @@ public final class MemoryManager {
    * @param tib the object's TIB
    * @param size the number of bytes allocated by the GC system for
    *  the object
-   * @param isScalar whether the header belongs to a scalar or an array
    */
   @Interruptible
+  public static void initializeHeader(BootImageInterface bootImage, Address ref, TIB tib, int size) {
+    initializeHeader(bootImage, ref, tib, size, 0, false);
+  }
+  @Interruptible
   public static void initializeHeader(BootImageInterface bootImage, Address ref, TIB tib, int size,
-                                      boolean isScalar) {
+                                      int numElements, boolean isScalar) {
     //    int status = JavaHeader.readAvailableBitsWord(bootImage, ref);
     byte status = Selected.Plan.get().setBuildTimeGCByte(ref, ObjectReference.fromObject(tib), size);
     JavaHeader.writeAvailableByte(bootImage, ref, status);
+    ObjectModel.setAllMarkBits(bootImage, ref, tib, size, numElements, isScalar);
   }
 
   /**

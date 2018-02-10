@@ -102,7 +102,7 @@ public class GenImmixCollector extends GenCollector {
   public final void postCopy(ObjectReference object, ObjectReference typeRef,
       int bytes, int allocator) {
     if (allocator == Plan.ALLOC_LOS)
-      Plan.loSpace.initializeHeader(object, false);
+      Plan.loSpace.initializeHeader(object, typeRef, false);
     else {
       if (VM.VERIFY_ASSERTIONS) {
         VM.assertions._assert((!GenImmix.immixSpace.inImmixCollection() && allocator == GenImmix.ALLOC_MATURE_MINORGC) ||
@@ -112,8 +112,8 @@ public class GenImmixCollector extends GenCollector {
     }
     if (Gen.USE_OBJECT_BARRIER)
       HeaderByte.markAsUnlogged(object);
-   // if (Gen.USE_FIELD_BARRIER)
-      //VM.objectModel.markAllFieldsAsUnlogged(object, typeRef);
+    if (Gen.USE_FIELD_BARRIER)
+      VM.objectModel.markAllFieldsAsUnlogged(object, typeRef);
   }
 
   /*****************************************************************************

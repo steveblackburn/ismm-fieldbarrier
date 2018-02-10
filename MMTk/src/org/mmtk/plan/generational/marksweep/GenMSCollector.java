@@ -97,9 +97,9 @@ public class GenMSCollector extends GenCollector {
   public final void postCopy(ObjectReference object, ObjectReference typeRef,
                              int bytes, int allocator) {
     if (allocator == Plan.ALLOC_LOS)
-      Plan.loSpace.initializeHeader(object, false);
+      Plan.loSpace.initializeHeader(object, typeRef, false);
     else
-      GenMS.msSpace.postCopy(object, allocator == GenMS.ALLOC_MATURE_MAJORGC);
+      GenMS.msSpace.postCopy(object, typeRef,allocator == GenMS.ALLOC_MATURE_MAJORGC);
     if (Gen.USE_OBJECT_BARRIER)
       HeaderByte.markAsUnlogged(object);
   }

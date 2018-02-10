@@ -18,7 +18,6 @@ import org.mmtk.plan.TraceLocal;
 import org.mmtk.plan.Trace;
 import org.mmtk.utility.HeaderByte;
 import org.mmtk.utility.deque.*;
-import org.mmtk.vm.ObjectModel;
 import org.mmtk.vm.VM;
 
 import org.vmmagic.pragma.*;
@@ -97,10 +96,12 @@ public final class GenNurseryTraceLocal extends TraceLocal {
       scanObject(obj);
     }
     logMessage(5, "processing fieldbuf");
-    ObjectReference ref;
-    while (!(ref = fieldbuf.pop1().toObjectReference()).isNull()) {
-      if (VM.VERIFY_ASSERTIONS) VM.assertions._assert(false);
-      processNode(ref);
+    Address slot;
+    while (!(slot = fieldbuf.pop1()).isZero()) {
+      ObjectReference node = slot.loadObjectReference();
+      if (Gen.inNursery(node)) {
+          processRootEdge(slot, false);
+      }
       VM.objectModel.markAsUnlogged(fieldbuf.pop2().toWord());
     }
     logMessage(5, "processing remset");

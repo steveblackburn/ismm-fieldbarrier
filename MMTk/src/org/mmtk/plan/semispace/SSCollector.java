@@ -104,7 +104,7 @@ public class SSCollector extends StopTheWorldCollector {
       int bytes, int allocator) {
     ForwardingWord.clearForwardingBits(object);
     if (allocator == Plan.ALLOC_LOS)
-      Plan.loSpace.initializeHeader(object, false);
+      Plan.loSpace.initializeHeader(object, typeRef, false);
   }
 
   /****************************************************************************

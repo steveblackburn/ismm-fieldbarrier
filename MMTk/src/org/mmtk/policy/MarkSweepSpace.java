@@ -12,6 +12,7 @@
  */
 package org.mmtk.policy;
 
+import static org.mmtk.plan.generational.Gen.USE_FIELD_BARRIER;
 import static org.mmtk.utility.Constants.*;
 
 import org.mmtk.plan.TransitiveClosure;
@@ -326,8 +327,8 @@ public final class MarkSweepSpace extends SegregatedFreeListSpace {
    * @param object the object ref to the storage to be initialized
    */
   @Inline
-  public void postAlloc(ObjectReference object) {
-    initializeHeader(object, true);
+  public void postAlloc(ObjectReference object, ObjectReference typeRef) {
+    initializeHeader(object, typeRef, true);
   }
 
   /**
@@ -339,8 +340,8 @@ public final class MarkSweepSpace extends SegregatedFreeListSpace {
    * @param majorGC Is this copy happening during a major gc?
    */
   @Inline
-  public void postCopy(ObjectReference object, boolean majorGC) {
-    initializeHeader(object, false);
+  public void postCopy(ObjectReference object, ObjectReference typeRef, boolean majorGC) {
+    initializeHeader(object, typeRef, false);
     if (!HEADER_MARK_BITS) {
       testAndSetLiveBit(object);
     }
@@ -354,13 +355,16 @@ public final class MarkSweepSpace extends SegregatedFreeListSpace {
    * (true) or due to copying (false)?
    */
   @Inline
-  public void initializeHeader(ObjectReference object, boolean alloc) {
+  public void initializeHeader(ObjectReference object, ObjectReference typeRef, boolean alloc) {
     if (HEADER_MARK_BITS) {
       byte oldValue = VM.objectModel.readAvailableByte(object);
       byte newValue = (byte) ((oldValue & ~MARK_COUNT_MASK) | (alloc && !isAllocAsMarked ? allocState : markState));
       VM.objectModel.writeAvailableByte(object, newValue);
     } else if (HeaderByte.NEEDS_UNLOGGED_BIT)
       HeaderByte.markAsUnlogged(object);
+
+    if (USE_FIELD_BARRIER)
+      VM.objectModel.markAllFieldsAsUnlogged(object, typeRef);
   }
 
   /**

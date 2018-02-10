@@ -141,13 +141,13 @@ import org.vmmagic.unboxed.*;
     if (Gen.GATHER_WRITE_BARRIER_STATS) Gen.wbFast.inc();
     if ((Gen.USE_FIELD_BARRIER_FOR_AASTORE && mode == ARRAY_ELEMENT) ||
              (Gen.USE_FIELD_BARRIER_FOR_PUTFIELD && mode == INSTANCE_FIELD)) {
-      if (true || VM.objectModel.isUnlogged(src, markOffset)) {
+      if (Space.isInSpace(VM_SPACE,src) || VM.objectModel.isUnlogged(src, markOffset)) {
+        //if (VM.objectModel.isUnlogged(src, markOffset)) {
         if (Gen.GATHER_WRITE_BARRIER_STATS) Gen.wbFRSlow.inc();
         VM.objectModel.markAsLogged(src, markOffset);
-        // fieldbuf.insert(slot,src.toAddress().plus(markOffset));
+        fieldbuf.insert(slot, src.toAddress().plus(markOffset));
       }
-    }
-    if ((mode == ARRAY_ELEMENT && USE_OBJECT_BARRIER_FOR_AASTORE) ||
+    } else if ((mode == ARRAY_ELEMENT && USE_OBJECT_BARRIER_FOR_AASTORE) ||
         (mode == INSTANCE_FIELD && USE_OBJECT_BARRIER_FOR_PUTFIELD)) {
       if (HeaderByte.isUnlogged(src)) {
         if (Gen.GATHER_WRITE_BARRIER_STATS) Gen.wbSlow.inc();

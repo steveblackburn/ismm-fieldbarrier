@@ -77,7 +77,7 @@ public class MSMutator extends StopTheWorldMutator {
   public void postAlloc(ObjectReference ref, ObjectReference typeRef,
       int bytes, int allocator) {
     if (allocator == MS.ALLOC_DEFAULT)
-      MS.msSpace.postAlloc(ref);
+      MS.msSpace.postAlloc(ref, typeRef);
     else
       super.postAlloc(ref, typeRef, bytes, allocator);
   }

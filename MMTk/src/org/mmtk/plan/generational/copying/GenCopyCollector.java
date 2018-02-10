@@ -105,7 +105,7 @@ public class GenCopyCollector extends GenCollector {
       int bytes, int allocator) {
     ForwardingWord.clearForwardingBits(object);
     if (allocator == Plan.ALLOC_LOS)
-      Plan.loSpace.initializeHeader(object, false);
+      Plan.loSpace.initializeHeader(object, typeRef, false);
     else if (GenCopy.IGNORE_REMSETS)
       GenCopy.immortalSpace.traceObject(getCurrentTrace(), object); // FIXME this does not look right
     if (Gen.USE_OBJECT_BARRIER)

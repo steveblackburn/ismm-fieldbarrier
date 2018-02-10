@@ -13,6 +13,8 @@
 package org.jikesrvm.objectmodel;
 
 import static org.jikesrvm.mm.mminterface.MemoryManagerConstants.USE_FIELD_BARRIER;
+import static org.jikesrvm.mm.mminterface.MemoryManagerConstants.USE_FIELD_BARRIER_FOR_AASTORE;
+import static org.jikesrvm.mm.mminterface.MemoryManagerConstants.USE_FIELD_BARRIER_FOR_PUTFIELD;
 import static org.jikesrvm.objectmodel.JavaHeaderConstants.*;
 import static org.jikesrvm.runtime.JavaSizeConstants.BYTES_IN_INT;
 
@@ -225,23 +227,43 @@ public class ObjectModel {
     }
   }
 
-  /**
-   * Get the pointer to the mark bits of an object (if any).
-   *
-   * @param obj the object in question
-   * @return first word after the object
-   */
-  public static Address getObjectMarkBitsAddress(Object obj) {
-    if (VM.VerifyAssertions) VM._assert(false);
-    if (VM.VerifyAssertions) VM._assert(USE_FIELD_BARRIER);
-    TIB tib = getTIB(obj);
+  @Interruptible
+  public static void setAllMarkBits(BootImageInterface bootImage, Address ref, TIB tib, int size,
+                                    int numElements, boolean isScalar) {
     RVMType type = tib.getType();
-    if (type.isClassType()) {
-      return Magic.objectAsAddress(obj).plus(((RVMClass)type).getMarkStateOffset());
-    } else {
-      // FIXME assert that this array of references
-      int numElements = Magic.getArrayLength(obj);
-      return Magic.objectAsAddress(obj).plus(numElements<<2);  // FIXME address width constant
+    Address start = ref.minus(GC_HEADER_OFFSET);
+    Address end = start.plus(size);
+    Address cursor;
+    if (isScalar)
+      cursor = ref.plus(((RVMClass) type).getMarkStateOffset());
+    else
+      cursor = end.minus(numElements);
+    while (cursor.LT(end)) {
+      bootImage.setByte(cursor, (byte) 1);
+      cursor = cursor.plus(1);
+    }
+  }
+
+
+  public static void setAllMarkBits(ObjectReference obj, ObjectReference tib) {
+    RVMType type = ((TIB) Magic.addressAsObject(tib.toAddress())).getType();
+    if ((type.isArrayType() && USE_FIELD_BARRIER_FOR_AASTORE && ((RVMArray) type).getElementType().isReferenceType()) ||
+            (!type.isArrayType() && USE_FIELD_BARRIER_FOR_PUTFIELD)) {
+      Address cursor;
+      Address end;
+      if (type.isClassType()) {
+        cursor = Magic.objectAsAddress(obj).plus(((RVMClass) type).getMarkStateOffset());
+        end = getObjectEndAddress(obj, type.asClass());
+      } else {
+        if (VM.VerifyAssertions) VM._assert(((RVMArray) type).getElementType().isReferenceType());
+        int numElements = Magic.getArrayLength(obj);
+        cursor = Magic.objectAsAddress(obj).plus(numElements << 2);  // FIXME address width constant
+        end = getObjectEndAddress(obj, type.asArray(), numElements);
+      }
+      while (cursor.LT(end)) {
+        cursor.store((byte) 1);
+        cursor = cursor.plus(1);
+      }
     }
   }
 
@@ -935,7 +957,7 @@ public class ObjectModel {
     int offset = getOffsetForAlignment(klass, needsIdentityHash);
     Address ptr = bootImage.allocateDataStorage(size, align, offset);
     Address ref = JavaHeader.initializeScalarHeader(bootImage, ptr, tib, size, needsIdentityHash, identityHashValue);
-    MemoryManager.initializeHeader(bootImage, ref, tib, size, true);
+    MemoryManager.initializeHeader(bootImage, ref, tib, size);
     MiscHeader.initializeHeader(bootImage, ref, tib, size, true);
     return ref;
   }
@@ -1029,7 +1051,7 @@ public class ObjectModel {
     ptr = AlignmentEncoding.adjustRegion(alignCode, ptr);
     Address ref = JavaHeader.initializeArrayHeader(bootImage, ptr, tib, size, numElements, needsIdentityHash, identityHashValue);
     bootImage.setFullWord(ref.plus(getArrayLengthOffset()), numElements);
-    MemoryManager.initializeHeader(bootImage, ref, tib, size, false);
+    MemoryManager.initializeHeader(bootImage, ref, tib, size, numElements, false);
     MiscHeader.initializeHeader(bootImage, ref, tib, size, false);
     return ref;
   }
@@ -1053,7 +1075,7 @@ public class ObjectModel {
     Address ptr = bootImage.allocateCodeStorage(size, align, offset);
     Address ref = JavaHeader.initializeArrayHeader(bootImage, ptr, tib, size, numElements, false, 0);
     bootImage.setFullWord(ref.plus(getArrayLengthOffset()), numElements);
-    MemoryManager.initializeHeader(bootImage, ref, tib, size, false);
+    MemoryManager.initializeHeader(bootImage, ref, tib, size, numElements, false);
     MiscHeader.initializeHeader(bootImage, ref, tib, size, false);
     return ref;
   }

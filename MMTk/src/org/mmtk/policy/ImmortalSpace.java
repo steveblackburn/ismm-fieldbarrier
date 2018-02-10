@@ -12,6 +12,7 @@
  */
 package org.mmtk.policy;
 
+import static org.mmtk.plan.generational.Gen.USE_FIELD_BARRIER;
 import static org.mmtk.utility.Constants.*;
 
 import org.mmtk.plan.Plan;
@@ -107,11 +108,13 @@ import org.vmmagic.pragma.*;
    *
    * @param object The newly allocated object instance whose header we are initializing
    */
-  public void initializeHeader(ObjectReference object) {
+  public void initializeHeader(ObjectReference object, ObjectReference typeRef) {
     byte oldValue = VM.objectModel.readAvailableByte(object);
     byte newValue = (byte) ((oldValue & GC_MARK_BIT_MASK) | markState);
     if (HeaderByte.NEEDS_UNLOGGED_BIT) newValue |= HeaderByte.UNLOGGED_BIT;
     VM.objectModel.writeAvailableByte(object, newValue);
+    if (USE_FIELD_BARRIER)
+      VM.objectModel.markAllFieldsAsUnlogged(object, typeRef);
   }
 
   /**
