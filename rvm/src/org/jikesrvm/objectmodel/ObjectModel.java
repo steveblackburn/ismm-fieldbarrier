@@ -237,9 +237,11 @@ public class ObjectModel {
     if (isScalar) {
       cursor = ref.plus(((RVMClass) type).getMarkStateOffset());
     } else {
-      if (!(((RVMArray) type) == RVMArray.JavaLangObjectArray))
+     if (!(((RVMArray) type).getElementType().isReferenceType()))
         return;
-      cursor = end.minus(numElements);
+      cursor = end.minus(numElements);  // FIXME: why is this not the same as the statement below???
+//      VM.sysWrite("o: ", ref); VM.sysWrite(" s: ",start); VM.sysWrite(" c: ",cursor); VM.sysWriteln(" e: ",end);
+      cursor = ref.plus((numElements)<<2); // FIXME LOG_ADDRESS_WIDTH
     }
     while (cursor.LT(end)) {
       bootImage.setByte(cursor, (byte) 1);
