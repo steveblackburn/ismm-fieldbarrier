@@ -230,6 +230,8 @@ public class ObjectModel {
   @Interruptible
   public static void setAllMarkBits(BootImageInterface bootImage, Address ref, TIB tib, int size,
                                     int numElements, boolean isScalar) {
+    if (VM.VerifyAssertions) VM._assert((isScalar && USE_FIELD_BARRIER_FOR_PUTFIELD) || (!isScalar && USE_FIELD_BARRIER_FOR_AASTORE));
+
     RVMType type = tib.getType();
     Address start = ref.minus(GC_HEADER_OFFSET);
     Address end = start.plus(size);
@@ -252,8 +254,8 @@ public class ObjectModel {
 
   public static void setAllMarkBits(ObjectReference obj, ObjectReference tib) {
     RVMType type = ((TIB) Magic.addressAsObject(tib.toAddress())).getType();
-    if ((type.isArrayType() && USE_FIELD_BARRIER_FOR_AASTORE && ((RVMArray) type).getElementType().isReferenceType()) ||
-            (!type.isArrayType() && USE_FIELD_BARRIER_FOR_PUTFIELD)) {
+    if (VM.VerifyAssertions) VM._assert((!type.isArrayType() && USE_FIELD_BARRIER_FOR_PUTFIELD) || (type.isArrayType() && USE_FIELD_BARRIER_FOR_AASTORE));
+    if (!(type.isArrayType() && !((RVMArray) type).getElementType().isReferenceType())) {
       Address cursor;
       Address end;
       if (type.isClassType()) {

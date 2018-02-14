@@ -457,7 +457,7 @@ public final class RVMField extends RVMMember {
       }
     } else {
       if (NEEDS_OBJECT_PUTFIELD_BARRIER && !isUntraced()) {
-        Barriers.objectFieldWrite(obj, ref, getOffset(), getId());
+        Barriers.objectFieldWrite(obj, ref, getOffset(), getId(), getMarkOffset());
       } else {
         Magic.setObjectAtOffset(obj, getOffset(), ref);
       }

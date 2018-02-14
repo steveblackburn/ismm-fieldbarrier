@@ -239,7 +239,8 @@ public final class Unsafe {
     Offset off = Offset.fromLong(offset);
     Magic.storeStoreBarrier();
     if (NEEDS_OBJECT_PUTFIELD_BARRIER) {
-      objectFieldWrite(obj, value, off, 0);
+      if (VM.VerifyAssertions) VM._assert(VM.NOT_REACHED);
+      objectFieldWrite(obj, value, off, 0, 0);
     } else {
       Magic.setObjectAtOffset(obj, off, value);
     }
@@ -594,7 +595,8 @@ public final class Unsafe {
   public void putObject(Object obj, long offset, Object value) {
     Offset off = Offset.fromLong(offset);
     if (NEEDS_OBJECT_PUTFIELD_BARRIER) {
-      objectFieldWrite(obj, value, off, 0);
+      if (VM.VerifyAssertions) VM._assert(VM.NOT_REACHED);
+      objectFieldWrite(obj, value, off, 0, 0);
     } else {
       Magic.setObjectAtOffset(obj,off,value);
     }
@@ -605,7 +607,8 @@ public final class Unsafe {
     Offset off = Offset.fromLong(offset);
     Magic.storeStoreBarrier();
     if (NEEDS_OBJECT_PUTFIELD_BARRIER) {
-      objectFieldWrite(obj, value, off, 0);
+      if (VM.VerifyAssertions) VM._assert(VM.NOT_REACHED);
+      objectFieldWrite(obj, value, off, 0, 0);
     } else {
       Magic.setObjectAtOffset(obj, off, value);
     }

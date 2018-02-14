@@ -111,7 +111,7 @@ public abstract class Reference<T> {
   public void clear() {
     if (RVMType.JavaLangRefReferenceReferenceField.madeTraced()) {
       if (NEEDS_OBJECT_PUTFIELD_BARRIER) {
-        Barriers.objectFieldWrite(this, null, RVMType.JavaLangRefReferenceReferenceField.getOffset(), RVMType.JavaLangRefReferenceReferenceField.getId());
+        Barriers.objectFieldWrite(this, null, RVMType.JavaLangRefReferenceReferenceField.getOffset(), RVMType.JavaLangRefReferenceReferenceField.getId(),RVMType.JavaLangRefReferenceReferenceField.getMarkOffset());
       } else {
         Magic.setObjectAtOffset(this, RVMType.JavaLangRefReferenceReferenceField.getOffset(), null, RVMType.JavaLangRefReferenceReferenceField.getId());
       }

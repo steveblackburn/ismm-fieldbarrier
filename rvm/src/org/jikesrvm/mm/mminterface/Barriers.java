@@ -1243,17 +1243,9 @@ public class Barriers {
    */
   @Inline
   @Entrypoint
-  public static void objectFieldWrite(Object ref, Object value, Offset offset, int locationMetadata) {
+  public static void objectFieldWrite(Object ref, Object value, Offset offset, int locationMetadata, int markOffset) {
     if (NEEDS_OBJECT_GC_WRITE_BARRIER) {
       ObjectReference src = ObjectReference.fromObject(ref);
-      int markOffset = 0;
-      if (USE_FIELD_BARRIER_FOR_PUTFIELD) {
-        // FIXME: this needs to be hoisted to compile time
-        TIB tib = ObjectModel.getTIB(ref);
-        RVMClass type = (RVMClass) tib.getType();
-        markOffset = type.getMarkStateOffset();
-        markOffset += (4+offset.toInt()) >> 2;
-      }
       Selected.Mutator.get().objectReferenceWrite(src, src.toAddress().plus(offset), ObjectReference.fromObject(value), offset.toWord(), Word.fromIntZeroExtend(locationMetadata), INSTANCE_FIELD, markOffset);
     } else if (VM.VerifyAssertions)
       VM._assert(VM.NOT_REACHED);

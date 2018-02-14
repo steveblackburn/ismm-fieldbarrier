@@ -141,7 +141,8 @@ import org.vmmagic.unboxed.*;
     if (Gen.GATHER_WRITE_BARRIER_STATS) Gen.wbFast.inc();
     if ((Gen.USE_FIELD_BARRIER_FOR_AASTORE && mode == ARRAY_ELEMENT) ||
              (Gen.USE_FIELD_BARRIER_FOR_PUTFIELD && mode == INSTANCE_FIELD)) {
-      if (VM.objectModel.isUnlogged(src, markOffset)) {
+//      if (Space.isInSpace(LOS,src) || VM.objectModel.isUnlogged(src, markOffset)) {
+      if (true || VM.objectModel.isUnlogged(src, markOffset)) {
         if (Gen.GATHER_WRITE_BARRIER_STATS) Gen.wbFRSlow.inc();
         VM.objectModel.markAsLogged(src, markOffset);
         fieldbuf.insert(slot, src.toAddress().plus(markOffset));
