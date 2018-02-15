@@ -12,7 +12,6 @@
  */
 package org.jikesrvm.objectmodel;
 
-import static org.jikesrvm.mm.mminterface.MemoryManagerConstants.USE_FIELD_BARRIER;
 import static org.jikesrvm.mm.mminterface.MemoryManagerConstants.USE_FIELD_BARRIER_FOR_AASTORE;
 import static org.jikesrvm.mm.mminterface.MemoryManagerConstants.USE_FIELD_BARRIER_FOR_PUTFIELD;
 import static org.jikesrvm.objectmodel.JavaHeaderConstants.*;

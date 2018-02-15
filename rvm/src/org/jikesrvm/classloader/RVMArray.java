@@ -16,7 +16,6 @@ import static org.jikesrvm.VM.NOT_REACHED;
 import static org.jikesrvm.classloader.ClassLoaderConstants.*;
 import static org.jikesrvm.mm.mminterface.Barriers.*;
 import static org.jikesrvm.mm.mminterface.MemoryManagerConstants.USE_FIELD_BARRIER_FOR_AASTORE;
-import static org.jikesrvm.mm.mminterface.MemoryManagerConstants.USE_FIELD_BARRIER_FOR_PUTFIELD;
 import static org.jikesrvm.objectmodel.JavaHeaderConstants.LOG_MIN_ALIGNMENT;
 import static org.jikesrvm.runtime.JavaSizeConstants.BYTES_IN_BOOLEAN;
 import static org.jikesrvm.runtime.JavaSizeConstants.BYTES_IN_CHAR;

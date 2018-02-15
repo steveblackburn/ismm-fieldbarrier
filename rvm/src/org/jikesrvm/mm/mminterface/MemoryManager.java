@@ -497,7 +497,7 @@ public final class MemoryManager {
    */
   @Inline
   public static Object allocateScalar(int size, TIB tib, int allocator, int align, int offset, int site) {
-    if (USE_FIELD_BARRIER) {
+    if (USE_FIELD_BARRIER_FOR_PUTFIELD) {
       int pad = (FIELD_BARRIER_USE_BYTE ? (size + 3) >> 2 : (size + 31) >> 5);
       size += pad;
     }
@@ -567,7 +567,7 @@ public final class MemoryManager {
   @Inline
   private static Object allocateArrayInternal(int numElements, int size, TIB tib, int allocator,
                                               int align, int offset, int site) {
-    if (USE_FIELD_BARRIER) {
+    if (USE_FIELD_BARRIER_FOR_AASTORE) {
       int pad = (FIELD_BARRIER_USE_BYTE ? (size + 3) >> 2 : (size + 31) >> 5);
       size += pad;
     }

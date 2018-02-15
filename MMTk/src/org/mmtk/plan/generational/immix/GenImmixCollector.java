@@ -112,7 +112,7 @@ public class GenImmixCollector extends GenCollector {
     }
     if (Gen.USE_OBJECT_BARRIER)
       HeaderByte.markAsUnlogged(object);
-    if (Gen.USE_FIELD_BARRIER)
+    if (Gen.USE_FIELD_BARRIERX)
       VM.objectModel.markAllFieldsAsUnlogged(object, typeRef);
   }
 

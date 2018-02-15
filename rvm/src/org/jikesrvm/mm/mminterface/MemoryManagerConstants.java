@@ -40,7 +40,6 @@ public class MemoryManagerConstants {
   public static final boolean MOVES_CODE = false;
   public static final boolean USE_FIELD_BARRIER_FOR_PUTFIELD = Selected.Constraints.get().useFieldBarrierForPutfield();
   public static final boolean USE_FIELD_BARRIER_FOR_AASTORE = Selected.Constraints.get().useFieldBarrierForAAStore();
-  public static final boolean USE_FIELD_BARRIER = Selected.Constraints.get().useFieldBarrier();
   public static final boolean FIELD_BARRIER_USE_BYTE = Selected.Constraints.get().fieldBarrierUseByte();
 }
 

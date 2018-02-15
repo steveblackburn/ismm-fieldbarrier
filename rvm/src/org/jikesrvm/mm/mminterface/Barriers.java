@@ -17,7 +17,6 @@ import static org.jikesrvm.mm.mminterface.MemoryManagerConstants.USE_FIELD_BARRI
 import static org.jikesrvm.mm.mminterface.MemoryManagerConstants.USE_FIELD_BARRIER_FOR_PUTFIELD;
 import static org.jikesrvm.objectmodel.ObjectModel.calculateMarkOffsetForField;
 import static org.jikesrvm.objectmodel.ObjectModel.calculateMarkOffsetForIndex;
-import static org.jikesrvm.objectmodel.ObjectModel.getFieldMarkStateBaseOffset;
 import static org.jikesrvm.runtime.JavaSizeConstants.LOG_BYTES_IN_BOOLEAN;
 import static org.jikesrvm.runtime.JavaSizeConstants.LOG_BYTES_IN_DOUBLE;
 import static org.jikesrvm.runtime.JavaSizeConstants.LOG_BYTES_IN_FLOAT;

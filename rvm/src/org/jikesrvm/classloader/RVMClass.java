@@ -30,7 +30,6 @@ import static org.jikesrvm.classloader.ClassLoaderConstants.CLASS_LOADED;
 import static org.jikesrvm.classloader.ClassLoaderConstants.CLASS_RESOLVED;
 import static org.jikesrvm.classloader.ClassLoaderConstants.CP_MEMBER;
 import static org.jikesrvm.classloader.ClassLoaderConstants.CP_UTF;
-import static org.jikesrvm.mm.mminterface.MemoryManagerConstants.USE_FIELD_BARRIER;
 import static org.jikesrvm.mm.mminterface.MemoryManagerConstants.USE_FIELD_BARRIER_FOR_PUTFIELD;
 import static org.jikesrvm.objectmodel.ObjectModel.calculateMarkOffsetForField;
 import static org.jikesrvm.runtime.JavaSizeConstants.BYTES_IN_DOUBLE;
