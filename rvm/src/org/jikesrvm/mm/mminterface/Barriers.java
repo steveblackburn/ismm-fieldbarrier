@@ -12,8 +12,12 @@
  */
 package org.jikesrvm.mm.mminterface;
 
+import static org.jikesrvm.classloader.MemberReference.getFieldRef;
 import static org.jikesrvm.mm.mminterface.MemoryManagerConstants.USE_FIELD_BARRIER_FOR_AASTORE;
 import static org.jikesrvm.mm.mminterface.MemoryManagerConstants.USE_FIELD_BARRIER_FOR_PUTFIELD;
+import static org.jikesrvm.objectmodel.ObjectModel.calculateMarkOffsetForField;
+import static org.jikesrvm.objectmodel.ObjectModel.calculateMarkOffsetForIndex;
+import static org.jikesrvm.objectmodel.ObjectModel.getFieldMarkStateBaseOffset;
 import static org.jikesrvm.runtime.JavaSizeConstants.LOG_BYTES_IN_BOOLEAN;
 import static org.jikesrvm.runtime.JavaSizeConstants.LOG_BYTES_IN_DOUBLE;
 import static org.jikesrvm.runtime.JavaSizeConstants.LOG_BYTES_IN_FLOAT;
@@ -26,6 +30,7 @@ import static org.mmtk.utility.Constants.LOG_BYTES_IN_INT;
 import static org.mmtk.utility.Constants.LOG_BYTES_IN_SHORT;
 
 import org.jikesrvm.VM;
+import org.jikesrvm.classloader.FieldReference;
 import org.jikesrvm.classloader.RVMClass;
 import org.jikesrvm.objectmodel.ObjectModel;
 import org.jikesrvm.objectmodel.TIB;
@@ -33,6 +38,7 @@ import org.jikesrvm.runtime.Magic;
 import org.jikesrvm.runtime.Memory;
 import org.vmmagic.pragma.Entrypoint;
 import org.vmmagic.pragma.Inline;
+import org.vmmagic.pragma.Interruptible;
 import org.vmmagic.pragma.Uninterruptible;
 import org.vmmagic.unboxed.Address;
 import org.vmmagic.unboxed.Extent;
@@ -1234,6 +1240,29 @@ public class Barriers {
   public static final boolean OBJECT_BULK_COPY_SUPPORTED         = !(NEEDS_OBJECT_ASTORE_BARRIER || NEEDS_OBJECT_ALOAD_BARRIER) || Selected.Constraints.get().objectReferenceBulkCopySupported();
 
   /**
+   * Barrier for writes of objects into fields of instances (i.e. putfield)
+   * in case where field was not resolved at compile time.
+   *
+   * @param ref the object which is the subject of the putfield
+   * @param value the new value for the field
+   * @param offset the offset of the field to be modified
+   * @param locationMetadata an int that encodes the source location being modified
+   */
+  @Inline
+  @Entrypoint
+  @Interruptible // FIXME is this really OK?   Added because of need to resolve field
+  public static void unresolvedObjectFieldWrite(Object ref, Object value, Offset offset, int locationMetadata) {
+    if (NEEDS_OBJECT_GC_WRITE_BARRIER) {
+      ObjectReference src = ObjectReference.fromObject(ref);
+      FieldReference fr = getFieldRef(locationMetadata);
+      if (VM.VerifyAssertions) VM._assert(fr.isResolved());
+      int markOffset = USE_FIELD_BARRIER_FOR_PUTFIELD ? calculateMarkOffsetForField(fr.peekResolvedField()) : 0;
+      Selected.Mutator.get().objectReferenceWrite(src, src.toAddress().plus(offset), ObjectReference.fromObject(value), offset.toWord(), Word.fromIntZeroExtend(locationMetadata), INSTANCE_FIELD, markOffset);
+    } else if (VM.VerifyAssertions)
+      VM._assert(VM.NOT_REACHED);
+  }
+
+  /**
    * Barrier for writes of objects into fields of instances (i.e. putfield).
    *
    * @param ref the object which is the subject of the putfield
@@ -1267,9 +1296,8 @@ public class Barriers {
       ObjectReference array = ObjectReference.fromObject(ref);
       Offset offset = Offset.fromIntZeroExtend(index << LOG_BYTES_IN_ADDRESS);
       int markoffset = 0;
-      if (USE_FIELD_BARRIER_FOR_AASTORE) {
-          markoffset = (Magic.getArrayLength(ref) << LOG_BYTES_IN_ADDRESS) + index;
-      }
+      if (USE_FIELD_BARRIER_FOR_AASTORE)
+          markoffset = calculateMarkOffsetForIndex(index);
       Selected.Mutator.get().objectReferenceWrite(array, array.toAddress().plus(offset), ObjectReference.fromObject(value), offset.toWord(), Word.zero(), ARRAY_ELEMENT, markoffset);
     } else if (VM.VerifyAssertions)
       VM._assert(VM.NOT_REACHED);

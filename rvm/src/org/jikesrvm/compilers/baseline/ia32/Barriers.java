@@ -149,10 +149,9 @@ class Barriers {
   static void compilePutfieldBarrier(Assembler asm, GPR offset, int locationMetadata) {
     asm.emitPUSH_Reg(offset);
     asm.emitPUSH_Imm(locationMetadata);
-    asm.emitPUSH_Imm(0); // FIXME
-    BaselineCompilerImpl.genParameterRegisterLoad(asm, 5);
+    BaselineCompilerImpl.genParameterRegisterLoad(asm, 4);
     genNullCheck(asm, T0);
-    asm.generateJTOCcall(Entrypoints.objectFieldWriteBarrierMethod.getOffset());
+    asm.generateJTOCcall(Entrypoints.unresolvedObjectFieldWriteBarrierMethod.getOffset());
   }
 
   /**
@@ -164,10 +163,10 @@ class Barriers {
    * @param locationMetadata meta-data about the location
    */
   @Inline
-  static void compilePutfieldBarrierImm(Assembler asm, Offset fieldOffset, int locationMetadata) {
+  static void compilePutfieldBarrierImm(Assembler asm, Offset fieldOffset, int locationMetadata, int fieldMarkOffset) {
     asm.emitPUSH_Imm(fieldOffset.toInt());
     asm.emitPUSH_Imm(locationMetadata);
-    asm.emitPUSH_Imm(0); // FIXME
+    asm.emitPUSH_Imm(fieldMarkOffset);
     BaselineCompilerImpl.genParameterRegisterLoad(asm, 5);
     genNullCheck(asm, T0);
     asm.generateJTOCcall(Entrypoints.objectFieldWriteBarrierMethod.getOffset());

@@ -2814,7 +2814,7 @@ public final class BaselineCompilerImpl extends BaselineCompiler {
     if (field.isReferenceType()) {
       // 32/64bit reference store
       if (NEEDS_OBJECT_PUTFIELD_BARRIER && !field.isUntraced()) {
-        Barriers.compilePutfieldBarrierImm(asm, fieldOffset, fieldRef.getId());
+        Barriers.compilePutfieldBarrierImm(asm, fieldOffset, fieldRef.getId(), field.getFieldMarkOffset());
       } else {
         asm.emitPOP_Reg(T0);  // T0 is the value to be stored
         asm.emitPOP_Reg(S0);  // S0 is the object reference

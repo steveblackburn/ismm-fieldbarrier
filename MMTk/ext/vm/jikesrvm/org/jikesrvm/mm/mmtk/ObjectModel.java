@@ -12,7 +12,6 @@
  */
 package org.jikesrvm.mm.mmtk;
 
-import static org.jikesrvm.mm.mminterface.MemoryManagerConstants.*;
 import static org.jikesrvm.objectmodel.JavaHeaderConstants.ARRAY_BASE_OFFSET;
 import static org.jikesrvm.objectmodel.JavaHeaderConstants.GC_HEADER_OFFSET;
 
@@ -25,7 +24,6 @@ import org.jikesrvm.mm.mminterface.MemoryManager;
 import org.jikesrvm.objectmodel.TIB;
 import org.jikesrvm.runtime.Magic;
 import org.mmtk.plan.CollectorContext;
-import org.mmtk.utility.Log;
 import org.mmtk.utility.alloc.Allocator;
 import org.mmtk.vm.VM;
 import org.vmmagic.pragma.Inline;
@@ -98,7 +96,7 @@ import org.vmmagic.unboxed.Word;
    * @return The size (in bytes) of the given object.
    */
   static int getObjectSize(ObjectReference object) {
-      return org.jikesrvm.objectmodel.ObjectModel.bytesRequiredWhenCopied(object);
+      return org.jikesrvm.objectmodel.ObjectModel.bytesRequiredWhenCopied(object.toObject());
   }
 
   /**
@@ -295,18 +293,24 @@ import org.vmmagic.unboxed.Word;
     return type.isAcyclicReference();
   }
 
-  public void markAsUnlogged(Word markReference) {
-    markReference.toAddress().store((byte) 1);
+  @Inline
+  public void markAllFieldsAsUnlogged(ObjectReference obj, ObjectReference tib) {
+    org.jikesrvm.objectmodel.ObjectModel.markAllFieldsAsUnlogged(obj, tib);
   }
 
-  public void markAllFieldsAsUnlogged(ObjectReference obj, ObjectReference tib) {
-    org.jikesrvm.objectmodel.ObjectModel.setAllMarkBits(obj, tib);
+  @Inline
+  public Word markFieldAsLogged(ObjectReference object, int fieldMarkOffset) {
+    return org.jikesrvm.objectmodel.ObjectModel.markFieldAsLogged(object, fieldMarkOffset);
   }
-  public void markAsLogged(ObjectReference object, int markOffset) {
-    object.toAddress().plus(markOffset).store((byte) 0);
+
+  @Inline
+  public void markFieldAsUnlogged(Word fieldMarkReference) {
+    org.jikesrvm.objectmodel.ObjectModel.markFieldAsUnlogged(fieldMarkReference);
   }
-  public boolean isUnlogged(ObjectReference object, int markOffset) {
-    return object.toAddress().plus(markOffset).loadByte() == 1;
+
+  @Inline
+  public boolean isFieldUnlogged(ObjectReference object, int fieldMarkOffset) {
+    return org.jikesrvm.objectmodel.ObjectModel.isFieldUnlogged(object, fieldMarkOffset);
   }
 
   @Override

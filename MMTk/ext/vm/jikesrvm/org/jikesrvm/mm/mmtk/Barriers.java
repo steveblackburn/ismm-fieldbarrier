@@ -12,6 +12,7 @@
  */
 package org.jikesrvm.mm.mmtk;
 
+import static org.jikesrvm.mm.mminterface.MemoryManagerConstants.USE_FIELD_BARRIER;
 import static org.jikesrvm.runtime.UnboxedSizeConstants.LOG_BYTES_IN_ADDRESS;
 import static org.mmtk.utility.Constants.ARRAY_ELEMENT;
 import static org.mmtk.utility.Constants.INSTANCE_FIELD;
@@ -353,6 +354,7 @@ public class Barriers extends org.mmtk.vm.Barriers {
       for (int i = 0; i < arrayLength; i++) {
         Word offset = Offset.fromIntSignExtend(i << LOG_BYTES_IN_ADDRESS).toWord();
         Address slotAddress = ref.toAddress().plus(i << LOG_BYTES_IN_ADDRESS);
+        if (VM.VERIFY_ASSERTIONS) VM.assertions._assert(!USE_FIELD_BARRIER);
         VM.activePlan.mutator().objectReferenceWrite(ref, slotAddress, nullValue, offset, location, ARRAY_ELEMENT, 0); //FIXME
       }
     } else {
@@ -361,6 +363,7 @@ public class Barriers extends org.mmtk.vm.Barriers {
       for (int i = 0; i < referenceOffsets.length; i++) {
         Word offset = Offset.fromIntSignExtend(referenceOffsets[i]).toWord();
         Address slotAddress = ref.toAddress().plus(referenceOffsets[i]);
+        if (VM.VERIFY_ASSERTIONS) VM.assertions._assert(!USE_FIELD_BARRIER);
         VM.activePlan.mutator().objectReferenceWrite(ref, slotAddress, nullValue, offset, location, INSTANCE_FIELD, 0); // FIXME
       }
     }

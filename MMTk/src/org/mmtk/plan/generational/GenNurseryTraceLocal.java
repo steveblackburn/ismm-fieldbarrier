@@ -102,7 +102,7 @@ public final class GenNurseryTraceLocal extends TraceLocal {
       if (Gen.inNursery(node)) {
           processRootEdge(slot, false);
       }
-      VM.objectModel.markAsUnlogged(fieldbuf.pop2().toWord());
+      VM.objectModel.markFieldAsUnlogged(fieldbuf.pop2().toWord());
     }
     logMessage(5, "processing remset");
     while (!remset.isEmpty()) {

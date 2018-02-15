@@ -57,12 +57,6 @@ public abstract class RVMMember extends AnnotatedElement {
   protected int offset;
 
   /**
-   * The member's mark bit offset
-   * Set by {@link RVMClass#resolve()}
-   */
-  protected int markoffset;
-
-  /**
    * NOTE: Only {@link RVMClass} is allowed to create an instance of a RVMMember.
    *
    * @param declaringClass the TypeReference object of the class that declared this member
@@ -215,19 +209,6 @@ public abstract class RVMMember extends AnnotatedElement {
     if (VM.VerifyAssertions) VM._assert(declaringClass.isLoaded());
     if (VM.VerifyAssertions) VM._assert(offset != NO_OFFSET);
     return Offset.fromIntSignExtend(offset);
-  }
-
-  public final int getMarkOffset() {
-    return markoffset;
-/*
-    int markOffset = 0;
-    if (USE_FIELD_BARRIER_FOR_PUTFIELD) {
-      // FIXME: this needs to be hoisted to compile time
-      TIB tib = ObjectModel.getTIB(ref);
-      RVMClass type = (RVMClass) tib.getType();
-      markOffset = type.getMarkStateOffset();
-      markOffset += (4+offset.toInt()) >> 2;
-    } */
   }
 
   /**

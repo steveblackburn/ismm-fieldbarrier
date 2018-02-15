@@ -64,6 +64,12 @@ public final class RVMField extends RVMMember {
   private boolean madeTraced;
 
   /**
+   * The fields's mark bit offset
+   * Set by {@link RVMClass#resolve()}
+   */
+  protected int fieldmarkoffset;
+
+  /**
    * Create a field.
    *
    * @param declaringClass the TypeReference object of the class
@@ -457,7 +463,7 @@ public final class RVMField extends RVMMember {
       }
     } else {
       if (NEEDS_OBJECT_PUTFIELD_BARRIER && !isUntraced()) {
-        Barriers.objectFieldWrite(obj, ref, getOffset(), getId(), getMarkOffset());
+        Barriers.objectFieldWrite(obj, ref, getOffset(), getId(), getFieldMarkOffset());
       } else {
         Magic.setObjectAtOffset(obj, getOffset(), ref);
       }
@@ -612,4 +618,10 @@ public final class RVMField extends RVMMember {
       }
     }
   }
+
+
+  public final int getFieldMarkOffset() {
+    return fieldmarkoffset;
+  }
+
 }

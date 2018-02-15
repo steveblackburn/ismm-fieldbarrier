@@ -30,8 +30,9 @@ import static org.jikesrvm.classloader.ClassLoaderConstants.CLASS_LOADED;
 import static org.jikesrvm.classloader.ClassLoaderConstants.CLASS_RESOLVED;
 import static org.jikesrvm.classloader.ClassLoaderConstants.CP_MEMBER;
 import static org.jikesrvm.classloader.ClassLoaderConstants.CP_UTF;
+import static org.jikesrvm.mm.mminterface.MemoryManagerConstants.USE_FIELD_BARRIER;
 import static org.jikesrvm.mm.mminterface.MemoryManagerConstants.USE_FIELD_BARRIER_FOR_PUTFIELD;
-import static org.jikesrvm.objectmodel.JavaHeaderConstants.LOG_MIN_ALIGNMENT;
+import static org.jikesrvm.objectmodel.ObjectModel.calculateMarkOffsetForField;
 import static org.jikesrvm.runtime.JavaSizeConstants.BYTES_IN_DOUBLE;
 import static org.jikesrvm.runtime.JavaSizeConstants.BYTES_IN_INT;
 import static org.jikesrvm.runtime.JavaSizeConstants.BYTES_IN_LONG;
@@ -836,7 +837,7 @@ public final class RVMClass extends RVMType {
   }
 
   @Uninterruptible
-  public int getMarkStateOffset() {
+  public int getFieldMarkStateBaseOffset() {
     if (VM.VerifyAssertions) VM._assert(isResolved() && USE_FIELD_BARRIER_FOR_PUTFIELD);
     return markStateOffset;
   }
@@ -1301,6 +1302,8 @@ public final class RVMClass extends RVMType {
       for (RVMField field : instanceFields) {
         if (field.isTraced()) {
           referenceOffsets[j++] = field.getOffset().toInt();
+          if (USE_FIELD_BARRIER_FOR_PUTFIELD)
+            field.fieldmarkoffset = calculateMarkOffsetForField(field);
         }
       }
     }

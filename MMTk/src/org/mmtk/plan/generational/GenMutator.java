@@ -22,11 +22,9 @@ import org.mmtk.utility.alloc.Allocator;
 import org.mmtk.utility.statistics.Stats;
 import org.mmtk.vm.VM;
 
-import static org.mmtk.plan.Plan.*;
-import static org.mmtk.plan.generational.Gen.NURSERY;
+import static org.mmtk.plan.Plan.VM_SPACE;
 import static org.mmtk.plan.generational.Gen.USE_OBJECT_BARRIER_FOR_AASTORE;
 import static org.mmtk.plan.generational.Gen.USE_OBJECT_BARRIER_FOR_PUTFIELD;
-import static org.mmtk.plan.generational.immix.GenImmix.IMMIX;
 import static org.mmtk.utility.Constants.*;
 
 import org.vmmagic.pragma.*;
@@ -140,14 +138,14 @@ import org.vmmagic.unboxed.*;
   private void fastPath(ObjectReference src, Address slot, ObjectReference tgt, int mode, int markOffset) {
     if (Gen.GATHER_WRITE_BARRIER_STATS) Gen.wbFast.inc();
     if ((Gen.USE_FIELD_BARRIER_FOR_AASTORE && mode == ARRAY_ELEMENT) ||
-             (Gen.USE_FIELD_BARRIER_FOR_PUTFIELD && mode == INSTANCE_FIELD)) {
-//      if (Space.isInSpace(LOS,src) || VM.objectModel.isUnlogged(src, markOffset)) {
-      if (true || VM.objectModel.isUnlogged(src, markOffset)) {
+              (Gen.USE_FIELD_BARRIER_FOR_PUTFIELD && mode == INSTANCE_FIELD)) {
+      if (VM.objectModel.isFieldUnlogged(src, markOffset)) {
         if (Gen.GATHER_WRITE_BARRIER_STATS) Gen.wbFRSlow.inc();
-        VM.objectModel.markAsLogged(src, markOffset);
-        fieldbuf.insert(slot, src.toAddress().plus(markOffset));
+    //    Word mark = VM.objectModel.markFieldAsLogged(src, markOffset);
+   //     fieldbuf.insert(slot, mark.toAddress());
       }
-    } else if ((mode == ARRAY_ELEMENT && USE_OBJECT_BARRIER_FOR_AASTORE) ||
+    } // FIXME!!! need to make these mutually exclusive again
+    if ((mode == ARRAY_ELEMENT && USE_OBJECT_BARRIER_FOR_AASTORE) ||
         (mode == INSTANCE_FIELD && USE_OBJECT_BARRIER_FOR_PUTFIELD)) {
       if (HeaderByte.isUnlogged(src)) {
         if (Gen.GATHER_WRITE_BARRIER_STATS) Gen.wbSlow.inc();

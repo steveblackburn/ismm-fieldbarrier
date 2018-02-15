@@ -130,7 +130,7 @@ public abstract class GenMatureTraceLocal extends TraceLocal {
     logMessage(5, "clearing fieldbuf");
     Word markRef;
     while (!fieldbuf.pop1().isZero()) {
-      VM.objectModel.markAsUnlogged(fieldbuf.pop2().toWord());
+      VM.objectModel.markFieldAsUnlogged(fieldbuf.pop2().toWord());
     }
     logMessage(5, "clearing remset");
     while (!remset.isEmpty()) {

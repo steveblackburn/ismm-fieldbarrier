@@ -1186,7 +1186,7 @@ public final class MemoryManager {
     byte status = Selected.Plan.get().setBuildTimeGCByte(ref, ObjectReference.fromObject(tib), size);
     JavaHeader.writeAvailableByte(bootImage, ref, status);
     if ((isScalar && USE_FIELD_BARRIER_FOR_PUTFIELD) || (!isScalar && USE_FIELD_BARRIER_FOR_AASTORE))
-      ObjectModel.setAllMarkBits(bootImage, ref, tib, size, numElements, isScalar);
+      ObjectModel.markAllFieldsAsUnlogged(bootImage, ref, tib, size, numElements, isScalar);
   }
 
   /**

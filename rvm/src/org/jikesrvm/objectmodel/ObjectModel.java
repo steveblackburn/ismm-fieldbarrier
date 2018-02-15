@@ -17,10 +17,12 @@ import static org.jikesrvm.mm.mminterface.MemoryManagerConstants.USE_FIELD_BARRI
 import static org.jikesrvm.mm.mminterface.MemoryManagerConstants.USE_FIELD_BARRIER_FOR_PUTFIELD;
 import static org.jikesrvm.objectmodel.JavaHeaderConstants.*;
 import static org.jikesrvm.runtime.JavaSizeConstants.BYTES_IN_INT;
+import static org.mmtk.utility.Constants.LOG_BYTES_IN_ADDRESS;
 
 import org.jikesrvm.VM;
 import org.jikesrvm.classloader.RVMArray;
 import org.jikesrvm.classloader.RVMClass;
+import org.jikesrvm.classloader.RVMField;
 import org.jikesrvm.classloader.RVMType;
 import org.jikesrvm.mm.mminterface.AlignmentEncoding;
 import org.jikesrvm.mm.mminterface.MemoryManager;
@@ -227,9 +229,23 @@ public class ObjectModel {
     }
   }
 
+  public static int getFieldMarkStateBaseOffset(ObjectReference object) {
+    // FIXME need to move all this crap off fast path ---> move state to front of object
+    RVMType type = ObjectModel.getTIB(object).getType();
+    if (type.isClassType()) {
+      if (VM.VerifyAssertions) VM._assert(USE_FIELD_BARRIER_FOR_PUTFIELD);
+      return ((RVMClass) type).getFieldMarkStateBaseOffset();
+    } else {
+      if (VM.VerifyAssertions) VM._assert(USE_FIELD_BARRIER_FOR_AASTORE);
+      if (VM.VerifyAssertions) VM._assert(((RVMArray) type).getElementType().isReferenceType());
+      int numElements = Magic.getArrayLength(object);
+      return numElements << LOG_BYTES_IN_ADDRESS;  // FIXME address width constant
+    }
+  }
+
   @Interruptible
-  public static void setAllMarkBits(BootImageInterface bootImage, Address ref, TIB tib, int size,
-                                    int numElements, boolean isScalar) {
+  public static void markAllFieldsAsUnlogged(BootImageInterface bootImage, Address ref, TIB tib, int size,
+                                             int numElements, boolean isScalar) {
     if (VM.VerifyAssertions) VM._assert((isScalar && USE_FIELD_BARRIER_FOR_PUTFIELD) || (!isScalar && USE_FIELD_BARRIER_FOR_AASTORE));
 
     RVMType type = tib.getType();
@@ -237,13 +253,14 @@ public class ObjectModel {
     Address end = start.plus(size);
     Address cursor;
     if (isScalar) {
-      cursor = ref.plus(((RVMClass) type).getMarkStateOffset());
+      cursor = ref.plus(((RVMClass) type).getFieldMarkStateBaseOffset());
+      VM.sysWrite("o: ", ref); VM.sysWrite(" s: ",start); VM.sysWrite(" c: ",cursor); VM.sysWriteln(" e: ",end);
     } else {
      if (!(((RVMArray) type).getElementType().isReferenceType()))
         return;
-      cursor = end.minus(numElements);  // FIXME: why is this not the same as the statement below???
+//      cursor = end.minus(numElements);  // FIXME: BUG? why does this line not behave the same as the statement below???
 //      VM.sysWrite("o: ", ref); VM.sysWrite(" s: ",start); VM.sysWrite(" c: ",cursor); VM.sysWriteln(" e: ",end);
-      cursor = ref.plus((numElements)<<2); // FIXME LOG_ADDRESS_WIDTH
+      cursor = ref.plus((numElements)<<LOG_BYTES_IN_ADDRESS); // FIXME LOG_ADDRESS_WIDTH
     }
     while (cursor.LT(end)) {
       bootImage.setByte(cursor, (byte) 1);
@@ -251,27 +268,56 @@ public class ObjectModel {
     }
   }
 
-
-  public static void setAllMarkBits(ObjectReference obj, ObjectReference tib) {
+  public static void markAllFieldsAsUnlogged(ObjectReference obj, ObjectReference tib) {
     RVMType type = ((TIB) Magic.addressAsObject(tib.toAddress())).getType();
-    if (VM.VerifyAssertions) VM._assert((!type.isArrayType() && USE_FIELD_BARRIER_FOR_PUTFIELD) || (type.isArrayType() && USE_FIELD_BARRIER_FOR_AASTORE));
-    if (!(type.isArrayType() && !((RVMArray) type).getElementType().isReferenceType())) {
-      Address cursor;
+    if ((USE_FIELD_BARRIER_FOR_AASTORE && type.isArrayType() && ((RVMArray) type).getElementType().isReferenceType()) ||
+            USE_FIELD_BARRIER_FOR_PUTFIELD && !type.isArrayType()) {
+      Address cursor = Magic.objectAsAddress(obj).plus(getFieldMarkStateBaseOffset(obj));
       Address end;
       if (type.isClassType()) {
-        cursor = Magic.objectAsAddress(obj).plus(((RVMClass) type).getMarkStateOffset());
-        end = getObjectEndAddress(obj, type.asClass());
+        end = getObjectEndAddress(obj.toObject(), type.asClass());
       } else {
         if (VM.VerifyAssertions) VM._assert(((RVMArray) type).getElementType().isReferenceType());
         int numElements = Magic.getArrayLength(obj);
-        cursor = Magic.objectAsAddress(obj).plus(numElements << 2);  // FIXME address width constant
-        end = getObjectEndAddress(obj, type.asArray(), numElements);
+        end = getObjectEndAddress(obj.toObject(), type.asArray(), numElements);
       }
       while (cursor.LT(end)) {
         cursor.store((byte) 1);
         cursor = cursor.plus(1);
       }
     }
+  }
+
+  @Inline
+  public static int calculateMarkOffsetForField(RVMField field) {
+    if (VM.VerifyAssertions) VM._assert(USE_FIELD_BARRIER_FOR_PUTFIELD);
+    return (field.getOffset().minus(FIELD_ZERO_OFFSET).toInt()) >> 2;  // FIXME this will need to change as we move to bits etc.
+  }
+
+  @Inline
+  public static int calculateMarkOffsetForIndex(int index) {
+    if (VM.VerifyAssertions) VM._assert(USE_FIELD_BARRIER_FOR_AASTORE);
+    return index >> 2; // FIXME this will need to change as we move to bits etc.
+  }
+
+  @Inline
+  public static void markFieldAsUnlogged(Word fieldMarkReference) {
+    fieldMarkReference.toAddress().store((byte) 1);
+  }
+
+  @Inline
+  public static Word markFieldAsLogged(ObjectReference object, int fieldMarkOffset) {
+    int markBase = getFieldMarkStateBaseOffset(object);
+    Address mark = object.toAddress().plus(markBase+fieldMarkOffset);
+    if (VM.VerifyAssertions) VM._assert(mark.LT(getObjectEndAddress(object.toObject())));
+    mark.store((byte) 0);
+    return mark.toWord();
+  }
+
+  @Inline
+  public static boolean isFieldUnlogged(ObjectReference object, int fieldMarkOffset) {
+    int markBase = getFieldMarkStateBaseOffset(object);
+    return object.toAddress().plus(markBase+fieldMarkOffset).loadByte() == 1;
   }
 
   /**

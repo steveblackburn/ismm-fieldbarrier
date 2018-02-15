@@ -340,6 +340,8 @@ public class Entrypoints {
   public static final NormalMethod doubleArrayReadBarrierMethod =
     getMethod(org.jikesrvm.mm.mminterface.Barriers.class, "doubleArrayRead", "([DI)D");
 
+  public static final NormalMethod unresolvedObjectFieldWriteBarrierMethod =
+    getMethod(org.jikesrvm.mm.mminterface.Barriers.class, "unresolvedObjectFieldWrite", "(Ljava/lang/Object;Ljava/lang/Object;Lorg/vmmagic/unboxed/Offset;I)V");
   public static final NormalMethod objectFieldWriteBarrierMethod =
     getMethod(org.jikesrvm.mm.mminterface.Barriers.class, "objectFieldWrite", "(Ljava/lang/Object;Ljava/lang/Object;Lorg/vmmagic/unboxed/Offset;II)V");
   public static final NormalMethod objectArrayWriteBarrierMethod =
