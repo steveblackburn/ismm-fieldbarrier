@@ -492,7 +492,7 @@ public final class ExpandRuntimeServices extends CompilerPhase {
                   inline(wb, ir, true);
                 }
               } else if (!field.isUntraced()) {  // field is resolved
-                IntConstantOperand  markBitOffset = IRTools.IC(field.getFieldMarkOffset()); // FIXME
+                IntConstantOperand  markBitOffset = IRTools.IC(field.getFieldMarkOffset());
                 RVMMethod target = Entrypoints.objectFieldWriteBarrierMethod;
                 Instruction wb =
                     Call.create5(CALL,
