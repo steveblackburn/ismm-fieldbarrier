@@ -473,7 +473,6 @@ public final class ExpandRuntimeServices extends CompilerPhase {
             FieldReference fieldRef = loc.getFieldRef();
             if (!fieldRef.getFieldContentsType().isPrimitiveType()) {
               // reference PUTFIELD
-              IntConstantOperand  markBitOffset = IRTools.IC(0); // FIXME
               RVMField field = fieldRef.peekResolvedField();
               if (field == null) { // field is unresolved
                 RVMMethod target = Entrypoints.unresolvedObjectFieldWriteBarrierMethod;
@@ -493,6 +492,7 @@ public final class ExpandRuntimeServices extends CompilerPhase {
                   inline(wb, ir, true);
                 }
               } else if (!field.isUntraced()) {  // field is resolved
+                IntConstantOperand  markBitOffset = IRTools.IC(field.getFieldMarkOffset()); // FIXME
                 RVMMethod target = Entrypoints.objectFieldWriteBarrierMethod;
                 Instruction wb =
                     Call.create5(CALL,
