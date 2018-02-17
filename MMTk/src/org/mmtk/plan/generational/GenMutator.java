@@ -139,7 +139,7 @@ import org.vmmagic.unboxed.*;
     if (Gen.GATHER_WRITE_BARRIER_STATS) Gen.wbFast.inc();
     if ((Gen.USE_FIELD_BARRIER_FOR_AASTORE && mode == ARRAY_ELEMENT) ||
               (Gen.USE_FIELD_BARRIER_FOR_PUTFIELD && mode == INSTANCE_FIELD)) {
-      if (true || VM.objectModel.isFieldUnlogged(src, markOffset)) {
+      if (VM.objectModel.isFieldUnlogged(src, markOffset)) {
         if (Gen.GATHER_WRITE_BARRIER_STATS) Gen.wbFRSlow.inc();
         Word mark = VM.objectModel.markFieldAsLogged(src, markOffset);
         fieldbuf.insert(slot, mark.toAddress());

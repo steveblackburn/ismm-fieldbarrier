@@ -296,7 +296,7 @@ public class ObjectModel {
   @Inline
   public static int calculateMarkOffsetForIndex(int index) {
     if (VM.VerifyAssertions) VM._assert(USE_FIELD_BARRIER_FOR_AASTORE);
-    return index >> 2; // FIXME this will need to change as we move to bits etc.
+    return index; // FIXME this will need to change as we move to bits etc.
   }
 
   @Inline
