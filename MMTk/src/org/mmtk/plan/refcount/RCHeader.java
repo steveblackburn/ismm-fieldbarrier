@@ -91,9 +91,22 @@ public class RCHeader {
     return true;
   }
 
-
   /**
    * Signify completion of logging <code>object</code>.
+   *
+   * @see #attemptToLog(ObjectReference)
+   * @param object The object whose state is to be changed.
+   */
+  @Inline
+  @Uninterruptible
+  public static void finishLogging(ObjectReference object) {
+    Word value = VM.objectModel.readAvailableBitsWord(object);
+    if (VM.VERIFY_ASSERTIONS) VM.assertions._assert(value.and(BEING_LOGGED).EQ(BEING_LOGGED));
+    VM.objectModel.writeAvailableBitsWord(object, value.and(BEING_LOGGED.not()));
+  }
+
+  /**
+   * Mark as unlogged and signify completion of logging <code>object</code>.
    *
    * <code>object</code> is left in the <code>LOGGED</code> state.
    *

@@ -30,6 +30,7 @@ import static org.mmtk.plan.refcount.RCBase.BUILD_FOR_GENRC;
 import static org.mmtk.plan.refcount.RCBase.USE_FIELD_BARRIER_FOR_AASTORE;
 import static org.mmtk.plan.refcount.RCBase.USE_FIELD_BARRIER_FOR_PUTFIELD;
 import static org.mmtk.utility.Constants.ARRAY_ELEMENT;
+import static org.mmtk.utility.Constants.BYTES_IN_ADDRESS;
 import static org.mmtk.utility.Constants.INSTANCE_FIELD;
 
 /**
@@ -294,13 +295,30 @@ public class RCBaseMutator extends StopTheWorldMutator {
 
   @NoInline
   private void coalescingFieldWriteBarrierSlow(ObjectReference src, Address slot, int markOffset) {
-
+    if (RCHeader.attemptToLog(src)) {
+      ObjectReference tgt = slot.loadObjectReference();
+      if (!tgt.isNull())
+        decBuffer.push(tgt);
+      Word mark = VM.objectModel.markFieldAsLogged(src, markOffset);
+      modFieldBuffer.insert(slot, mark.toAddress());
+      RCHeader.finishLogging(src);
+    }
   }
 
   private void coalescingFieldWriteBarrierSlow(ObjectReference dst, Offset dstOffset, int bytes) {
-
+    // log each of the to-be-overwritten fields
+    if (RCHeader.attemptToLog(dst)) {
+      Address cursor = dst.toAddress().plus(dstOffset);
+      Address end = dst.toAddress().plus(dstOffset.plus(bytes));
+      while (cursor.LT(end)) {
+        decBuffer.push(cursor.loadObjectReference());
+        Word mark = VM.objectModel.markFieldAsLogged(dst, cursor.diff(dst.toAddress()).toInt());
+        modFieldBuffer.insert(cursor, mark.toAddress());
+        cursor = cursor.plus(BYTES_IN_ADDRESS);
+      }
+      RCHeader.finishLogging(dst);
+    }
   }
-
 
   /****************************************************************************
    *

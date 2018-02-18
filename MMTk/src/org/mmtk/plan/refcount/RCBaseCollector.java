@@ -25,6 +25,7 @@ import org.mmtk.utility.deque.ObjectReferenceDeque;
 import org.mmtk.vm.VM;
 import org.vmmagic.pragma.Inline;
 import org.vmmagic.pragma.Uninterruptible;
+import org.vmmagic.unboxed.Address;
 import org.vmmagic.unboxed.ObjectReference;
 
 /**
@@ -180,6 +181,17 @@ public abstract class RCBaseCollector extends StopTheWorldCollector {
         }
         VM.scanning.scanObject(getModifiedProcessor(), current);
       }
+      Address slot;
+      while (!(slot = modFieldBuffer.pop1()).isZero()) {
+        VM.objectModel.markFieldAsUnlogged(modFieldBuffer.pop2().toWord());
+        if (!RCBase.BUILD_FOR_GENRC) {
+          if (Space.isInSpace(RCBase.REF_COUNT, current)) {
+            ExplicitFreeListSpace.testAndSetLiveBit(current);
+          }
+        }
+        getModifiedProcessor().processEdge(ObjectReference.nullReference(), slot);
+      }
+
       return;
     }
 
