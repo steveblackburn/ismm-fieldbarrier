@@ -40,7 +40,7 @@ public class RCHeader {
   public static final int      LOG_BIT  = 0;
   public static final Word       LOGGED = Word.zero();                          //...00000
   public static final Word    UNLOGGED  = Word.one();                           //...00001
-  public static final Word BEING_LOGGED = Word.one().lsh(2).minus(Word.one());  //...00011
+  public static final Word BEING_LOGGED = Word.one().lsh(1);                    //...00010
   public static final Word LOGGING_MASK = LOGGED.or(UNLOGGED).or(BEING_LOGGED); //...00011
 
   /**
@@ -82,11 +82,11 @@ public class RCHeader {
       if (oldValue.and(LOGGING_MASK).EQ(LOGGED)) {
         return false;
       }
-    } while ((oldValue.and(LOGGING_MASK).EQ(BEING_LOGGED)) ||
+    } while ((oldValue.and(BEING_LOGGED).EQ(BEING_LOGGED)) ||
              !VM.objectModel.attemptAvailableBits(object, oldValue, oldValue.or(BEING_LOGGED)));
     if (VM.VERIFY_ASSERTIONS) {
       Word value = VM.objectModel.readAvailableBitsWord(object);
-      VM.assertions._assert(value.and(LOGGING_MASK).EQ(BEING_LOGGED));
+      VM.assertions._assert(value.and(BEING_LOGGED).EQ(BEING_LOGGED));
     }
     return true;
   }
