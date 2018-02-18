@@ -17,7 +17,6 @@ import org.mmtk.policy.SegregatedFreeListSpace;
 import org.vmmagic.pragma.*;
 import org.vmmagic.unboxed.*;
 
-
 /**
  * This abstract class implements the fast path for a segregated free list.
  */

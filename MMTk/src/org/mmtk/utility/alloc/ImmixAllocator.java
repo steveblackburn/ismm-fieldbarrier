@@ -113,7 +113,6 @@ public class ImmixAllocator extends Allocator {
     Address start = alignAllocationNoFill(cursor, align, offset);
     Address end = start.plus(bytes);
 
-
     /* check whether we've exceeded the limit */
     if (end.GT(limit)) {
       if (bytes > BYTES_IN_LINE)
