@@ -49,4 +49,10 @@ public class RCBaseConstraints extends StopTheWorldConstraints {
   public boolean buildForGenRC() {
     return false;
   }
+
+  @Override
+  public boolean useFieldBarrierForPutfield() { return RCBase.USE_FIELD_BARRIER_FOR_PUTFIELD; }
+
+  @Override
+  public boolean useFieldBarrierForAAStore() { return RCBase.USE_FIELD_BARRIER_FOR_AASTORE; }
 }
