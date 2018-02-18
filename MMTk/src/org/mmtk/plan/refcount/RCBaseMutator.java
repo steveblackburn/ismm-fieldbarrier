@@ -263,11 +263,9 @@ public class RCBaseMutator extends StopTheWorldMutator {
   @Inline
   public boolean objectReferenceBulkCopy(ObjectReference src, Offset srcOffset,
                               ObjectReference dst, Offset dstOffset, int bytes) {
- //   if (USE_FIELD_BARRIER) { // FIXME: assumption that this only applies to arrays
- //     coalescingFieldWriteBarrierSlow(dst, dstOffset, bytes);
-  //  }
-
-    if (RCHeader.logRequired(dst)) {
+    if (USE_FIELD_BARRIER) { // FIXME: assumption that this only applies to arrays
+      coalescingFieldWriteBarrierSlow(dst, dstOffset, bytes);
+   } else if (RCHeader.logRequired(dst)) {
       coalescingObjectWriteBarrierSlow(dst);
     }
     return false;
@@ -286,7 +284,7 @@ public class RCBaseMutator extends StopTheWorldMutator {
    */
   @NoInline
   private void coalescingObjectWriteBarrierSlow(ObjectReference srcObj) {
-   // if (VM.VERIFY_ASSERTIONS) VM.assertions._assert(!USE_FIELD_BARRIER);
+    if (VM.VERIFY_ASSERTIONS) VM.assertions._assert(!USE_FIELD_BARRIER);
     if (RCHeader.attemptToLogObject(srcObj)) {
       modObjectBuffer.push(srcObj);
       decBuffer.processChildren(srcObj);
@@ -310,9 +308,18 @@ public class RCBaseMutator extends StopTheWorldMutator {
   }
 
   private void coalescingFieldWriteBarrierSlow(ObjectReference dst, Offset dstOffset, int bytes) {
-    if (VM.VERIFY_ASSERTIONS) VM.assertions._assert(USE_FIELD_BARRIER);
-    // VM.assertions._assert(false);
     // log each of the to-be-overwritten fields
+    if (VM.VERIFY_ASSERTIONS) VM.assertions._assert(USE_FIELD_BARRIER);
+    Address cursor = dst.toAddress().plus(dstOffset);
+    Address end = cursor.plus(bytes);
+    int index = dstOffset.toInt() >> LOG_BYTES_IN_ADDRESS;
+    while (cursor.LT(end)) {
+      coalescingFieldWriteBarrierSlow(dst, cursor, index);
+      cursor = cursor.plus(BYTES_IN_ADDRESS);
+      index++;
+    }
+
+    /*  FIXME the above code has unnecessary synchronization.   The code below does not work.  Why?
     if (RCHeader.prepareToLogFieldInObject(dst)) {
       Address cursor = dst.toAddress().plus(dstOffset);
       Address end = cursor.plus(bytes);
@@ -329,7 +336,7 @@ public class RCBaseMutator extends StopTheWorldMutator {
       RCHeader.finishLogging(dst);
     } else {
       if (VM.VERIFY_ASSERTIONS) VM.assertions._assert(false);
-    }
+    } */
   }
 
   /****************************************************************************

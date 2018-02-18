@@ -77,7 +77,7 @@ public class RCHeader {
   @Inline
   @Uninterruptible
   public static boolean attemptToLogObject(ObjectReference object) {
-   // if (VM.VERIFY_ASSERTIONS) VM.assertions._assert(!USE_FIELD_BARRIER);
+    if (VM.VERIFY_ASSERTIONS) VM.assertions._assert(!USE_FIELD_BARRIER);
     Word oldValue;
     do {
       oldValue = VM.objectModel.prepareAvailableBits(object);
