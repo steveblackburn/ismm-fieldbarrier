@@ -172,24 +172,27 @@ public abstract class RCBaseCollector extends StopTheWorldCollector {
 
     if (phaseId == RCBase.PROCESS_MODBUFFER) {
       ObjectReference current;
-      while (!(current = modObjectBuffer.pop()).isNull()) {
-        RCHeader.makeUnlogged(current);
+      while (!(modObjectBuffer.isEmpty() && modFieldBuffer.isEmpty())) {
+        while (!(current = modObjectBuffer.pop()).isNull()) {
+          RCHeader.makeUnlogged(current);
+          if (!RCBase.BUILD_FOR_GENRC) {
+            if (Space.isInSpace(RCBase.REF_COUNT, current)) {
+              ExplicitFreeListSpace.testAndSetLiveBit(current);
+            }
+          }
+          VM.scanning.scanObject(getModifiedProcessor(), current);
+        }
+        Address slot;
+        while (!(slot = modFieldBuffer.pop1()).isZero()) {
+          VM.objectModel.markFieldAsUnlogged(modFieldBuffer.pop2().toWord());
+        /*  FIXME: how does this apply in the field-remembering context??
         if (!RCBase.BUILD_FOR_GENRC) {
           if (Space.isInSpace(RCBase.REF_COUNT, current)) {
             ExplicitFreeListSpace.testAndSetLiveBit(current);
           }
+        } */
+          getModifiedProcessor().processEdge(ObjectReference.nullReference(), slot);
         }
-        VM.scanning.scanObject(getModifiedProcessor(), current);
-      }
-      Address slot;
-      while (!(slot = modFieldBuffer.pop1()).isZero()) {
-        VM.objectModel.markFieldAsUnlogged(modFieldBuffer.pop2().toWord());
-        if (!RCBase.BUILD_FOR_GENRC) {
-          if (Space.isInSpace(RCBase.REF_COUNT, current)) {
-            ExplicitFreeListSpace.testAndSetLiveBit(current);
-          }
-        }
-        getModifiedProcessor().processEdge(ObjectReference.nullReference(), slot);
       }
 
       return;
@@ -261,6 +264,7 @@ public abstract class RCBaseCollector extends StopTheWorldCollector {
       if (VM.VERIFY_ASSERTIONS) {
         VM.assertions._assert(newRootBuffer.isEmpty());
         VM.assertions._assert(modObjectBuffer.isEmpty());
+        VM.assertions._assert(modFieldBuffer.isEmpty());
         VM.assertions._assert(decBuffer.isEmpty());
       }
       return;
