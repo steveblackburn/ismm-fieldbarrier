@@ -45,6 +45,9 @@ public class RCBase extends StopTheWorld {
   public static final short PROCESS_MODBUFFER      = Phase.createSimple("mods");
   public static final short PROCESS_DECBUFFER      = Phase.createSimple("decs");
 
+ // public static final boolean USE_FIELD_BARRIER_FOR_AASTORE = true; // choose between slot and object barriers
+ // public static final boolean USE_FIELD_BARRIER_FOR_PUTFIELD = true; // choose between slot and object barriers
+
   /** Is cycle collection enabled? */
   public static final boolean CC_ENABLED           = true;
   /** Force full cycle collection at each GC? */
@@ -149,7 +152,8 @@ public class RCBase extends StopTheWorld {
   public static final int REF_COUNT = rcSpace.getDescriptor();
   public static final int REF_COUNT_LOS = rcloSpace.getDescriptor();
 
-  public final SharedDeque modPool = new SharedDeque("mod", metaDataSpace, 1);
+  public final SharedDeque modObjectPool = new SharedDeque("mod", metaDataSpace, 1);
+  public final SharedDeque modFieldPool = new SharedDeque("fieldBufs",metaDataSpace, 2);
   public final SharedDeque decPool = new SharedDeque("dec", metaDataSpace, 1);
   public final SharedDeque newRootPool = new SharedDeque("newRoot", metaDataSpace, 1);
   public final SharedDeque oldRootPool = new SharedDeque("oldRoot", metaDataSpace, 1);
@@ -237,7 +241,8 @@ public class RCBase extends StopTheWorld {
 
     if (phaseId == CLOSURE) {
       rootTrace.prepare();
-      modPool.prepare();
+      modObjectPool.prepare();
+      modFieldPool.prepare();
       return;
     }
 
@@ -260,7 +265,8 @@ public class RCBase extends StopTheWorld {
 
 
     if (phaseId == PROCESS_MODBUFFER) {
-      modPool.prepare();
+      modObjectPool.prepare();
+      modFieldPool.prepare();
       return;
     }
 

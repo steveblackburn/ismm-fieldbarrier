@@ -19,6 +19,7 @@ import org.mmtk.policy.ExplicitFreeListSpace;
 import org.mmtk.policy.LargeObjectLocal;
 import org.mmtk.policy.Space;
 import org.mmtk.utility.alloc.Allocator;
+import org.mmtk.utility.deque.AddressPairDeque;
 import org.mmtk.utility.deque.ObjectReferenceDeque;
 import org.mmtk.vm.VM;
 
@@ -44,7 +45,8 @@ public class RCBaseMutator extends StopTheWorldMutator {
    */
   private final ExplicitFreeListLocal rc;
   private final LargeObjectLocal rclos;
-  private final ObjectReferenceDeque modBuffer;
+  private final ObjectReferenceDeque modObjectBuffer;
+  private final AddressPairDeque modFieldBuffer;
   private final RCDecBuffer decBuffer;
   private final BTSweepImmortalScanner btSweepImmortal;
 
@@ -59,7 +61,8 @@ public class RCBaseMutator extends StopTheWorldMutator {
   public RCBaseMutator() {
     rc = new ExplicitFreeListLocal(RCBase.rcSpace);
     rclos = new LargeObjectLocal(RCBase.rcloSpace);
-    modBuffer = new ObjectReferenceDeque("mod", global().modPool);
+    modObjectBuffer = new ObjectReferenceDeque("mod obj", global().modObjectPool);
+    modFieldBuffer = new AddressPairDeque("mod field", global().modFieldPool);
     decBuffer = new RCDecBuffer(global().decPool);
     btSweepImmortal = new BTSweepImmortalScanner();
   }
@@ -95,10 +98,11 @@ public class RCBaseMutator extends StopTheWorldMutator {
   @Override
   @Inline
   public void postAlloc(ObjectReference ref, ObjectReference typeRef, int bytes, int allocator) {
+    // FIXME: how does the field barrier affect the following cases?
     switch (allocator) {
     case RCBase.ALLOC_DEFAULT:
     case RCBase.ALLOC_NON_MOVING:
-      if (RCBase.BUILD_FOR_GENRC) modBuffer.push(ref);
+      if (RCBase.BUILD_FOR_GENRC) modObjectBuffer.push(ref);
     case RCBase.ALLOC_CODE:
       if (RCBase.BUILD_FOR_GENRC) {
         decBuffer.push(ref);
@@ -107,7 +111,7 @@ public class RCBaseMutator extends StopTheWorldMutator {
       }
       break;
     case RCBase.ALLOC_LOS:
-      if (RCBase.BUILD_FOR_GENRC) modBuffer.push(ref);
+      if (RCBase.BUILD_FOR_GENRC) modObjectBuffer.push(ref);
     case RCBase.ALLOC_PRIMITIVE_LOS:
     case RCBase.ALLOC_LARGE_CODE:
       decBuffer.push(ref);
@@ -115,7 +119,7 @@ public class RCBaseMutator extends StopTheWorldMutator {
       RCBase.rcloSpace.initializeHeader(ref, true);
       return;
     case RCBase.ALLOC_IMMORTAL:
-      if (RCBase.BUILD_FOR_GENRC) modBuffer.push(ref);
+      if (RCBase.BUILD_FOR_GENRC) modObjectBuffer.push(ref);
       decBuffer.push(ref);
       if (RCBase.BUILD_FOR_GENRC) RCHeader.initializeHeader(ref, true);
       return;
@@ -149,7 +153,8 @@ public class RCBaseMutator extends StopTheWorldMutator {
     }
 
     if (phaseId == RCBase.PROCESS_MODBUFFER) {
-      modBuffer.flushLocal();
+      modObjectBuffer.flushLocal();
+      modFieldBuffer.flushLocal();
       return;
     }
 
@@ -163,7 +168,8 @@ public class RCBaseMutator extends StopTheWorldMutator {
         immortal.linearScan(btSweepImmortal);
       }
       rc.release();
-      if (VM.VERIFY_ASSERTIONS) VM.assertions._assert(modBuffer.isEmpty());
+      if (VM.VERIFY_ASSERTIONS) VM.assertions._assert(modObjectBuffer.isEmpty());
+      if (VM.VERIFY_ASSERTIONS) VM.assertions._assert(modFieldBuffer.isEmpty());
       if (!RCBase.BUILD_FOR_GENRC) {
         if (VM.VERIFY_ASSERTIONS) VM.assertions._assert(decBuffer.isEmpty());
       }
@@ -176,7 +182,8 @@ public class RCBaseMutator extends StopTheWorldMutator {
   @Override
   public final void flushRememberedSets() {
     decBuffer.flushLocal();
-    modBuffer.flushLocal();
+    modObjectBuffer.flushLocal();
+    modFieldBuffer.flushLocal();
     assertRemsetsFlushed();
   }
 
@@ -184,7 +191,8 @@ public class RCBaseMutator extends StopTheWorldMutator {
   public final void assertRemsetsFlushed() {
     if (VM.VERIFY_ASSERTIONS) {
       VM.assertions._assert(decBuffer.isFlushed());
-      VM.assertions._assert(modBuffer.isFlushed());
+      VM.assertions._assert(modObjectBuffer.isFlushed());
+      VM.assertions._assert(modFieldBuffer.isFlushed());
     }
   }
 
@@ -263,7 +271,7 @@ public class RCBaseMutator extends StopTheWorldMutator {
   @NoInline
   private void coalescingWriteBarrierSlow(ObjectReference srcObj) {
     if (RCHeader.attemptToLog(srcObj)) {
-      modBuffer.push(srcObj);
+      modObjectBuffer.push(srcObj);
       decBuffer.processChildren(srcObj);
       RCHeader.makeLogged(srcObj);
     }

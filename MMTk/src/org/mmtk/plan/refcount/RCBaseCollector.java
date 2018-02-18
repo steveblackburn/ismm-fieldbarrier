@@ -20,6 +20,7 @@ import org.mmtk.plan.TransitiveClosure;
 import org.mmtk.plan.refcount.backuptrace.BTTraceLocal;
 import org.mmtk.policy.Space;
 import org.mmtk.policy.ExplicitFreeListSpace;
+import org.mmtk.utility.deque.AddressPairDeque;
 import org.mmtk.utility.deque.ObjectReferenceDeque;
 import org.mmtk.vm.VM;
 import org.vmmagic.pragma.Inline;
@@ -45,7 +46,8 @@ public abstract class RCBaseCollector extends StopTheWorldCollector {
    */
   protected final ObjectReferenceDeque newRootBuffer;
   private final BTTraceLocal backupTrace;
-  private final ObjectReferenceDeque modBuffer;
+  private final ObjectReferenceDeque modObjectBuffer;
+  private final AddressPairDeque modFieldBuffer;
   private final ObjectReferenceDeque oldRootBuffer;
   private final RCDecBuffer decBuffer;
   private final RCZero zero;
@@ -56,7 +58,8 @@ public abstract class RCBaseCollector extends StopTheWorldCollector {
   public RCBaseCollector() {
     newRootBuffer = new ObjectReferenceDeque("new-root", global().newRootPool);
     oldRootBuffer = new ObjectReferenceDeque("old-root", global().oldRootPool);
-    modBuffer = new ObjectReferenceDeque("mod buf", global().modPool);
+    modObjectBuffer = new ObjectReferenceDeque("mod obj buf", global().modObjectPool);
+    modFieldBuffer = new AddressPairDeque("mod field buf", global().modFieldPool);
     decBuffer = new RCDecBuffer(global().decPool);
     backupTrace = new BTTraceLocal(global().backupTrace);
     zero = new RCZero();
@@ -134,7 +137,7 @@ public abstract class RCBaseCollector extends StopTheWorldCollector {
               RCHeader.initRC(current);
             } else {
               if (RCHeader.initRC(current) == RCHeader.INC_NEW) {
-                modBuffer.push(current);
+                modObjectBuffer.push(current);
               }
             }
             backupTrace.processNode(current);
@@ -143,12 +146,12 @@ public abstract class RCBaseCollector extends StopTheWorldCollector {
               RCHeader.incRC(current);
             } else {
               if (RCHeader.incRC(current) == RCHeader.INC_NEW) {
-                modBuffer.push(current);
+                modObjectBuffer.push(current);
               }
             }
           }
         }
-        if (!RCBase.BUILD_FOR_GENRC) modBuffer.flushLocal();
+        if (!RCBase.BUILD_FOR_GENRC) modObjectBuffer.flushLocal();
         return;
       }
       while (!(current = newRootBuffer.pop()).isNull()) {
@@ -156,19 +159,19 @@ public abstract class RCBaseCollector extends StopTheWorldCollector {
           RCHeader.incRC(current);
         } else {
           if (RCHeader.incRC(current) == RCHeader.INC_NEW) {
-            modBuffer.push(current);
+            modObjectBuffer.push(current);
           }
         }
         oldRootBuffer.push(current);
       }
       oldRootBuffer.flushLocal();
-      if (!RCBase.BUILD_FOR_GENRC) modBuffer.flushLocal();
+      if (!RCBase.BUILD_FOR_GENRC) modObjectBuffer.flushLocal();
       return;
     }
 
     if (phaseId == RCBase.PROCESS_MODBUFFER) {
       ObjectReference current;
-      while (!(current = modBuffer.pop()).isNull()) {
+      while (!(current = modObjectBuffer.pop()).isNull()) {
         RCHeader.makeUnlogged(current);
         if (!RCBase.BUILD_FOR_GENRC) {
           if (Space.isInSpace(RCBase.REF_COUNT, current)) {
@@ -245,7 +248,7 @@ public abstract class RCBaseCollector extends StopTheWorldCollector {
       getRootTrace().release();
       if (VM.VERIFY_ASSERTIONS) {
         VM.assertions._assert(newRootBuffer.isEmpty());
-        VM.assertions._assert(modBuffer.isEmpty());
+        VM.assertions._assert(modObjectBuffer.isEmpty());
         VM.assertions._assert(decBuffer.isEmpty());
       }
       return;
@@ -270,9 +273,9 @@ public abstract class RCBaseCollector extends StopTheWorldCollector {
     return getRootTrace();
   }
 
-  /** @return The current modBuffer instance. */
+  /** @return The current modObjectBuffer instance. */
   @Inline
-  public final ObjectReferenceDeque getModBuffer() {
-    return modBuffer;
+  public final ObjectReferenceDeque getModObjectBuffer() {
+    return modObjectBuffer;
   }
 }

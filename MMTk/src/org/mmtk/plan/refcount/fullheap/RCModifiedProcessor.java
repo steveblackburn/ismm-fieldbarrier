@@ -41,11 +41,11 @@ public final class RCModifiedProcessor extends TransitiveClosure {
     if (RCBase.isRCObject(object)) {
       if (RCBase.CC_BACKUP_TRACE && RCBase.performCycleCollection) {
         if (RCHeader.remainRC(object) == RCHeader.INC_NEW) {
-          collector.getModBuffer().push(object);
+          collector.getModObjectBuffer().push(object);
         }
       } else {
         if (RCHeader.incRC(object) == RCHeader.INC_NEW) {
-          collector.getModBuffer().push(object);
+          collector.getModObjectBuffer().push(object);
         }
       }
     }
