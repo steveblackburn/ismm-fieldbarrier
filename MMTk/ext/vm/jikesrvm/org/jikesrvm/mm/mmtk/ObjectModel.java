@@ -309,6 +309,11 @@ import org.vmmagic.unboxed.Word;
   }
 
   @Inline
+  public void markFieldAsUnlogged(ObjectReference object, Address slot) {
+    org.jikesrvm.objectmodel.ObjectModel.markFieldAsUnlogged(object, slot);
+  }
+
+  @Inline
   public void markFieldAsUnlogged(Word fieldMarkReference) {
     org.jikesrvm.objectmodel.ObjectModel.markFieldAsUnlogged(fieldMarkReference);
   }

@@ -20,6 +20,7 @@ import org.mmtk.plan.TransitiveClosure;
 import org.mmtk.plan.refcount.backuptrace.BTTraceLocal;
 import org.mmtk.policy.Space;
 import org.mmtk.policy.ExplicitFreeListSpace;
+import org.mmtk.utility.Log;
 import org.mmtk.utility.deque.AddressPairDeque;
 import org.mmtk.utility.deque.ObjectReferenceDeque;
 import org.mmtk.vm.VM;
@@ -27,6 +28,8 @@ import org.vmmagic.pragma.Inline;
 import org.vmmagic.pragma.Uninterruptible;
 import org.vmmagic.unboxed.Address;
 import org.vmmagic.unboxed.ObjectReference;
+
+import static org.mmtk.plan.refcount.RCBase.USE_FIELD_BARRIER;
 
 /**
  * This class implements the collector context for a reference counting collector.
@@ -175,6 +178,7 @@ public abstract class RCBaseCollector extends StopTheWorldCollector {
       while (!(modObjectBuffer.isEmpty() && modFieldBuffer.isEmpty())) {
         while (!(current = modObjectBuffer.pop()).isNull()) {
           RCHeader.makeUnlogged(current);
+        //  VM.objectModel.markAllFieldsAsUnlogged(current);
           if (!RCBase.BUILD_FOR_GENRC) {
             if (Space.isInSpace(RCBase.REF_COUNT, current)) {
               ExplicitFreeListSpace.testAndSetLiveBit(current);
@@ -185,8 +189,8 @@ public abstract class RCBaseCollector extends StopTheWorldCollector {
         Address slot;
         while (!(slot = modFieldBuffer.pop1()).isZero()) {
           VM.objectModel.markFieldAsUnlogged(modFieldBuffer.pop2().toWord());
-        /*  FIXME: how does this apply in the field-remembering context??
-        if (!RCBase.BUILD_FOR_GENRC) {
+        //  FIXME: how does this apply in the field-remembering context?? ---> as a hack, create another buffer and apply this to each remembered slot's parent
+     /*   if (!RCBase.BUILD_FOR_GENRC) {
           if (Space.isInSpace(RCBase.REF_COUNT, current)) {
             ExplicitFreeListSpace.testAndSetLiveBit(current);
           }

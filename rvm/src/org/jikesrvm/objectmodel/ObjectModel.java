@@ -16,6 +16,7 @@ import static org.jikesrvm.mm.mminterface.MemoryManagerConstants.USE_FIELD_BARRI
 import static org.jikesrvm.mm.mminterface.MemoryManagerConstants.USE_FIELD_BARRIER_FOR_PUTFIELD;
 import static org.jikesrvm.objectmodel.JavaHeaderConstants.*;
 import static org.jikesrvm.runtime.JavaSizeConstants.BYTES_IN_INT;
+import static org.mmtk.utility.Constants.BYTES_IN_ADDRESS;
 import static org.mmtk.utility.Constants.LOG_BYTES_IN_ADDRESS;
 
 import org.jikesrvm.VM;
@@ -317,6 +318,27 @@ public class ObjectModel {
     if (VM.VerifyAssertions) VM._assert(mark.LT(getObjectEndAddress(object.toObject())));
     mark.store((byte) 0);
     return mark.toWord();
+  }
+
+  @Inline
+  public static void markFieldAsUnlogged(ObjectReference object, int fieldMarkOffset) {
+    int markBase = getFieldMarkStateBaseOffset(object);
+    Address mark = object.toAddress().plus(markBase+fieldMarkOffset);
+    if (VM.VerifyAssertions) VM._assert(mark.LT(getObjectEndAddress(object.toObject())));
+    mark.store((byte) 1);
+  }
+
+
+  @Inline
+  public static void markFieldAsUnlogged(ObjectReference object, Address slot) {
+    RVMType type = ObjectModel.getTIB(object).getType();
+    int markOffset;
+    if (type.isClassType()) {
+      markOffset = slot.diff(object.toAddress().minus(BYTES_IN_ADDRESS)).toInt()>>2;  // FIXME hardcoded
+    } else {
+      markOffset = slot.diff(object.toAddress()).toInt()>>2;
+    }
+    markFieldAsUnlogged(object,markOffset);
   }
 
   @Inline
