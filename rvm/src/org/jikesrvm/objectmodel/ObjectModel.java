@@ -288,6 +288,12 @@ public class ObjectModel {
   }
 
   @Inline
+  public static int fieldMarkBytes(int numReferences) {
+    int bytes = numReferences; // one mark byte per reference in type
+    return bytes + ((-bytes) & ((1 << LOG_MIN_ALIGNMENT) - 1));  // round up to LOG_MIN_ALIGNMENT
+  }
+
+  @Inline
   public static int calculateMarkOffsetForField(RVMField field) {
     if (VM.VerifyAssertions) VM._assert(USE_FIELD_BARRIER_FOR_PUTFIELD);
     return (field.getOffset().minus(FIELD_ZERO_OFFSET).toInt()) >> 2;  // FIXME this will need to change as we move to bits etc.

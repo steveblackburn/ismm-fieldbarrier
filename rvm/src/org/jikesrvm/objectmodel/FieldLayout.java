@@ -153,9 +153,8 @@ public abstract class FieldLayout {
     int size = fieldLayout.getObjectSize();
     if (USE_FIELD_BARRIER_FOR_PUTFIELD) {
       klass.setInstanceMarkStateOffsetInternal(size - (OBJECT_REF_OFFSET - SCALAR_HEADER_SIZE));
-      int padbytes = (size + 3) >> 2; // Gen.FIELD_BARRIER_USE_BYTE ? (bytes + 3) >> 2 : (bytes + 31) >> 5;
-      size += padbytes;
-      size = size + ((-size) & ((1 << LOG_MIN_ALIGNMENT) - 1));
+      int numReferences = (size + 3) >> 2; // conservative estimate
+      size += ObjectModel.fieldMarkBytes(numReferences);
     }
 
     klass.setInstanceSizeInternal(ObjectModel.computeScalarHeaderSize(klass) + size);

@@ -16,7 +16,6 @@ import static org.jikesrvm.VM.NOT_REACHED;
 import static org.jikesrvm.classloader.ClassLoaderConstants.*;
 import static org.jikesrvm.mm.mminterface.Barriers.*;
 import static org.jikesrvm.mm.mminterface.MemoryManagerConstants.USE_FIELD_BARRIER_FOR_AASTORE;
-import static org.jikesrvm.objectmodel.JavaHeaderConstants.LOG_MIN_ALIGNMENT;
 import static org.jikesrvm.runtime.JavaSizeConstants.BYTES_IN_BOOLEAN;
 import static org.jikesrvm.runtime.JavaSizeConstants.BYTES_IN_CHAR;
 import static org.jikesrvm.runtime.JavaSizeConstants.BYTES_IN_DOUBLE;
@@ -242,9 +241,7 @@ public final class RVMArray extends RVMType {
   public int getInstanceSize(int numelts) {
     int size = getInstanceSizeNoPad(numelts);
     if (USE_FIELD_BARRIER_FOR_AASTORE && referenceOffsets == REFARRAY_OFFSET_ARRAY) {
-      int padbytes = numelts; // Gen.FIELD_BARRIER_USE_BYTE ? (bytes + 3) >> 2 : (bytes + 31) >> 5;
-      size += padbytes;
-      size = size + ((-size) & ((1 << LOG_MIN_ALIGNMENT) - 1));
+      size += ObjectModel.fieldMarkBytes(numelts);
     }
     return size;
   }

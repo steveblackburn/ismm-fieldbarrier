@@ -497,10 +497,6 @@ public final class MemoryManager {
    */
   @Inline
   public static Object allocateScalar(int size, TIB tib, int allocator, int align, int offset, int site) {
-    if (USE_FIELD_BARRIER_FOR_PUTFIELD) {
-      int pad = (FIELD_BARRIER_USE_BYTE ? (size + 3) >> 2 : (size + 31) >> 5);
-      size += pad;
-    }
     Selected.Mutator mutator = Selected.Mutator.get();
     allocator = mutator.checkAllocator(org.jikesrvm.runtime.Memory.alignUp(size, MIN_ALIGNMENT), align, allocator);
     Address region = allocateSpace(mutator, size, align, offset, allocator, site);
@@ -535,6 +531,8 @@ public final class MemoryManager {
       throwLargeArrayOutOfMemoryError();
     }
     int size = elemBytes + headerSize;
+    if (USE_FIELD_BARRIER_FOR_AASTORE && ((RVMArray) tib.getType()).getElementType().isReferenceType())
+      size += ObjectModel.fieldMarkBytes(numElements);
     return allocateArrayInternal(numElements, size, tib, allocator, align, offset, site);
   }
 
@@ -567,10 +565,6 @@ public final class MemoryManager {
   @Inline
   private static Object allocateArrayInternal(int numElements, int size, TIB tib, int allocator,
                                               int align, int offset, int site) {
-    if (USE_FIELD_BARRIER_FOR_AASTORE) {
-      int pad = (FIELD_BARRIER_USE_BYTE ? (size + 3) >> 2 : (size + 31) >> 5);
-      size += pad;
-    }
     Selected.Mutator mutator = Selected.Mutator.get();
     allocator = mutator.checkAllocator(org.jikesrvm.runtime.Memory.alignUp(size, MIN_ALIGNMENT), align, allocator);
     Address region = allocateSpace(mutator, size, align, offset, allocator, site);
