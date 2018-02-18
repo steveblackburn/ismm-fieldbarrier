@@ -26,6 +26,12 @@ import org.mmtk.vm.VM;
 import org.vmmagic.pragma.*;
 import org.vmmagic.unboxed.*;
 
+import static org.mmtk.plan.refcount.RCBase.BUILD_FOR_GENRC;
+import static org.mmtk.plan.refcount.RCBase.USE_FIELD_BARRIER_FOR_AASTORE;
+import static org.mmtk.plan.refcount.RCBase.USE_FIELD_BARRIER_FOR_PUTFIELD;
+import static org.mmtk.utility.Constants.ARRAY_ELEMENT;
+import static org.mmtk.utility.Constants.INSTANCE_FIELD;
+
 /**
  * This class implements the mutator context for a reference counting collector.
  * See Shahriyar et al for details of and rationale for the optimizations used
@@ -98,30 +104,30 @@ public class RCBaseMutator extends StopTheWorldMutator {
   @Override
   @Inline
   public void postAlloc(ObjectReference ref, ObjectReference typeRef, int bytes, int allocator) {
-    // FIXME: how does the field barrier affect the following cases?
+    if (VM.VERIFY_ASSERTIONS) VM.assertions._assert(!(BUILD_FOR_GENRC && (USE_FIELD_BARRIER_FOR_PUTFIELD || USE_FIELD_BARRIER_FOR_AASTORE))); // FIXME: how does the field barrier affect the following cases?
     switch (allocator) {
     case RCBase.ALLOC_DEFAULT:
     case RCBase.ALLOC_NON_MOVING:
-      if (RCBase.BUILD_FOR_GENRC) modObjectBuffer.push(ref);
+      if (BUILD_FOR_GENRC) modObjectBuffer.push(ref);
     case RCBase.ALLOC_CODE:
-      if (RCBase.BUILD_FOR_GENRC) {
+      if (BUILD_FOR_GENRC) {
         decBuffer.push(ref);
         RCHeader.initializeHeader(ref, true);
         ExplicitFreeListSpace.unsyncSetLiveBit(ref);
       }
       break;
     case RCBase.ALLOC_LOS:
-      if (RCBase.BUILD_FOR_GENRC) modObjectBuffer.push(ref);
+      if (BUILD_FOR_GENRC) modObjectBuffer.push(ref);
     case RCBase.ALLOC_PRIMITIVE_LOS:
     case RCBase.ALLOC_LARGE_CODE:
       decBuffer.push(ref);
-      if (RCBase.BUILD_FOR_GENRC) RCHeader.initializeHeader(ref, true);
+      if (BUILD_FOR_GENRC) RCHeader.initializeHeader(ref, true);
       RCBase.rcloSpace.initializeHeader(ref, true);
       return;
     case RCBase.ALLOC_IMMORTAL:
-      if (RCBase.BUILD_FOR_GENRC) modObjectBuffer.push(ref);
+      if (BUILD_FOR_GENRC) modObjectBuffer.push(ref);
       decBuffer.push(ref);
-      if (RCBase.BUILD_FOR_GENRC) RCHeader.initializeHeader(ref, true);
+      if (BUILD_FOR_GENRC) RCHeader.initializeHeader(ref, true);
       return;
     default:
       VM.assertions.fail("Allocator not understood by RC");
@@ -170,7 +176,7 @@ public class RCBaseMutator extends StopTheWorldMutator {
       rc.release();
       if (VM.VERIFY_ASSERTIONS) VM.assertions._assert(modObjectBuffer.isEmpty());
       if (VM.VERIFY_ASSERTIONS) VM.assertions._assert(modFieldBuffer.isEmpty());
-      if (!RCBase.BUILD_FOR_GENRC) {
+      if (!BUILD_FOR_GENRC) {
         if (VM.VERIFY_ASSERTIONS) VM.assertions._assert(decBuffer.isEmpty());
       }
       return;
@@ -214,9 +220,12 @@ public class RCBaseMutator extends StopTheWorldMutator {
   @Inline
   public void objectReferenceWrite(ObjectReference src, Address slot,
                            ObjectReference tgt, Word metaDataA,
-                           Word metaDataB, int mode, int markoffset) {
-    if (RCHeader.logRequired(src)) {
-      coalescingWriteBarrierSlow(src);
+                           Word metaDataB, int mode, int markOffset) {
+    if ((mode == ARRAY_ELEMENT && USE_FIELD_BARRIER_FOR_AASTORE) || (mode == INSTANCE_FIELD && USE_FIELD_BARRIER_FOR_PUTFIELD)) {
+      if (VM.objectModel.isFieldUnlogged(src, markOffset))
+        coalescingFieldWriteBarrierSlow(src, slot, markOffset);
+    } else if (RCHeader.logRequired(src)) {
+      coalescingObjectWriteBarrierSlow(src);
     }
     VM.barriers.objectReferenceWrite(src,tgt,metaDataA, metaDataB, mode);
   }
@@ -226,8 +235,12 @@ public class RCBaseMutator extends StopTheWorldMutator {
   public boolean objectReferenceTryCompareAndSwap(ObjectReference src, Address slot,
                                                ObjectReference old, ObjectReference tgt, Word metaDataA,
                                                Word metaDataB, int mode, int markOffset) {
-    if (RCHeader.logRequired(src)) {
-      coalescingWriteBarrierSlow(src);
+    if ((mode == ARRAY_ELEMENT && USE_FIELD_BARRIER_FOR_AASTORE) || (mode == INSTANCE_FIELD && USE_FIELD_BARRIER_FOR_PUTFIELD)) {
+      if (VM.objectModel.isFieldUnlogged(src, markOffset)) {
+        coalescingFieldWriteBarrierSlow(src, slot, markOffset);
+      }
+    } else if (RCHeader.logRequired(src)) {
+      coalescingObjectWriteBarrierSlow(src);
     }
     return VM.barriers.objectReferenceTryCompareAndSwap(src,old,tgt,metaDataA,metaDataB,mode);
   }
@@ -251,8 +264,10 @@ public class RCBaseMutator extends StopTheWorldMutator {
   @Inline
   public boolean objectReferenceBulkCopy(ObjectReference src, Offset srcOffset,
                               ObjectReference dst, Offset dstOffset, int bytes) {
-    if (RCHeader.logRequired(dst)) {
-      coalescingWriteBarrierSlow(dst);
+    if (USE_FIELD_BARRIER_FOR_AASTORE) { // FIXME: assumption that this only applies to arrays
+      coalescingFieldWriteBarrierSlow(dst, dstOffset, bytes);
+    } else if (RCHeader.logRequired(dst)) {
+      coalescingObjectWriteBarrierSlow(dst);
     }
     return false;
   }
@@ -269,13 +284,23 @@ public class RCBaseMutator extends StopTheWorldMutator {
    * @param srcObj The object being mutated
    */
   @NoInline
-  private void coalescingWriteBarrierSlow(ObjectReference srcObj) {
+  private void coalescingObjectWriteBarrierSlow(ObjectReference srcObj) {
     if (RCHeader.attemptToLog(srcObj)) {
       modObjectBuffer.push(srcObj);
       decBuffer.processChildren(srcObj);
       RCHeader.makeLogged(srcObj);
     }
   }
+
+  @NoInline
+  private void coalescingFieldWriteBarrierSlow(ObjectReference src, Address slot, int markOffset) {
+
+  }
+
+  private void coalescingFieldWriteBarrierSlow(ObjectReference dst, Offset dstOffset, int bytes) {
+
+  }
+
 
   /****************************************************************************
    *

@@ -79,7 +79,7 @@ import org.vmmagic.unboxed.*;
   public void postAlloc(ObjectReference object, ObjectReference typeRef,
                         int bytes, int allocator) {
     if (allocator == SSGCspy.ALLOC_GCSPY)
-      SSGCspy.gcspySpace.initializeHeader(object, typeRef);
+      SSGCspy.gcspySpace.initializeHeader(object);
     else
       super.postAlloc(object, typeRef, bytes, allocator);
   }

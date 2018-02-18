@@ -102,7 +102,7 @@ public class GenImmixCollector extends GenCollector {
   public final void postCopy(ObjectReference object, ObjectReference typeRef,
       int bytes, int allocator) {
     if (allocator == Plan.ALLOC_LOS)
-      Plan.loSpace.initializeHeader(object, typeRef, false);
+      Plan.loSpace.initializeHeader(object, false);
     else {
       if (VM.VERIFY_ASSERTIONS) {
         VM.assertions._assert((!GenImmix.immixSpace.inImmixCollection() && allocator == GenImmix.ALLOC_MATURE_MINORGC) ||

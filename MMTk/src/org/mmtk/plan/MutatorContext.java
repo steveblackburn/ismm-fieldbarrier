@@ -216,11 +216,11 @@ public abstract class MutatorContext {
   public void postAlloc(ObjectReference ref, ObjectReference typeRef,
       int bytes, int allocator) {
     switch (allocator) {
-    case           Plan.ALLOC_LOS: Plan.loSpace.initializeHeader(ref, typeRef, true); return;
-    case      Plan.ALLOC_IMMORTAL: Plan.immortalSpace.initializeHeader(ref, typeRef);  return;
-    case          Plan.ALLOC_CODE: Plan.smallCodeSpace.initializeHeader(ref, typeRef, true); return;
-    case    Plan.ALLOC_LARGE_CODE: Plan.largeCodeSpace.initializeHeader(ref, typeRef, true); return;
-    case    Plan.ALLOC_NON_MOVING: Plan.nonMovingSpace.initializeHeader(ref, typeRef, true); return;
+    case           Plan.ALLOC_LOS: Plan.loSpace.initializeHeader(ref, true); return;
+    case      Plan.ALLOC_IMMORTAL: Plan.immortalSpace.initializeHeader(ref);  return;
+    case          Plan.ALLOC_CODE: Plan.smallCodeSpace.initializeHeader(ref, true); return;
+    case    Plan.ALLOC_LARGE_CODE: Plan.largeCodeSpace.initializeHeader(ref, true); return;
+    case    Plan.ALLOC_NON_MOVING: Plan.nonMovingSpace.initializeHeader(ref, true); return;
     default:
       VM.assertions.fail("No such allocator");
     }

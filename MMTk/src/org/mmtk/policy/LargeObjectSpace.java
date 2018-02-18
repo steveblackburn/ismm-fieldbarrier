@@ -12,7 +12,6 @@
  */
 package org.mmtk.policy;
 
-import static org.mmtk.plan.generational.Gen.USE_FIELD_BARRIER;
 import static org.mmtk.utility.Constants.LOG_BYTES_IN_PAGE;
 
 import org.mmtk.plan.TransitiveClosure;
@@ -219,7 +218,7 @@ public final class LargeObjectSpace extends BaseLargeObjectSpace {
    * ({@code true}) or due to copying ({@code false})?
    */
   @Inline
-  public void initializeHeader(ObjectReference object, ObjectReference typeRef, boolean alloc) {
+  public void initializeHeader(ObjectReference object, boolean alloc) {
     byte oldValue = VM.objectModel.readAvailableByte(object);
     byte newValue = (byte) ((oldValue & ~LOS_BIT_MASK) | markState);
     if (alloc) newValue |= NURSERY_BIT;
@@ -227,8 +226,6 @@ public final class LargeObjectSpace extends BaseLargeObjectSpace {
     VM.objectModel.writeAvailableByte(object, newValue);
     Address cell = VM.objectModel.objectStartRef(object);
     treadmill.addToTreadmill(Treadmill.midPayloadToNode(cell), alloc);
-    if (USE_FIELD_BARRIER)
-      VM.objectModel.markAllFieldsAsUnlogged(object, typeRef);
   }
 
   /**

@@ -45,8 +45,8 @@ public class RCBase extends StopTheWorld {
   public static final short PROCESS_MODBUFFER      = Phase.createSimple("mods");
   public static final short PROCESS_DECBUFFER      = Phase.createSimple("decs");
 
-  public static final boolean USE_FIELD_BARRIER_FOR_AASTORE = true; // choose between slot and object barriers
-  public static final boolean USE_FIELD_BARRIER_FOR_PUTFIELD = true; // choose between slot and object barriers
+  public static final boolean USE_FIELD_BARRIER_FOR_AASTORE = false; // choose between slot and object barriers
+  public static final boolean USE_FIELD_BARRIER_FOR_PUTFIELD = false; // choose between slot and object barriers
 
   /** Is cycle collection enabled? */
   public static final boolean CC_ENABLED           = true;

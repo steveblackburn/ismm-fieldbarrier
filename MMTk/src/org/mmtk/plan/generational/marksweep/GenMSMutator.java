@@ -89,7 +89,7 @@ public class GenMSMutator extends GenMutator {
   public final void postAlloc(ObjectReference ref, ObjectReference typeRef,
       int bytes, int allocator) {
     if (allocator == GenMS.ALLOC_MATURE) {
-      GenMS.msSpace.initializeHeader(ref, typeRef, true);
+      GenMS.msSpace.initializeHeader(ref, true);
     } else {
       super.postAlloc(ref, typeRef, bytes, allocator);
     }

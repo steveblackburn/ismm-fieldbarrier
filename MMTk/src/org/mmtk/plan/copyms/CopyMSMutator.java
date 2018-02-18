@@ -98,7 +98,7 @@ public class CopyMSMutator extends StopTheWorldMutator {
     if (allocator == CopyMS.ALLOC_DEFAULT)
       return;
     else if (allocator == CopyMS.ALLOC_MS)
-      CopyMS.msSpace.initializeHeader(ref, typeRef, true);
+      CopyMS.msSpace.initializeHeader(ref, true);
     else
       super.postAlloc(ref, typeRef, bytes, allocator);
   }

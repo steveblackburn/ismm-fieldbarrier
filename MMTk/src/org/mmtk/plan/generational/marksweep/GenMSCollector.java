@@ -26,6 +26,8 @@ import org.mmtk.vm.VM;
 import org.vmmagic.pragma.*;
 import org.vmmagic.unboxed.*;
 
+import static org.mmtk.plan.generational.Gen.USE_FIELD_BARRIER;
+
 /**
  * This class implements <i>per-collector thread</i> behavior and state for
  * the <code>GenMS</code> two-generational copying collector.<p>
@@ -97,11 +99,14 @@ public class GenMSCollector extends GenCollector {
   public final void postCopy(ObjectReference object, ObjectReference typeRef,
                              int bytes, int allocator) {
     if (allocator == Plan.ALLOC_LOS)
-      Plan.loSpace.initializeHeader(object, typeRef, false);
+      Plan.loSpace.initializeHeader(object, false);
     else
-      GenMS.msSpace.postCopy(object, typeRef,allocator == GenMS.ALLOC_MATURE_MAJORGC);
+      GenMS.msSpace.postCopy(object,allocator == GenMS.ALLOC_MATURE_MAJORGC);
     if (Gen.USE_OBJECT_BARRIER)
       HeaderByte.markAsUnlogged(object);
+    if (USE_FIELD_BARRIER)  // FIXME: applying to arrays and scalars indiscriminately
+      VM.objectModel.markAllFieldsAsUnlogged(object, typeRef);
+
   }
 
   /*****************************************************************************
