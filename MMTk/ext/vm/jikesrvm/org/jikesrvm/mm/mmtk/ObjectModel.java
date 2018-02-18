@@ -294,6 +294,11 @@ import org.vmmagic.unboxed.Word;
   }
 
   @Inline
+  public void markAllFieldsAsUnlogged(ObjectReference obj) {
+    org.jikesrvm.objectmodel.ObjectModel.markAllFieldsAsUnlogged(obj, ObjectReference.fromObject(org.jikesrvm.objectmodel.JavaHeader.getTIB(obj.toObject())));
+  }
+
+  @Inline
   public void markAllFieldsAsUnlogged(ObjectReference obj, ObjectReference tib) {
     org.jikesrvm.objectmodel.ObjectModel.markAllFieldsAsUnlogged(obj, tib);
   }

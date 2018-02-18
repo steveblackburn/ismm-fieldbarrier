@@ -243,6 +243,7 @@ public abstract class ObjectModel {
   public abstract void markFieldAsUnlogged(Word markReference);
   public abstract Word markFieldAsLogged(ObjectReference object, int markOffset);
   public abstract boolean isFieldUnlogged(ObjectReference object, int markOffset);
+  public abstract void markAllFieldsAsUnlogged(ObjectReference obj);
   public abstract void markAllFieldsAsUnlogged(ObjectReference obj, ObjectReference tib);
 
   /*

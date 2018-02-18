@@ -27,11 +27,8 @@ import org.vmmagic.pragma.*;
 import org.vmmagic.unboxed.*;
 
 import static org.mmtk.plan.refcount.RCBase.BUILD_FOR_GENRC;
-import static org.mmtk.plan.refcount.RCBase.USE_FIELD_BARRIER_FOR_AASTORE;
-import static org.mmtk.plan.refcount.RCBase.USE_FIELD_BARRIER_FOR_PUTFIELD;
-import static org.mmtk.utility.Constants.ARRAY_ELEMENT;
+import static org.mmtk.plan.refcount.RCBase.USE_FIELD_BARRIER;
 import static org.mmtk.utility.Constants.BYTES_IN_ADDRESS;
-import static org.mmtk.utility.Constants.INSTANCE_FIELD;
 
 /**
  * This class implements the mutator context for a reference counting collector.
@@ -105,7 +102,7 @@ public class RCBaseMutator extends StopTheWorldMutator {
   @Override
   @Inline
   public void postAlloc(ObjectReference ref, ObjectReference typeRef, int bytes, int allocator) {
-    if (VM.VERIFY_ASSERTIONS) VM.assertions._assert(!(BUILD_FOR_GENRC && (USE_FIELD_BARRIER_FOR_PUTFIELD || USE_FIELD_BARRIER_FOR_AASTORE))); // FIXME: how does the field barrier affect the following cases?
+    if (VM.VERIFY_ASSERTIONS) VM.assertions._assert(!(BUILD_FOR_GENRC && USE_FIELD_BARRIER)); // FIXME: how does the field barrier affect the following cases?
     switch (allocator) {
     case RCBase.ALLOC_DEFAULT:
     case RCBase.ALLOC_NON_MOVING:
@@ -222,7 +219,7 @@ public class RCBaseMutator extends StopTheWorldMutator {
   public void objectReferenceWrite(ObjectReference src, Address slot,
                            ObjectReference tgt, Word metaDataA,
                            Word metaDataB, int mode, int markOffset) {
-    if ((mode == ARRAY_ELEMENT && USE_FIELD_BARRIER_FOR_AASTORE) || (mode == INSTANCE_FIELD && USE_FIELD_BARRIER_FOR_PUTFIELD)) {
+    if (USE_FIELD_BARRIER) {
       if (VM.objectModel.isFieldUnlogged(src, markOffset))
         coalescingFieldWriteBarrierSlow(src, slot, markOffset);
     } else if (RCHeader.logRequired(src)) {
@@ -236,7 +233,7 @@ public class RCBaseMutator extends StopTheWorldMutator {
   public boolean objectReferenceTryCompareAndSwap(ObjectReference src, Address slot,
                                                ObjectReference old, ObjectReference tgt, Word metaDataA,
                                                Word metaDataB, int mode, int markOffset) {
-    if ((mode == ARRAY_ELEMENT && USE_FIELD_BARRIER_FOR_AASTORE) || (mode == INSTANCE_FIELD && USE_FIELD_BARRIER_FOR_PUTFIELD)) {
+    if (USE_FIELD_BARRIER) {
       if (VM.objectModel.isFieldUnlogged(src, markOffset)) {
         coalescingFieldWriteBarrierSlow(src, slot, markOffset);
       }
@@ -265,7 +262,7 @@ public class RCBaseMutator extends StopTheWorldMutator {
   @Inline
   public boolean objectReferenceBulkCopy(ObjectReference src, Offset srcOffset,
                               ObjectReference dst, Offset dstOffset, int bytes) {
-    if (USE_FIELD_BARRIER_FOR_AASTORE) { // FIXME: assumption that this only applies to arrays
+    if (USE_FIELD_BARRIER) { // FIXME: assumption that this only applies to arrays
       coalescingFieldWriteBarrierSlow(dst, dstOffset, bytes);
     } else if (RCHeader.logRequired(dst)) {
       coalescingObjectWriteBarrierSlow(dst);
@@ -286,6 +283,7 @@ public class RCBaseMutator extends StopTheWorldMutator {
    */
   @NoInline
   private void coalescingObjectWriteBarrierSlow(ObjectReference srcObj) {
+    if (VM.VERIFY_ASSERTIONS) VM.assertions._assert(!(USE_FIELD_BARRIER));
     if (RCHeader.attemptToLog(srcObj)) {
       modObjectBuffer.push(srcObj);
       decBuffer.processChildren(srcObj);
@@ -296,11 +294,13 @@ public class RCBaseMutator extends StopTheWorldMutator {
   @NoInline
   private void coalescingFieldWriteBarrierSlow(ObjectReference src, Address slot, int markOffset) {
     if (RCHeader.attemptToLog(src)) {
-      ObjectReference tgt = slot.loadObjectReference();
-      if (!tgt.isNull())
-        decBuffer.push(tgt);
-      Word mark = VM.objectModel.markFieldAsLogged(src, markOffset);
-      modFieldBuffer.insert(slot, mark.toAddress());
+      if (VM.objectModel.isFieldUnlogged(src, markOffset)) {
+        ObjectReference tgt = slot.loadObjectReference();
+        if (!tgt.isNull())
+          decBuffer.push(tgt);
+        Word mark = VM.objectModel.markFieldAsLogged(src, markOffset);
+        modFieldBuffer.insert(slot, mark.toAddress());
+      }
       RCHeader.finishLogging(src);
     }
   }
@@ -311,9 +311,11 @@ public class RCBaseMutator extends StopTheWorldMutator {
       Address cursor = dst.toAddress().plus(dstOffset);
       Address end = dst.toAddress().plus(dstOffset.plus(bytes));
       while (cursor.LT(end)) {
-        decBuffer.push(cursor.loadObjectReference());
-        Word mark = VM.objectModel.markFieldAsLogged(dst, cursor.diff(dst.toAddress()).toInt());
-        modFieldBuffer.insert(cursor, mark.toAddress());
+        if (VM.objectModel.isFieldUnlogged(dst, cursor.diff(dst.toAddress()).toInt())) {
+          decBuffer.push(cursor.loadObjectReference());
+          Word mark = VM.objectModel.markFieldAsLogged(dst, cursor.diff(dst.toAddress()).toInt());
+          modFieldBuffer.insert(cursor, mark.toAddress());
+        }
         cursor = cursor.plus(BYTES_IN_ADDRESS);
       }
       RCHeader.finishLogging(dst);
