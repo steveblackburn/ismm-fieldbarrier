@@ -169,12 +169,13 @@ public final class ExpandRuntimeServices extends CompilerPhase {
           }
           IntConstantOperand site = IRTools.IC(MemoryManager.getAllocationSite(true));
           RVMMethod target = Entrypoints.resolvedNewScalarMethod;
-          Call.mutate7(inst,
+          Call.mutate8(inst,
                        CALL,
                        New.getClearResult(inst),
                        IRTools.AC(target.getOffset()),
                        MethodOperand.STATIC(target),
                        IRTools.IC(cls.getInstanceSize()),
+                       IRTools.IC(cls.getAlignedFieldMarkBytes()),
                        tib,
                        hasFinalizer,
                        allocator,

@@ -164,6 +164,7 @@ public final class RVMClass extends RVMType {
 
   /** Offset from object reference to mark state, if any */
   private int markStateOffset;
+  private int alignedFieldMarkBytes;
 
   /** The desired alignment for instances of this type. */
   private int alignment;
@@ -836,6 +837,12 @@ public final class RVMClass extends RVMType {
   }
 
   @Uninterruptible
+  public int getAlignedFieldMarkBytes() {
+    if (VM.VerifyAssertions) VM._assert(isResolved());
+    return alignedFieldMarkBytes;
+  }
+
+  @Uninterruptible
   public int getFieldMarkStateBaseOffset() {
     if (VM.VerifyAssertions) VM._assert(isResolved() && USE_FIELD_BARRIER_FOR_PUTFIELD);
     return markStateOffset;
@@ -864,7 +871,10 @@ public final class RVMClass extends RVMType {
   public void setInstanceMarkStateOffsetInternal(int offset) {
     markStateOffset = offset;
   }
-
+  @Uninterruptible
+  public void setAlignedFieldMarkBytes(int bytes) {
+    alignedFieldMarkBytes = bytes;
+  }
   /**
    * @return number of fields that are non-final
    */

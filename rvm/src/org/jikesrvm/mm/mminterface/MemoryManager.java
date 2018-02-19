@@ -496,11 +496,11 @@ public final class MemoryManager {
    * @return the initialized Object
    */
   @Inline
-  public static Object allocateScalar(int size, TIB tib, int allocator, int align, int offset, int site) {
+  public static Object allocateScalar(int prefix, int size, TIB tib, int allocator, int align, int offset, int site) {
     Selected.Mutator mutator = Selected.Mutator.get();
     allocator = mutator.checkAllocator(org.jikesrvm.runtime.Memory.alignUp(size, MIN_ALIGNMENT), align, allocator);
-    Address region = allocateSpace(mutator, size, align, offset, allocator, site);
-    Object result = ObjectModel.initializeScalar(region, tib, size);
+    Address region = allocateSpace(mutator, size+prefix, align, offset, allocator, site);
+    Object result = ObjectModel.initializeScalar(region.plus(prefix), tib, size);
     mutator.postAlloc(ObjectReference.fromObject(result), ObjectReference.fromObject(tib), size, allocator);
     return result;
   }

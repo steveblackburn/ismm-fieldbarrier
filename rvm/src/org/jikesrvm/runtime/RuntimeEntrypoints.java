@@ -273,7 +273,8 @@ public class RuntimeEntrypoints {
     int allocator = MemoryManager.pickAllocator(cls);
     int align = ObjectModel.getAlignment(cls);
     int offset = ObjectModel.getOffsetForAlignment(cls, false);
-    return resolvedNewScalar(cls.getInstanceSize(),
+    return resolvedNewScalar(cls.getAlignedFieldMarkBytes(),
+                             cls.getInstanceSize(),
                              cls.getTypeInformationBlock(),
                              cls.hasFinalizer(),
                              allocator,
@@ -295,7 +296,8 @@ public class RuntimeEntrypoints {
     int site = MemoryManager.getAllocationSite(false);
     int align = ObjectModel.getAlignment(cls);
     int offset = ObjectModel.getOffsetForAlignment(cls, false);
-    return resolvedNewScalar(cls.getInstanceSize(),
+    return resolvedNewScalar(cls.getAlignedFieldMarkBytes(),
+                             cls.getInstanceSize(),
                              cls.getTypeInformationBlock(),
                              cls.hasFinalizer(),
                              allocator,
@@ -318,14 +320,14 @@ public class RuntimeEntrypoints {
    * See also: bytecode 0xbb ("new")
    */
   @Entrypoint
-  public static Object resolvedNewScalar(int size, TIB tib, boolean hasFinalizer, int allocator, int align,
+  public static Object resolvedNewScalar(int prefix, int size, TIB tib, boolean hasFinalizer, int allocator, int align,
                                          int offset, int site) throws OutOfMemoryError {
 
     // GC stress testing
     if (VM.ForceFrequentGC) checkAllocationCountDownToGC();
 
     // Allocate the object and initialize its header
-    Object newObj = MemoryManager.allocateScalar(size, tib, allocator, align, offset, site);
+    Object newObj = MemoryManager.allocateScalar(prefix, size, tib, allocator, align, offset, site);
 
     // Deal with finalization
     if (hasFinalizer) MemoryManager.addFinalizer(newObj);

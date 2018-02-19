@@ -3118,11 +3118,13 @@ public final class BaselineCompilerImpl extends BaselineCompiler {
   @Override
   protected void emit_resolved_new(RVMClass typeRef) {
     int instanceSize = typeRef.getInstanceSize();
+    int prefixSize = typeRef.getAlignedFieldMarkBytes();
     Offset tibOffset = typeRef.getTibOffset();
     int whichAllocator = MemoryManager.pickAllocator(typeRef, method);
     int align = ObjectModel.getAlignment(typeRef);
     int offset = ObjectModel.getOffsetForAlignment(typeRef, false);
     int site = MemoryManager.getAllocationSite(true);
+    asm.emitPUSH_Imm(prefixSize);
     asm.emitPUSH_Imm(instanceSize);
     asm.generateJTOCpush(tibOffset);                             // put tib on stack
     asm.emitPUSH_Imm(typeRef.hasFinalizer() ? 1 : 0);    // does the class have a finalizer?
@@ -3130,7 +3132,7 @@ public final class BaselineCompilerImpl extends BaselineCompiler {
     asm.emitPUSH_Imm(align);
     asm.emitPUSH_Imm(offset);
     asm.emitPUSH_Imm(site);
-    genParameterRegisterLoad(asm, 7);                    // pass 7 parameter words
+    genParameterRegisterLoad(asm, 8);                    // pass 8 parameter words
     asm.generateJTOCcall(Entrypoints.resolvedNewScalarMethod.getOffset());
     asm.emitPUSH_Reg(T0);
   }
