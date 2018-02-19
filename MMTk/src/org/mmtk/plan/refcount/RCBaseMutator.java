@@ -220,10 +220,10 @@ public class RCBaseMutator extends StopTheWorldMutator {
   @Inline
   public void objectReferenceWrite(ObjectReference src, Address slot,
                            ObjectReference tgt, Word metaDataA,
-                           Word metaDataB, int mode, int markOffset) {
+                           Word metaDataB, Word metaDataC, int mode) {
     if (USE_FIELD_BARRIER) {
-      if (VM.objectModel.isFieldUnlogged(src, Word.fromIntSignExtend(markOffset), mode == ARRAY_ELEMENT))
-        coalescingFieldWriteBarrierSlow(src, slot, Word.fromIntSignExtend(markOffset), mode == ARRAY_ELEMENT);
+      if (VM.objectModel.isFieldUnlogged(src, metaDataC, mode == ARRAY_ELEMENT))
+        coalescingFieldWriteBarrierSlow(src, slot, metaDataC, mode == ARRAY_ELEMENT);
     } else if (RCHeader.logRequired(src)) {
       coalescingObjectWriteBarrierSlow(src);
     }
@@ -234,10 +234,10 @@ public class RCBaseMutator extends StopTheWorldMutator {
   @Inline
   public boolean objectReferenceTryCompareAndSwap(ObjectReference src, Address slot,
                                                ObjectReference old, ObjectReference tgt, Word metaDataA,
-                                               Word metaDataB, int mode, int markOffset) {
+                                               Word metaDataB, Word metaDataC, int mode) {
     if (USE_FIELD_BARRIER) {
-      if (VM.objectModel.isFieldUnlogged(src, Word.fromIntSignExtend(markOffset), mode == ARRAY_ELEMENT)) {
-        coalescingFieldWriteBarrierSlow(src, slot, Word.fromIntSignExtend(markOffset), mode == ARRAY_ELEMENT);
+      if (VM.objectModel.isFieldUnlogged(src, metaDataC, mode == ARRAY_ELEMENT)) {
+        coalescingFieldWriteBarrierSlow(src, slot, metaDataC, mode == ARRAY_ELEMENT);
       }
     } else if (RCHeader.logRequired(src)) {
       coalescingObjectWriteBarrierSlow(src);

@@ -170,8 +170,8 @@ import org.vmmagic.unboxed.*;
   @Override
   @Inline
   public final void objectReferenceWrite(ObjectReference src, Address slot,
-      ObjectReference tgt, Word metaDataA, Word metaDataB, int mode, int markOffset) {
-    fastPath(src, slot, tgt, mode, Word.fromIntSignExtend(markOffset));
+      ObjectReference tgt, Word metaDataA, Word metaDataB, Word metaDataC, int mode) {
+    fastPath(src, slot, tgt, mode, metaDataC);
     VM.barriers.objectReferenceWrite(src, tgt, metaDataA, metaDataB, mode);
   }
 
@@ -218,10 +218,10 @@ import org.vmmagic.unboxed.*;
   @Override
   @Inline
   public boolean objectReferenceTryCompareAndSwap(ObjectReference src, Address slot, ObjectReference old, ObjectReference tgt,
-      Word metaDataA, Word metaDataB, int mode, int markOffset) {
+      Word metaDataA, Word metaDataB, Word metaDataC, int mode) {
     boolean result = VM.barriers.objectReferenceTryCompareAndSwap(src, old, tgt, metaDataA, metaDataB, mode);
     if (result)
-      fastPath(src, slot, tgt, mode, Word.fromIntSignExtend(markOffset));
+      fastPath(src, slot, tgt, mode, metaDataC);
     return result;
   }
 

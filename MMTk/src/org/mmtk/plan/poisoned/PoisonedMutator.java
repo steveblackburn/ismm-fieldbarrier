@@ -45,13 +45,13 @@ public class PoisonedMutator extends MSMutator {
    */
   @Inline
   @Override
-  public void objectReferenceWrite(ObjectReference src, Address slot, ObjectReference tgt, Word metaDataA, Word metaDataB, int mode, int markOffset) {
+  public void objectReferenceWrite(ObjectReference src, Address slot, ObjectReference tgt, Word metaDataA, Word metaDataB, Word metaDataC, int mode) {
     VM.barriers.wordWrite(src, Poisoned.poison(tgt), metaDataA, metaDataB, mode);
   }
 
   @Override
   public boolean objectReferenceTryCompareAndSwap(ObjectReference src, Address slot, ObjectReference old, ObjectReference tgt,
-                                               Word metaDataA, Word metaDataB, int mode, int markOffset) {
+                                               Word metaDataA, Word metaDataB, Word metaDataC, int mode) {
     return VM.barriers.wordTryCompareAndSwap(src, Poisoned.poison(old), Poisoned.poison(tgt), metaDataA, metaDataB, mode);
   }
 

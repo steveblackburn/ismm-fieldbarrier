@@ -1106,7 +1106,7 @@ public abstract class MutatorContext {
    * @param metaDataB A value that assists the host VM in creating a store
    * @param mode The context in which the store occurred
    */
-  public void objectReferenceWrite(ObjectReference src, Address slot, ObjectReference value, Word metaDataA, Word metaDataB, int mode, int markOffset) {
+  public void objectReferenceWrite(ObjectReference src, Address slot, ObjectReference value, Word metaDataA, Word metaDataB, Word metaDataC, int mode) {
     // Either: write barriers are used and this is overridden, or
     // write barriers are not used and this is never called
     if (VM.VERIFY_ASSERTIONS) VM.assertions._assert(false);
@@ -1207,7 +1207,7 @@ public abstract class MutatorContext {
    * @param mode The context in which the store occurred
    * @return True if the swap was successful.
    */
-  public boolean objectReferenceTryCompareAndSwap(ObjectReference src, Address slot, ObjectReference old, ObjectReference tgt, Word metaDataA, Word metaDataB, int mode, int markOffset) {
+  public boolean objectReferenceTryCompareAndSwap(ObjectReference src, Address slot, ObjectReference old, ObjectReference tgt, Word metaDataA, Word metaDataB, Word metaDataC, int mode) {
     // Either: write barriers are used and this is overridden, or
     // write barriers are not used and this is never called
     if (VM.VERIFY_ASSERTIONS) VM.assertions._assert(false);

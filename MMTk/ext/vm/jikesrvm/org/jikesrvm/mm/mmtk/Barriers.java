@@ -356,7 +356,7 @@ public class Barriers extends org.mmtk.vm.Barriers {
         Word offset = Offset.fromIntSignExtend(i << LOG_BYTES_IN_ADDRESS).toWord();
         Address slotAddress = ref.toAddress().plus(i << LOG_BYTES_IN_ADDRESS);
         if (VM.VERIFY_ASSERTIONS) VM.assertions._assert(!USE_FIELD_BARRIER_FOR_AASTORE);
-        VM.activePlan.mutator().objectReferenceWrite(ref, slotAddress, nullValue, offset, location, ARRAY_ELEMENT, 0); //FIXME
+        VM.activePlan.mutator().objectReferenceWrite(ref, slotAddress, nullValue, offset, location, Word.zero(), ARRAY_ELEMENT); //FIXME
       }
     } else {
       if (VM.VERIFY_ASSERTIONS) VM.assertions._assert(type.isClassType() ||
@@ -365,7 +365,7 @@ public class Barriers extends org.mmtk.vm.Barriers {
         Word offset = Offset.fromIntSignExtend(referenceOffsets[i]).toWord();
         Address slotAddress = ref.toAddress().plus(referenceOffsets[i]);
         if (VM.VERIFY_ASSERTIONS) VM.assertions._assert(!USE_FIELD_BARRIER_FOR_PUTFIELD);
-        VM.activePlan.mutator().objectReferenceWrite(ref, slotAddress, nullValue, offset, location, INSTANCE_FIELD, 0); // FIXME
+        VM.activePlan.mutator().objectReferenceWrite(ref, slotAddress, nullValue, offset, location, Word.zero(), INSTANCE_FIELD); // FIXME
       }
     }
   }

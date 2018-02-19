@@ -1256,7 +1256,7 @@ public class Barriers {
       FieldReference fr = getFieldRef(locationMetadata);
       if (VM.VerifyAssertions) VM._assert(fr.isResolved());
       int markOffset = USE_FIELD_BARRIER_FOR_PUTFIELD ? calculateMarkOffsetForField(fr.peekResolvedField()) : 0;
-      Selected.Mutator.get().objectReferenceWrite(src, src.toAddress().plus(offset), ObjectReference.fromObject(value), offset.toWord(), Word.fromIntZeroExtend(locationMetadata), INSTANCE_FIELD, markOffset);
+      Selected.Mutator.get().objectReferenceWrite(src, src.toAddress().plus(offset), ObjectReference.fromObject(value), offset.toWord(), Word.fromIntZeroExtend(locationMetadata), Word.fromIntSignExtend(markOffset), INSTANCE_FIELD);
     } else if (VM.VerifyAssertions)
       VM._assert(VM.NOT_REACHED);
   }
@@ -1274,7 +1274,7 @@ public class Barriers {
   public static void objectFieldWrite(Object ref, Object value, Offset offset, int locationMetadata, int markOffset) {
     if (NEEDS_OBJECT_GC_WRITE_BARRIER) {
       ObjectReference src = ObjectReference.fromObject(ref);
-      Selected.Mutator.get().objectReferenceWrite(src, src.toAddress().plus(offset), ObjectReference.fromObject(value), offset.toWord(), Word.fromIntZeroExtend(locationMetadata), INSTANCE_FIELD, markOffset);
+      Selected.Mutator.get().objectReferenceWrite(src, src.toAddress().plus(offset), ObjectReference.fromObject(value), offset.toWord(), Word.fromIntZeroExtend(locationMetadata), Word.fromIntZeroExtend(markOffset), INSTANCE_FIELD);
     } else if (VM.VerifyAssertions)
       VM._assert(VM.NOT_REACHED);
   }
@@ -1294,10 +1294,10 @@ public class Barriers {
     if (NEEDS_OBJECT_GC_WRITE_BARRIER) {
       ObjectReference array = ObjectReference.fromObject(ref);
       Offset offset = Offset.fromIntZeroExtend(index << LOG_BYTES_IN_ADDRESS);
-      int markoffset = 0;
+      Word markoffset = Word.zero();
       if (USE_FIELD_BARRIER_FOR_AASTORE)
           markoffset = calculateMarkOffsetForIndex(index);
-      Selected.Mutator.get().objectReferenceWrite(array, array.toAddress().plus(offset), ObjectReference.fromObject(value), offset.toWord(), Word.zero(), ARRAY_ELEMENT, markoffset);
+      Selected.Mutator.get().objectReferenceWrite(array, array.toAddress().plus(offset), ObjectReference.fromObject(value), offset.toWord(), Word.zero(), markoffset, ARRAY_ELEMENT);
     } else if (VM.VerifyAssertions)
       VM._assert(VM.NOT_REACHED);
   }
@@ -1429,8 +1429,8 @@ public class Barriers {
           ObjectReference.fromObject(value),
           offset.toWord(),
           Word.zero(), // do not have location metadata
-          INSTANCE_FIELD,
-              0); // FIXME
+          ObjectModel.calculateMarkOffsetForCompareAndSwap(offset),
+          INSTANCE_FIELD);
     } else if (VM.VerifyAssertions)
       VM._assert(VM.NOT_REACHED);
     return false;
