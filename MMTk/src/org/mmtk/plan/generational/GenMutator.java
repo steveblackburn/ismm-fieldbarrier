@@ -136,13 +136,13 @@ import org.vmmagic.unboxed.*;
    * @param mode The mode of the store (eg putfield, putstatic etc)
    */
   @Inline
-  private void fastPath(ObjectReference src, Address slot, ObjectReference tgt, int mode, int markOffset) {
+  private void fastPath(ObjectReference src, Address slot, ObjectReference tgt, int mode, Word metaData) {
     if (Gen.GATHER_WRITE_BARRIER_STATS) Gen.wbFast.inc();
-    if ((Gen.USE_FIELD_BARRIER_FOR_AASTORE && mode == ARRAY_ELEMENT) ||
-              (Gen.USE_FIELD_BARRIER_FOR_PUTFIELD && mode == INSTANCE_FIELD)) {
-      if (VM.objectModel.isFieldUnlogged(src, markOffset)) {
+    if ((Gen.USE_FIELD_BARRIER_FOR_PUTFIELD && mode == INSTANCE_FIELD) ||
+            (Gen.USE_FIELD_BARRIER_FOR_AASTORE && mode == ARRAY_ELEMENT)) {
+      if (VM.objectModel.isFieldUnlogged(src, metaData, mode == ARRAY_ELEMENT)) {
         if (Gen.GATHER_WRITE_BARRIER_STATS) Gen.wbFRSlow.inc();
-        Word mark = VM.objectModel.markFieldAsLogged(src, markOffset);
+        Word mark = VM.objectModel.markFieldAsLogged(src, metaData, mode == ARRAY_ELEMENT);
         fieldbuf.insert(slot, mark.toAddress());
       }
     } else if ((mode == ARRAY_ELEMENT && USE_OBJECT_BARRIER_FOR_AASTORE) ||
@@ -170,9 +170,8 @@ import org.vmmagic.unboxed.*;
   @Override
   @Inline
   public final void objectReferenceWrite(ObjectReference src, Address slot,
-      ObjectReference tgt, Word metaDataA,
-      Word metaDataB, int mode, int markOffset) {
-    fastPath(src, slot, tgt, mode, markOffset);
+      ObjectReference tgt, Word metaDataA, Word metaDataB, int mode, int markOffset) {
+    fastPath(src, slot, tgt, mode, Word.fromIntSignExtend(markOffset));
     VM.barriers.objectReferenceWrite(src, tgt, metaDataA, metaDataB, mode);
   }
 
@@ -222,7 +221,7 @@ import org.vmmagic.unboxed.*;
       Word metaDataA, Word metaDataB, int mode, int markOffset) {
     boolean result = VM.barriers.objectReferenceTryCompareAndSwap(src, old, tgt, metaDataA, metaDataB, mode);
     if (result)
-      fastPath(src, slot, tgt, mode, markOffset);
+      fastPath(src, slot, tgt, mode, Word.fromIntSignExtend(markOffset));
     return result;
   }
 
@@ -236,6 +235,7 @@ import org.vmmagic.unboxed.*;
   @Override
   public final boolean objectReferenceBulkCopy(ObjectReference src, Offset srcOffset, ObjectReference dst, Offset dstOffset, int bytes) {
     if (!Gen.inNursery(dst)) {
+      // FIXME!
       Address start = dst.toAddress().plus(dstOffset);
       arrayRemset.insert(start, start.plus(bytes));
     }

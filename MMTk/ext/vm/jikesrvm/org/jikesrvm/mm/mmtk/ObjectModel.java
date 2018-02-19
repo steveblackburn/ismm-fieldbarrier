@@ -304,8 +304,13 @@ import org.vmmagic.unboxed.Word;
   }
 
   @Inline
-  public Word markFieldAsLogged(ObjectReference object, int fieldMarkOffset) {
-    return org.jikesrvm.objectmodel.ObjectModel.markFieldAsLogged(object, fieldMarkOffset);
+  public boolean isFieldUnlogged(ObjectReference object, Word metaData, boolean isArray) {
+    return org.jikesrvm.objectmodel.ObjectModel.isFieldUnlogged(object, metaData, isArray);
+  }
+
+  @Inline
+  public Word markFieldAsLogged(ObjectReference object, Word metaData, boolean isArray) {
+    return org.jikesrvm.objectmodel.ObjectModel.markFieldAsLogged(object, metaData, isArray);
   }
 
   @Inline
@@ -318,10 +323,6 @@ import org.vmmagic.unboxed.Word;
     org.jikesrvm.objectmodel.ObjectModel.markFieldAsUnlogged(fieldMarkReference);
   }
 
-  @Inline
-  public boolean isFieldUnlogged(ObjectReference object, int fieldMarkOffset) {
-    return org.jikesrvm.objectmodel.ObjectModel.isFieldUnlogged(object, fieldMarkOffset);
-  }
 
   @Override
   public void dumpObject(ObjectReference object) {

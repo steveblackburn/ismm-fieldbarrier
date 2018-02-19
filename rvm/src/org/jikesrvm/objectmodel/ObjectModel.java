@@ -312,22 +312,12 @@ public class ObjectModel {
   }
 
   @Inline
-  public static Word markFieldAsLogged(ObjectReference object, int fieldMarkOffset) {
-    int markBase = getFieldMarkStateBaseOffset(object);
-    Address mark = object.toAddress().plus(markBase+fieldMarkOffset);
-    if (VM.VerifyAssertions) VM._assert(mark.LT(getObjectEndAddress(object.toObject())));
-    mark.store((byte) 0);
-    return mark.toWord();
-  }
-
-  @Inline
   public static void markFieldAsUnlogged(ObjectReference object, int fieldMarkOffset) {
     int markBase = getFieldMarkStateBaseOffset(object);
     Address mark = object.toAddress().plus(markBase+fieldMarkOffset);
     if (VM.VerifyAssertions) VM._assert(mark.LT(getObjectEndAddress(object.toObject())));
     mark.store((byte) 1);
   }
-
 
   @Inline
   public static void markFieldAsUnlogged(ObjectReference object, Address slot) {
@@ -342,9 +332,70 @@ public class ObjectModel {
   }
 
   @Inline
-  public static boolean isFieldUnlogged(ObjectReference object, int fieldMarkOffset) {
+  public static boolean isFieldUnlogged(ObjectReference object, Word metaData, boolean isArray) {
+    if (isArray)
+      return isArrayFieldUnlogged(object, metaData.toInt());
+    else
+      return isScalarFieldUnlogged(object, metaData);
+  }
+
+  @Inline
+  private static boolean isScalarFieldUnlogged(ObjectReference object, Word fieldMarkReference) {
+    if (VM.VerifyAssertions) {
+      VM._assert(USE_FIELD_BARRIER_FOR_PUTFIELD);
+      VM._assert(ObjectModel.getTIB(object).getType().isClassType());
+    }
+    return internalIsFieldUnlogged(object, fieldMarkReference.toInt());
+  }
+
+  @Inline
+  private static boolean isArrayFieldUnlogged(ObjectReference object, int index) {
+    if (VM.VerifyAssertions) {
+      VM._assert(USE_FIELD_BARRIER_FOR_AASTORE);
+      VM._assert(ObjectModel.getTIB(object).getType().isArrayType());
+    }
+    return internalIsFieldUnlogged(object, index);
+  }
+
+  @Inline
+  private static boolean internalIsFieldUnlogged(ObjectReference object, int index) {
     int markBase = getFieldMarkStateBaseOffset(object);
-    return object.toAddress().plus(markBase+fieldMarkOffset).loadByte() == 1;
+    return object.toAddress().plus(markBase+index).loadByte() == 1;
+  }
+
+  @Inline
+  public static Word markFieldAsLogged(ObjectReference object, Word metaData, boolean isArray) {
+     if (isArray)
+       return markArrayFieldAsLogged(object, metaData.toInt());
+     else
+       return markScalarFieldAsLogged(object, metaData);
+  }
+
+  @Inline
+  private static Word markArrayFieldAsLogged(ObjectReference object, int index) {
+    if (VM.VerifyAssertions) {
+      VM._assert(USE_FIELD_BARRIER_FOR_AASTORE);
+      VM._assert(ObjectModel.getTIB(object).getType().isArrayType());
+    }
+    return markFieldAsLogged(object, index);
+  }
+
+  @Inline
+  private static Word markScalarFieldAsLogged(ObjectReference object, Word metaData) {
+    if (VM.VerifyAssertions) {
+      VM._assert(USE_FIELD_BARRIER_FOR_PUTFIELD);
+      VM._assert(ObjectModel.getTIB(object).getType().isClassType());
+    }
+    return markFieldAsLogged(object, metaData.toInt());
+  }
+
+  @Inline
+  private static Word markFieldAsLogged(ObjectReference object, int index) {
+    int markBase = getFieldMarkStateBaseOffset(object);
+    Address mark = object.toAddress().plus(markBase+index);
+    if (VM.VerifyAssertions) VM._assert(mark.LT(getObjectEndAddress(object.toObject())));
+    mark.store((byte) 0);
+    return mark.toWord();
   }
 
   /**
