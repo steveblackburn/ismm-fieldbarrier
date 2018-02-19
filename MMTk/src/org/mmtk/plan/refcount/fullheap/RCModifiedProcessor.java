@@ -20,6 +20,8 @@ import org.mmtk.vm.VM;
 import org.vmmagic.pragma.*;
 import org.vmmagic.unboxed.*;
 
+import static org.mmtk.plan.refcount.RCBase.USE_FIELD_BARRIER;
+
 /**
  * This class is the fundamental mechanism for performing a
  * transitive closure over an object graph.
@@ -38,7 +40,7 @@ public final class RCModifiedProcessor extends TransitiveClosure {
   @Override
   @Inline
   public void processEdge(ObjectReference source, Address slot) {
-    if (!source.isNull()) {
+    if (USE_FIELD_BARRIER && !source.isNull()) {
       VM.objectModel.markFieldAsUnlogged(source, slot);
     }
     ObjectReference object = slot.loadObjectReference();
