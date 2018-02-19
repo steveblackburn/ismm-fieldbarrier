@@ -12,6 +12,7 @@
  */
 package org.mmtk.plan.refcount;
 
+import static org.mmtk.plan.refcount.RCBase.GATHER_INC_DEC_STATS;
 import static org.mmtk.plan.refcount.RCBase.USE_FIELD_BARRIER;
 import static org.mmtk.utility.Constants.BITS_IN_BYTE;
 
@@ -337,6 +338,7 @@ public class RCHeader {
     Word oldValue, newValue;
     int rtn;
     if (VM.VERIFY_ASSERTIONS) VM.assertions._assert(RCBase.isRCObject(object));
+    if (GATHER_INC_DEC_STATS) RCBase.inc.inc();
     do {
       oldValue = VM.objectModel.prepareAvailableBits(object);
       if (isStuck(oldValue)) return INC_OLD;
@@ -369,6 +371,7 @@ public class RCHeader {
   @Inline
   @Uninterruptible
   public static int decRC(ObjectReference object) {
+    if (GATHER_INC_DEC_STATS) RCBase.dec.inc();
     Word oldValue, newValue;
     int rtn;
     if (VM.VERIFY_ASSERTIONS) {

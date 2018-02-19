@@ -26,6 +26,7 @@ import org.mmtk.utility.deque.SharedDeque;
 import org.mmtk.utility.heap.VMRequest;
 import org.mmtk.utility.options.Options;
 import org.mmtk.utility.sanitychecker.SanityChecker;
+import org.mmtk.utility.statistics.EventCounter;
 import org.mmtk.vm.VM;
 import org.vmmagic.pragma.*;
 import org.vmmagic.unboxed.Address;
@@ -59,6 +60,18 @@ public class RCBase extends StopTheWorld {
 
   /** True if we are building for generational RC */
   public static final boolean BUILD_FOR_GENRC = ((RCBaseConstraints) VM.activePlan.constraints()).buildForGenRC();
+
+
+  /* Statistics */
+  public static final boolean GATHER_INC_DEC_STATS = true;
+
+  protected static final EventCounter inc;
+  protected static final EventCounter dec;
+
+  static {
+    inc = GATHER_INC_DEC_STATS ? new EventCounter("inc") : null;
+    dec = GATHER_INC_DEC_STATS ? new EventCounter("dec") : null;
+  }
 
   // CHECKSTYLE:OFF
 
