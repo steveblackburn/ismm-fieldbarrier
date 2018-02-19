@@ -234,8 +234,7 @@ import org.vmmagic.unboxed.*;
   @Inline
   @Override
   public final boolean objectReferenceBulkCopy(ObjectReference src, Offset srcOffset, ObjectReference dst, Offset dstOffset, int bytes) {
-    if (!Gen.inNursery(dst)) {
-      // FIXME!
+    if (!Gen.inNursery(dst)) { // FIXME This seems OK, but is it?  -- rewrote to use field barrier, but made no difference, and this makes sense, so pretty convinced that this is OK.
       Address start = dst.toAddress().plus(dstOffset);
       arrayRemset.insert(start, start.plus(bytes));
     }
