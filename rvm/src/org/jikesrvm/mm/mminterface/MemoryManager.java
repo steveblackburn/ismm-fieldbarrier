@@ -531,8 +531,10 @@ public final class MemoryManager {
       throwLargeArrayOutOfMemoryError();
     }
     int size = elemBytes + headerSize;
-    if (USE_FIELD_BARRIER_FOR_AASTORE && ((RVMArray) tib.getType()).getElementType().isReferenceType())
+    if (USE_FIELD_BARRIER_FOR_AASTORE && ((RVMArray) tib.getType()).getElementType().isReferenceType()) {
       size += ObjectModel.fieldMarkBytes(numElements);
+      if (VM.VerifyAssertions) VM._assert(org.jikesrvm.runtime.Memory.alignUp(size, MIN_ALIGNMENT) == size);
+    }
     return allocateArrayInternal(numElements, size, tib, allocator, align, offset, site);
   }
 
