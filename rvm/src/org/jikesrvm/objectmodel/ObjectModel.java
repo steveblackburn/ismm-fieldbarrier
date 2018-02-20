@@ -19,6 +19,7 @@ import static org.jikesrvm.objectmodel.JavaHeaderConstants.*;
 import static org.jikesrvm.runtime.JavaSizeConstants.BYTES_IN_INT;
 import static org.mmtk.utility.Constants.BYTES_IN_ADDRESS;
 import static org.mmtk.utility.Constants.LOG_BYTES_IN_ADDRESS;
+import static org.mmtk.utility.Constants.MIN_ALIGNMENT;
 
 import org.jikesrvm.VM;
 import org.jikesrvm.classloader.RVMArray;
@@ -28,6 +29,7 @@ import org.jikesrvm.classloader.RVMType;
 import org.jikesrvm.mm.mminterface.AlignmentEncoding;
 import org.jikesrvm.mm.mminterface.MemoryManager;
 import org.jikesrvm.runtime.Magic;
+import org.jikesrvm.runtime.Memory;
 import org.jikesrvm.scheduler.Lock;
 import org.jikesrvm.scheduler.RVMThread;
 import org.vmmagic.pragma.Entrypoint;
@@ -231,7 +233,7 @@ public class ObjectModel {
   }
 
   public static int getFieldMarkStateBaseOffset(ObjectReference object) {
-    // FIXME need to move all this crap off fast path ---> move state to front of object
+    // FIXME need to move all this crap off fast path ---> move state to front of scalars
     RVMType type = ObjectModel.getTIB(object).getType();
     if (type.isClassType()) {
       if (VM.VerifyAssertions) VM._assert(!USE_PREFIX_FIELD_MARKS_FOR_SCALARS);
@@ -302,8 +304,35 @@ public class ObjectModel {
   @Inline
   public static int fieldMarkBytes(int numReferences) {
     int bytes = numReferences; // one mark byte per reference in type
-    return bytes + ((-bytes) & ((1 << LOG_MIN_ALIGNMENT) - 1));  // round up to LOG_MIN_ALIGNMENT
+    return Memory.alignUp(bytes, MIN_ALIGNMENT);
   }
+
+  @Inline
+  private static Offset calculateMarkOffsetFromFieldOffset(Offset fieldOffset) {
+    int offset = fieldOffset.minus(FIELD_ZERO_OFFSET).toInt();
+    int fieldIndex = offset >> 2; // FIXME this will need to change as we move to bits etc.
+    if (USE_PREFIX_FIELD_MARKS_FOR_SCALARS)
+      return SCALAR_FIELD_MARK_BASE_OFFSET.minus(fieldIndex);  // return offset relative to object pointer
+    else
+      return Offset.fromIntSignExtend(fieldIndex);  // return offset relative to base of mark fields
+  }
+
+  @Inline
+  public static Word calculateMarkOffsetForCompareAndSwap(ObjectReference object, Offset fieldOffset) {
+      if (ObjectModel.getTIB(object).getType().isClassType()) {
+        Offset offset = calculateMarkOffsetFromFieldOffset(fieldOffset);
+        if (USE_PREFIX_FIELD_MARKS_FOR_SCALARS)
+          return offset.toWord();
+        else
+          return offset.plus(getFieldMarkStateBaseOffset(object)).toWord();
+      } else {
+        int index = fieldOffset.toInt() >> LOG_BYTES_IN_ADDRESS;
+        return calculateMarkOffsetForIndex(index);
+      }
+    }
+
+
+
 
   @Inline
   public static int calculateMarkOffsetForField(RVMField field) {
