@@ -55,4 +55,7 @@ public class RCBaseConstraints extends StopTheWorldConstraints {
 
   @Override
   public boolean useFieldBarrierForAAStore() { return RCBase.USE_FIELD_BARRIER; }
+
+  @Override
+  public boolean usePrefixFieldMarksForScalars() { return RCBase.USE_PREFIX_FIELD_MARKS_FOR_SCALARS; }
 }

@@ -41,7 +41,7 @@ public final class RCModifiedProcessor extends TransitiveClosure {
   @Inline
   public void processEdge(ObjectReference source, Address slot) {
     if (USE_FIELD_BARRIER && !source.isNull()) {
-      VM.objectModel.markFieldAsUnlogged(source, slot);
+      VM.objectModel.markFieldAsUnlogged(source, slot);  // FIXME check whether this is actually needed/correct
     }
     ObjectReference object = slot.loadObjectReference();
     if (RCBase.isRCObject(object)) {
