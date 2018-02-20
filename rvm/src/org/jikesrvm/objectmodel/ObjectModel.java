@@ -319,25 +319,22 @@ public class ObjectModel {
 
   @Inline
   public static Word calculateMarkOffsetForCompareAndSwap(ObjectReference object, Offset fieldOffset) {
-      if (ObjectModel.getTIB(object).getType().isClassType()) {
-        Offset offset = calculateMarkOffsetFromFieldOffset(fieldOffset);
-        if (USE_PREFIX_FIELD_MARKS_FOR_SCALARS)
-          return offset.toWord();
-        else
-          return offset.plus(getFieldMarkStateBaseOffset(object)).toWord();
-      } else {
-        int index = fieldOffset.toInt() >> LOG_BYTES_IN_ADDRESS;
-        return calculateMarkOffsetForIndex(index);
-      }
+    if (ObjectModel.getTIB(object).getType().isClassType()) {
+      Offset offset = calculateMarkOffsetFromFieldOffset(fieldOffset);
+      if (USE_PREFIX_FIELD_MARKS_FOR_SCALARS)
+        return offset.toWord();
+      else
+        return offset.plus(getFieldMarkStateBaseOffset(object)).toWord();
+    } else {
+      int index = fieldOffset.toInt() >> LOG_BYTES_IN_ADDRESS;
+      return calculateMarkOffsetForIndex(index);
     }
-
-
-
+  }
 
   @Inline
   public static int calculateMarkOffsetForField(RVMField field) {
     if (VM.VerifyAssertions) VM._assert(USE_FIELD_BARRIER_FOR_PUTFIELD);
-    return (field.getOffset().minus(FIELD_ZERO_OFFSET).toInt()) >> 2;  // FIXME this will need to change as we move to bits etc.
+    return calculateMarkOffsetFromFieldOffset(field.getOffset()).toInt();
   }
 
   @Inline
