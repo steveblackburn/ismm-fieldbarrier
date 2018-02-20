@@ -14,6 +14,7 @@ package org.jikesrvm.objectmodel;
 
 import static org.jikesrvm.mm.mminterface.MemoryManagerConstants.USE_FIELD_BARRIER_FOR_AASTORE;
 import static org.jikesrvm.mm.mminterface.MemoryManagerConstants.USE_FIELD_BARRIER_FOR_PUTFIELD;
+import static org.jikesrvm.mm.mminterface.MemoryManagerConstants.USE_PREFIX_FIELD_MARKS_FOR_SCALARS;
 import static org.jikesrvm.objectmodel.JavaHeaderConstants.*;
 import static org.jikesrvm.runtime.JavaSizeConstants.BYTES_IN_INT;
 import static org.mmtk.utility.Constants.BYTES_IN_ADDRESS;
@@ -233,6 +234,7 @@ public class ObjectModel {
     // FIXME need to move all this crap off fast path ---> move state to front of object
     RVMType type = ObjectModel.getTIB(object).getType();
     if (type.isClassType()) {
+      if (VM.VerifyAssertions) VM._assert(!USE_PREFIX_FIELD_MARKS_FOR_SCALARS);
       if (VM.VerifyAssertions) VM._assert(USE_FIELD_BARRIER_FOR_PUTFIELD);
       return ((RVMClass) type).getFieldMarkStateBaseOffset();
     } else {
@@ -246,21 +248,23 @@ public class ObjectModel {
   @Interruptible
   public static void markAllFieldsAsUnlogged(BootImageInterface bootImage, Address ref, TIB tib, int size,
                                              int numElements, boolean isScalar) {
-    if (VM.VerifyAssertions) VM._assert((isScalar && USE_FIELD_BARRIER_FOR_PUTFIELD) || (!isScalar && USE_FIELD_BARRIER_FOR_AASTORE));
-
-    RVMType type = tib.getType();
-    Address start = ref.minus(GC_HEADER_OFFSET);
-    Address end = start.plus(size);
     Address cursor;
+    Address end;
     if (isScalar) {
-      cursor = ref.plus(((RVMClass) type).getFieldMarkStateBaseOffset());
-      VM.sysWrite("o: ", ref); VM.sysWrite(" s: ",start); VM.sysWrite(" c: ",cursor); VM.sysWriteln(" e: ",end);
+      if (VM.VerifyAssertions) VM._assert(USE_FIELD_BARRIER_FOR_PUTFIELD);
+      if (USE_PREFIX_FIELD_MARKS_FOR_SCALARS) {
+        end = ref.plus(SCALAR_FIELD_MARK_BASE_OFFSET.plus(1));
+        cursor = end.minus(((RVMClass) tib.getType()).getAlignedFieldMarkBytes());
+      } else {
+        cursor = ref.plus(((RVMClass) tib.getType()).getFieldMarkStateBaseOffset());
+        end = ref.minus(GC_HEADER_OFFSET).plus(size);
+      }
     } else {
-     if (!(((RVMArray) type).getElementType().isReferenceType()))
+      if (VM.VerifyAssertions) VM._assert(USE_FIELD_BARRIER_FOR_AASTORE);
+      if (!(((RVMArray) tib.getType()).getElementType().isReferenceType()))
         return;
-//      cursor = end.minus(numElements);  // FIXME: BUG? why does this line not behave the same as the statement below???
-//      VM.sysWrite("o: ", ref); VM.sysWrite(" s: ",start); VM.sysWrite(" c: ",cursor); VM.sysWriteln(" e: ",end);
-      cursor = ref.plus((numElements)<<LOG_BYTES_IN_ADDRESS); // FIXME LOG_ADDRESS_WIDTH
+      end = ref.minus(GC_HEADER_OFFSET).plus(size);
+      cursor = ref.plus(numElements << LOG_BYTES_IN_ADDRESS);
     }
     while (cursor.LT(end)) {
       bootImage.setByte(cursor, (byte) 1);
