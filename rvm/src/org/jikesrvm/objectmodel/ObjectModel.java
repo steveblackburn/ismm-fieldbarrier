@@ -338,11 +338,6 @@ public class ObjectModel {
   }
 
   @Inline
-  public static Word calculateMarkOffsetForCompareAndSwap(Offset fieldOffset) {
-    return Word.fromIntSignExtend((fieldOffset.minus(FIELD_ZERO_OFFSET).toInt()>>2));  // FIXME this will need to change as we move to bits etc.
-  }
-
-  @Inline
   public static Word calculateMarkOffsetForIndex(int index) {
     if (VM.VerifyAssertions) VM._assert(USE_FIELD_BARRIER_FOR_AASTORE);
     return Word.fromIntSignExtend(index); // FIXME this will need to change as we move to bits etc.

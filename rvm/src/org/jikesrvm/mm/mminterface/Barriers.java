@@ -1429,7 +1429,7 @@ public class Barriers {
           ObjectReference.fromObject(value),
           offset.toWord(),
           Word.zero(), // do not have location metadata
-          ObjectModel.calculateMarkOffsetForCompareAndSwap(offset),
+          ObjectModel.calculateMarkOffsetForCompareAndSwap(ObjectReference.fromObject(ref), offset),
           INSTANCE_FIELD);
     } else if (VM.VerifyAssertions)
       VM._assert(VM.NOT_REACHED);
