@@ -323,6 +323,10 @@ import org.vmmagic.unboxed.Word;
     org.jikesrvm.objectmodel.ObjectModel.markFieldAsUnlogged(fieldMarkReference);
   }
 
+  @Inline
+  public  boolean isTIB(ObjectReference object) {
+    return org.jikesrvm.objectmodel.ObjectModel.isTIB(object);
+  }
 
   @Override
   public void dumpObject(ObjectReference object) {

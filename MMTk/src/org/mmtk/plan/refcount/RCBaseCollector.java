@@ -179,14 +179,7 @@ public abstract class RCBaseCollector extends StopTheWorldCollector {
       while (!(modObjectBuffer.isEmpty() && modFieldBuffer.isEmpty())) {
         while (!(current = modObjectBuffer.pop()).isNull()) {
           RCHeader.makeUnlogged(current);
-          if (USE_FIELD_BARRIER &&
-                  (current.toAddress().GE(Address.fromIntSignExtend(0x68d46f20)) &&
-                          current.toAddress().LT(Address.fromIntSignExtend(0x68d47000)))) {
-//          if (USE_FIELD_BARRIER && current.toAddress().LT(Address.fromIntSignExtend(0x68900000))) {
-//            if (USE_FIELD_BARRIER && current.toAddress().LT(Address.fromIntSignExtend(0x690b8484))) {
-//            if (USE_FIELD_BARRIER && current.toAddress().LT(Address.fromIntSignExtend(0x698e7da0))) {
-             Log.writeln("ULA: ", current);
-             VM.objectModel.dumpObject(current);
+          if (USE_FIELD_BARRIER && VM.objectModel.isTIB(current) && current.toAddress().EQ(Address.fromIntSignExtend(0x68d46f20))) {
              VM.objectModel.markAllFieldsAsUnlogged(current);
           }
           if (!RCBase.BUILD_FOR_GENRC) {

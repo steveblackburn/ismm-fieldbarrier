@@ -32,6 +32,7 @@ import org.jikesrvm.runtime.Magic;
 import org.jikesrvm.runtime.Memory;
 import org.jikesrvm.scheduler.Lock;
 import org.jikesrvm.scheduler.RVMThread;
+import org.mmtk.utility.Log;
 import org.vmmagic.pragma.Entrypoint;
 import org.vmmagic.pragma.Inline;
 import org.vmmagic.pragma.Interruptible;
@@ -274,13 +275,17 @@ public class ObjectModel {
     }
   }
 
+  public static boolean isTIB(ObjectReference object) {
+    return ObjectModel.getTIB(object).getType() == RVMType.TIBType;
+  }
+
   public static void markAllFieldsAsUnlogged(ObjectReference obj, ObjectReference tib) {
     RVMType type = ((TIB) Magic.addressAsObject(tib.toAddress())).getType();
     if ((USE_FIELD_BARRIER_FOR_AASTORE && type.isArrayType() && ((RVMArray) type).getElementType().isReferenceType()) ||
             USE_FIELD_BARRIER_FOR_PUTFIELD && !type.isArrayType()) {
       Address cursor;
       Address end;
-      if (type.isClassType()) {
+      if (type.isClassType() && type != RVMType.TIBType) {
         if (USE_PREFIX_FIELD_MARKS_FOR_SCALARS) {
           end = obj.toAddress().plus(SCALAR_FIELD_MARK_BASE_OFFSET.plus(1));
           cursor = end.minus(((RVMClass) type).getAlignedFieldMarkBytes());
@@ -289,7 +294,7 @@ public class ObjectModel {
           cursor = Magic.objectAsAddress(obj).plus(getFieldMarkStateBaseOffset(obj));
         }
       } else {
-        if (VM.VerifyAssertions) VM._assert(((RVMArray) type).getElementType().isReferenceType());
+        if (VM.VerifyAssertions) VM._assert(type == RVMType.TIBType || ((RVMArray) type).getElementType().isReferenceType());
         int numElements = Magic.getArrayLength(obj);
         cursor = Magic.objectAsAddress(obj).plus(numElements << LOG_BYTES_IN_ADDRESS);
         end = cursor.plus(numElements);
