@@ -276,14 +276,21 @@ public class ObjectModel {
     RVMType type = ((TIB) Magic.addressAsObject(tib.toAddress())).getType();
     if ((USE_FIELD_BARRIER_FOR_AASTORE && type.isArrayType() && ((RVMArray) type).getElementType().isReferenceType()) ||
             USE_FIELD_BARRIER_FOR_PUTFIELD && !type.isArrayType()) {
-      Address cursor = Magic.objectAsAddress(obj).plus(getFieldMarkStateBaseOffset(obj));
+      Address cursor;
       Address end;
       if (type.isClassType()) {
-        end = getObjectEndAddress(obj.toObject(), type.asClass());
+        if (USE_PREFIX_FIELD_MARKS_FOR_SCALARS) {
+          end = obj.toAddress().plus(SCALAR_FIELD_MARK_BASE_OFFSET.plus(1));
+          cursor = end.minus(((RVMClass) type).getAlignedFieldMarkBytes());
+        } else {
+          end = getObjectEndAddress(obj.toObject(), type.asClass());
+          cursor = Magic.objectAsAddress(obj).plus(getFieldMarkStateBaseOffset(obj));
+        }
       } else {
         if (VM.VerifyAssertions) VM._assert(((RVMArray) type).getElementType().isReferenceType());
         int numElements = Magic.getArrayLength(obj);
-        end = getObjectEndAddress(obj.toObject(), type.asArray(), numElements);
+        cursor = Magic.objectAsAddress(obj).plus(numElements << LOG_BYTES_IN_ADDRESS);
+        end = cursor.plus(numElements);
       }
       while (cursor.LT(end)) {
         cursor.store((byte) 1);
