@@ -290,6 +290,7 @@ public class RCBaseMutator extends StopTheWorldMutator {
       modObjectBuffer.push(srcObj);
       decBuffer.processChildren(srcObj);
       RCHeader.makeLogged(srcObj);
+      if (VM.VERIFY_ASSERTIONS) VM.assertions._assert(!RCHeader.logRequired(srcObj));
     }
   }
 

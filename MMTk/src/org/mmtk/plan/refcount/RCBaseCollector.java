@@ -28,6 +28,7 @@ import org.vmmagic.pragma.Inline;
 import org.vmmagic.pragma.Uninterruptible;
 import org.vmmagic.unboxed.Address;
 import org.vmmagic.unboxed.ObjectReference;
+import org.vmmagic.unboxed.Word;
 
 import static org.mmtk.plan.refcount.RCBase.USE_FIELD_BARRIER;
 
@@ -188,7 +189,8 @@ public abstract class RCBaseCollector extends StopTheWorldCollector {
         }
         Address slot;
         while (!(slot = modFieldBuffer.pop1()).isZero()) {
-          VM.objectModel.markFieldAsUnlogged(modFieldBuffer.pop2().toWord());
+          Word markAddressReference =  modFieldBuffer.pop2().toWord();
+          VM.objectModel.markFieldAsUnlogged(markAddressReference);
         //  FIXME: how does this apply in the field-remembering context?? ---> as a hack, create another buffer and apply this to each remembered slot's parent
      /*   if (!RCBase.BUILD_FOR_GENRC) {
           if (Space.isInSpace(RCBase.REF_COUNT, current)) {
