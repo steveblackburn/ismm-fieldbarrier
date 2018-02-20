@@ -179,9 +179,8 @@ public abstract class RCBaseCollector extends StopTheWorldCollector {
       while (!(modObjectBuffer.isEmpty() && modFieldBuffer.isEmpty())) {
         while (!(current = modObjectBuffer.pop()).isNull()) {
           RCHeader.makeUnlogged(current);
-          if (USE_FIELD_BARRIER && VM.objectModel.isTIB(current) && current.toAddress().EQ(Address.fromIntSignExtend(0x68d46f20))) {
-             VM.objectModel.markAllFieldsAsUnlogged(current);
-          }
+         // if (USE_FIELD_BARRIER)
+         //    VM.objectModel.markAllFieldsAsUnlogged(current);
           if (!RCBase.BUILD_FOR_GENRC) {
             if (Space.isInSpace(RCBase.REF_COUNT, current)) {
               ExplicitFreeListSpace.testAndSetLiveBit(current);

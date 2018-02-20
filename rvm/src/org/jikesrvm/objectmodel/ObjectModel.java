@@ -281,6 +281,7 @@ public class ObjectModel {
 
   public static void markAllFieldsAsUnlogged(ObjectReference obj, ObjectReference tib) {
     RVMType type = ((TIB) Magic.addressAsObject(tib.toAddress())).getType();
+    if (type == RVMType.TIBType) return;
     if ((USE_FIELD_BARRIER_FOR_AASTORE && type.isArrayType() && ((RVMArray) type).getElementType().isReferenceType()) ||
             USE_FIELD_BARRIER_FOR_PUTFIELD && !type.isArrayType()) {
       Address cursor;
