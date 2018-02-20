@@ -369,11 +369,18 @@ public class ObjectModel {
     RVMType type = ObjectModel.getTIB(object).getType();
     int markOffset;
     if (type.isClassType()) {
-      markOffset = slot.diff(object.toAddress().minus(BYTES_IN_ADDRESS)).toInt()>>2;  // FIXME hardcoded
+      if (USE_PREFIX_FIELD_MARKS_FOR_SCALARS) {
+        markOffset = calculateMarkOffsetFromFieldOffset(slot.diff(object.toAddress())).toInt();
+        Address mark = object.toAddress().plus(markOffset);
+        mark.store((byte) 1);
+      } else {
+        markOffset = slot.diff(object.toAddress().minus(BYTES_IN_ADDRESS)).toInt() >> 2;  // FIXME hardcoded
+        markFieldAsUnlogged(object, markOffset);
+      }
     } else {
       markOffset = slot.diff(object.toAddress()).toInt()>>2;
+      markFieldAsUnlogged(object,markOffset);
     }
-    markFieldAsUnlogged(object,markOffset);
   }
 
   @Inline
