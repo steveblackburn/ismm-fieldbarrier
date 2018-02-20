@@ -16,6 +16,7 @@ import org.mmtk.plan.TransitiveClosure;
 import org.mmtk.plan.refcount.RCBase;
 import org.mmtk.plan.refcount.RCHeader;
 
+import org.mmtk.utility.Log;
 import org.mmtk.vm.VM;
 import org.vmmagic.pragma.*;
 import org.vmmagic.unboxed.*;
@@ -40,8 +41,9 @@ public final class RCModifiedProcessor extends TransitiveClosure {
   @Override
   @Inline
   public void processEdge(ObjectReference source, Address slot) {
-    if (USE_FIELD_BARRIER && !source.isNull()) {
-      VM.objectModel.markFieldAsUnlogged(source, slot);  // FIXME check whether this is actually needed/correct
+    if (USE_FIELD_BARRIER && !source.isNull()) { // This should be done
+  //    Log.write("UL: ", source); Log.writeln(" ",slot);
+      VM.objectModel.markAllFieldsAsUnlogged(source);
     }
     ObjectReference object = slot.loadObjectReference();
     if (RCBase.isRCObject(object)) {

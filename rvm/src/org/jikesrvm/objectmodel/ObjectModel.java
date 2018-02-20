@@ -358,6 +358,8 @@ public class ObjectModel {
 
   @Inline
   public static void markFieldAsUnlogged(ObjectReference object, Address slot) {
+    // FIXME: it's not clear that this is ever really needed
+   //if (VM.VerifyAssertions) VM._assert(VM.NOT_REACHED);
     RVMType type = ObjectModel.getTIB(object).getType();
     int markOffset;
     if (type.isClassType()) {
