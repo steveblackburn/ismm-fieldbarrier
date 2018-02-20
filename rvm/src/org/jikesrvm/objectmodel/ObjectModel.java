@@ -392,12 +392,15 @@ public class ObjectModel {
   }
 
   @Inline
-  private static boolean isScalarFieldUnlogged(ObjectReference object, Word fieldMarkReference) {
+  private static boolean isScalarFieldUnlogged(ObjectReference object, Word metaData) {
     if (VM.VerifyAssertions) {
       VM._assert(USE_FIELD_BARRIER_FOR_PUTFIELD);
       VM._assert(ObjectModel.getTIB(object).getType().isClassType());
     }
-    return internalIsFieldUnlogged(object, fieldMarkReference.toInt());
+    if (USE_PREFIX_FIELD_MARKS_FOR_SCALARS)
+      return object.toAddress().plus(metaData.toInt()).loadByte() == 1;
+    else
+      return object.toAddress().plus(getFieldMarkStateBaseOffset(object)+metaData.toInt()).loadByte() == 1;
   }
 
   @Inline
@@ -438,7 +441,12 @@ public class ObjectModel {
       VM._assert(USE_FIELD_BARRIER_FOR_PUTFIELD);
       VM._assert(ObjectModel.getTIB(object).getType().isClassType());
     }
-    return markFieldAsLogged(object, metaData.toInt());
+    if (USE_PREFIX_FIELD_MARKS_FOR_SCALARS) {
+      Address mark = object.toAddress().plus(metaData.toInt());
+      mark.store((byte) 0);
+      return mark.toWord();
+    } else
+      return markFieldAsLogged(object, metaData.toInt());
   }
 
   @Inline
