@@ -47,7 +47,6 @@ public class RCBase extends StopTheWorld {
   public static final short PROCESS_DECBUFFER      = Phase.createSimple("decs");
 
   public static final boolean USE_FIELD_BARRIER = false;
-  public static final boolean USE_PREFIX_FIELD_MARKS_FOR_SCALARS = false;
 
   /** Is cycle collection enabled? */
   public static final boolean CC_ENABLED           = true;

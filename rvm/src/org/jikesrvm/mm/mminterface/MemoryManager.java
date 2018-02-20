@@ -497,6 +497,7 @@ public final class MemoryManager {
    */
   @Inline
   public static Object allocateScalar(int prefix, int size, TIB tib, int allocator, int align, int offset, int site) {
+    prefix = USE_PREFIX_FIELD_MARKS_FOR_SCALARS ? prefix : 0;
     Selected.Mutator mutator = Selected.Mutator.get();
     allocator = mutator.checkAllocator(org.jikesrvm.runtime.Memory.alignUp(size, MIN_ALIGNMENT), align, allocator);
     Address region = allocateSpace(mutator, size+prefix, align, offset, allocator, site);
