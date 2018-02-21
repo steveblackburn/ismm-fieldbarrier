@@ -275,13 +275,17 @@ public class ObjectModel {
     }
   }
 
-  public static boolean isTIB(ObjectReference object) {
-    return ObjectModel.getTIB(object).getType() == RVMType.TIBType;
+  public static boolean isFieldBarrierExcludedType(ObjectReference object) {
+    return isFieldBarrierExcludedType(ObjectModel.getTIB(object).getType());
+  }
+
+  public static boolean isFieldBarrierExcludedType(RVMType type) {
+    return type.isRuntimeTable();
   }
 
   public static void markAllFieldsAsUnlogged(ObjectReference obj, ObjectReference tib) {
     RVMType type = ((TIB) Magic.addressAsObject(tib.toAddress())).getType();
-    if (type == RVMType.TIBType) return;
+    if (isFieldBarrierExcludedType(type)) return;
     if ((USE_FIELD_BARRIER_FOR_AASTORE && type.isArrayType() && ((RVMArray) type).getElementType().isReferenceType()) ||
             USE_FIELD_BARRIER_FOR_PUTFIELD && !type.isArrayType()) {
       Address cursor;
@@ -325,6 +329,7 @@ public class ObjectModel {
 
   @Inline
   public static Word calculateMarkOffsetForCompareAndSwap(ObjectReference object, Offset fieldOffset) {
+    if (VM.VerifyAssertions) VM._assert(!isFieldBarrierExcludedType(object));
     if (ObjectModel.getTIB(object).getType().isClassType()) {
       Offset offset = calculateMarkOffsetFromFieldOffset(fieldOffset);
       if (USE_PREFIX_FIELD_MARKS_FOR_SCALARS)
@@ -356,6 +361,7 @@ public class ObjectModel {
 
   @Inline
   public static void markFieldAsUnlogged(ObjectReference object, int fieldMarkOffset) {
+    if (VM.VerifyAssertions) VM._assert(!isFieldBarrierExcludedType(object));
     int markBase = getFieldMarkStateBaseOffset(object);
     Address mark = object.toAddress().plus(markBase+fieldMarkOffset);
     if (VM.VerifyAssertions) VM._assert(mark.LT(getObjectEndAddress(object.toObject())));
@@ -365,8 +371,9 @@ public class ObjectModel {
   @Inline
   public static void markFieldAsUnlogged(ObjectReference object, Address slot) {
     // FIXME: it's not clear that this is ever really needed
-   //if (VM.VerifyAssertions) VM._assert(VM.NOT_REACHED);
+    //if (VM.VerifyAssertions) VM._assert(VM.NOT_REACHED);
     RVMType type = ObjectModel.getTIB(object).getType();
+    if (VM.VerifyAssertions) VM._assert(!isFieldBarrierExcludedType(type));
     int markOffset;
     if (type.isClassType()) {
       if (USE_PREFIX_FIELD_MARKS_FOR_SCALARS) {
@@ -385,6 +392,7 @@ public class ObjectModel {
 
   @Inline
   public static boolean isFieldUnlogged(ObjectReference object, Word metaData, boolean isArray) {
+    if (VM.VerifyAssertions) VM._assert(!isFieldBarrierExcludedType(object));
     if (isArray)
       return isArrayFieldUnlogged(object, metaData.toInt());
     else
@@ -396,6 +404,7 @@ public class ObjectModel {
     if (VM.VerifyAssertions) {
       VM._assert(USE_FIELD_BARRIER_FOR_PUTFIELD);
       VM._assert(ObjectModel.getTIB(object).getType().isClassType());
+      VM._assert(!isFieldBarrierExcludedType(object));
     }
     if (USE_PREFIX_FIELD_MARKS_FOR_SCALARS)
       return object.toAddress().plus(metaData.toInt()).loadByte() == 1;
@@ -408,6 +417,7 @@ public class ObjectModel {
     if (VM.VerifyAssertions) {
       VM._assert(USE_FIELD_BARRIER_FOR_AASTORE);
       VM._assert(ObjectModel.getTIB(object).getType().isArrayType());
+      VM._assert(!isFieldBarrierExcludedType(object));
     }
     return internalIsFieldUnlogged(object, index);
   }
@@ -431,6 +441,7 @@ public class ObjectModel {
     if (VM.VerifyAssertions) {
       VM._assert(USE_FIELD_BARRIER_FOR_AASTORE);
       VM._assert(ObjectModel.getTIB(object).getType().isArrayType());
+      VM._assert(!isFieldBarrierExcludedType(object));
     }
     return markFieldAsLogged(object, index);
   }
@@ -440,6 +451,7 @@ public class ObjectModel {
     if (VM.VerifyAssertions) {
       VM._assert(USE_FIELD_BARRIER_FOR_PUTFIELD);
       VM._assert(ObjectModel.getTIB(object).getType().isClassType());
+      VM._assert(!isFieldBarrierExcludedType(object));
     }
     if (USE_PREFIX_FIELD_MARKS_FOR_SCALARS) {
       Address mark = object.toAddress().plus(metaData.toInt());

@@ -246,7 +246,6 @@ public abstract class ObjectModel {
   public abstract void markFieldAsUnlogged(Word markFieldReference);
   public abstract void markAllFieldsAsUnlogged(ObjectReference obj);
   public abstract void markAllFieldsAsUnlogged(ObjectReference obj, ObjectReference tib);
-  public abstract boolean isTIB(ObjectReference object);
 
   /*
    * NOTE: The following methods must be implemented by subclasses of this

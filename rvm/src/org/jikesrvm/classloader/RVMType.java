@@ -277,6 +277,17 @@ public abstract class RVMType extends AnnotatedElement {
     Statics.setSlotContents(getTibOffset(), tib);
   }
 
+  @Uninterruptible
+  public final boolean isRuntimeTable() {
+    return
+            this == TIBType ||
+            this == ITableType ||
+            this == ITableArrayType ||
+            this == IMTType ||
+            this == FunctionTableType ||
+            this == LinkageTripletTableType;
+  }
+
   /**
    * @return canonical type reference for this type.
    */

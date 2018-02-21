@@ -153,7 +153,7 @@ public abstract class FieldLayout {
     klass.setFieldLayoutContext(fieldLayout);
 
     int size = fieldLayout.getObjectSize();
-    if (USE_FIELD_BARRIER_FOR_PUTFIELD) {
+    if (USE_FIELD_BARRIER_FOR_PUTFIELD && !klass.isRuntimeTable()) {
       int numReferences = (size + 3) >> 2; // conservative estimate
       int fieldMarkBytes = ObjectModel.fieldMarkBytes(numReferences);
       klass.setAlignedFieldMarkBytes(fieldMarkBytes);
