@@ -280,7 +280,7 @@ public class ObjectModel {
   }
 
   public static boolean isFieldBarrierExcludedType(RVMType type) {
-    return type.isRuntimeTable();
+    return type.isRuntimeTable() || type.isBootRecordType();
   }
 
   public static void markAllFieldsAsUnlogged(ObjectReference obj, ObjectReference tib) {

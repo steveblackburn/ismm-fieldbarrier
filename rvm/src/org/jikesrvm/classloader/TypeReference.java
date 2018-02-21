@@ -15,6 +15,7 @@ package org.jikesrvm.classloader;
 import static org.jikesrvm.runtime.UnboxedSizeConstants.BYTES_IN_ADDRESS;
 
 import org.jikesrvm.VM;
+import org.jikesrvm.runtime.BootRecord;
 import org.jikesrvm.runtime.ReflectionBase;
 import org.jikesrvm.util.ImmutableEntryHashSetRVM;
 
@@ -180,6 +181,8 @@ public final class TypeReference {
   public static final TypeReference RVMArray = findOrCreate(org.jikesrvm.classloader.RVMArray.class);
   /** Abstract base of reflective method invoker classes */
   static final TypeReference baseReflectionClass = TypeReference.findOrCreate(ReflectionBase.class);
+
+  public static final TypeReference BootRecord = TypeReference.findOrCreate(org.jikesrvm.runtime.BootRecord.class);
 
   // Synthetic types used by the opt compiler
   public static final TypeReference NULL_TYPE =

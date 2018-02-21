@@ -20,6 +20,7 @@ import org.jikesrvm.compilers.common.CodeArray;
 import org.jikesrvm.mm.mminterface.AlignmentEncoding;
 import org.jikesrvm.mm.mminterface.MemoryManager;
 import org.jikesrvm.objectmodel.TIB;
+import org.jikesrvm.runtime.BootRecord;
 import org.jikesrvm.runtime.RuntimeEntrypoints;
 import org.jikesrvm.runtime.Statics;
 import org.vmmagic.pragma.Entrypoint;
@@ -135,6 +136,7 @@ public abstract class RVMType extends AnnotatedElement {
   public static final RVMClass IMTType;
   public static final RVMClass FunctionTableType;
   public static final RVMClass LinkageTripletTableType;
+  public static final RVMClass BootRecordType;
 
   static {
     // Primitive types
@@ -163,6 +165,8 @@ public abstract class RVMType extends AnnotatedElement {
     ObjectReferenceArrayType = TypeReference.ObjectReferenceArray.resolve().asArray();
     OffsetArrayType = TypeReference.OffsetArray.resolve().asArray();
     ExtentArrayType = TypeReference.ExtentArray.resolve().asArray();
+    // The bootrecord
+    BootRecordType = TypeReference.BootRecord.resolve().asClass();
     // Runtime Tables
     TIBType = TypeReference.TIB.resolve().asClass();
     ITableType = TypeReference.ITable.resolve().asClass();
@@ -517,6 +521,11 @@ public abstract class RVMType extends AnnotatedElement {
   @Uninterruptible
   public final boolean isJavaLangThrowableType() {
     return this == JavaLangThrowableType;
+  }
+
+  @Uninterruptible
+  public final boolean isBootRecordType() {
+    return this == BootRecordType;
   }
 
   /** @return is this type the class String? */
