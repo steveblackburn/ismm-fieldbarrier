@@ -497,12 +497,15 @@ public final class MemoryManager {
    */
   @Inline
   public static Object allocateScalar(int prefix, int size, TIB tib, int allocator, int align, int offset, int site) {
-    prefix = USE_PREFIX_FIELD_MARKS_FOR_SCALARS ? prefix : 0;
+    prefix = true || USE_PREFIX_FIELD_MARKS_FOR_SCALARS ? prefix : 0;
     Selected.Mutator mutator = Selected.Mutator.get();
-    allocator = mutator.checkAllocator(org.jikesrvm.runtime.Memory.alignUp(size, MIN_ALIGNMENT), align, allocator);
+    allocator = mutator.checkAllocator(org.jikesrvm.runtime.Memory.alignUp(size+prefix, MIN_ALIGNMENT), align, allocator);
     Address region = allocateSpace(mutator, size+prefix, align, offset, allocator, site);
     Object result = ObjectModel.initializeScalar(region.plus(prefix), tib, size);
     mutator.postAlloc(ObjectReference.fromObject(result), ObjectReference.fromObject(tib), size, allocator);
+    VM.sysWrite("S: ", region);
+    VM.sysWrite(" e: ",region.plus(size+prefix));
+    VM.sysWriteln(" o: ",ObjectReference.fromObject(result));
     return result;
   }
 
@@ -573,6 +576,9 @@ public final class MemoryManager {
     Address region = allocateSpace(mutator, size, align, offset, allocator, site);
     Object result = ObjectModel.initializeArray(region, tib, numElements, size);
     mutator.postAlloc(ObjectReference.fromObject(result), ObjectReference.fromObject(tib), size, allocator);
+    VM.sysWrite("S: ", region);
+    VM.sysWrite(" e: ",region.plus(size));
+    VM.sysWriteln(" o: ",ObjectReference.fromObject(result));
     return result;
   }
 

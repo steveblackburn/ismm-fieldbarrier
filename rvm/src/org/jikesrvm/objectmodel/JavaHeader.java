@@ -18,6 +18,7 @@ import static org.jikesrvm.objectmodel.MiscHeader.REQUESTED_BITS;
 import static org.jikesrvm.runtime.JavaSizeConstants.BYTES_IN_INT;
 import static org.jikesrvm.runtime.UnboxedSizeConstants.LOG_BYTES_IN_ADDRESS;
 
+import gnu.CORBA.Poa.AOM;
 import org.jikesrvm.VM;
 import org.jikesrvm.classloader.RVMArray;
 import org.jikesrvm.classloader.RVMClass;
@@ -27,6 +28,7 @@ import org.jikesrvm.runtime.Memory;
 import org.jikesrvm.scheduler.Lock;
 import org.jikesrvm.scheduler.RVMThread;
 import org.jikesrvm.scheduler.ThinLock;
+import org.mmtk.policy.Space;
 import org.vmmagic.pragma.Inline;
 import org.vmmagic.pragma.Interruptible;
 import org.vmmagic.pragma.NoInline;
@@ -310,15 +312,22 @@ public class JavaHeader {
    */
   @Inline
   public static Address objectStartRef(ObjectReference obj) {
+    Address start = obj.toAddress().minus(OBJECT_REF_OFFSET);
     if (MOVES_OBJECTS) {
       if (ADDRESS_BASED_HASHING && !DYNAMIC_HASH_OFFSET) {
         Word hashState = obj.toAddress().loadWord(STATUS_OFFSET).and(HASH_STATE_MASK);
         if (hashState.EQ(HASH_STATE_HASHED_AND_MOVED)) {
-          return obj.toAddress().minus(OBJECT_REF_OFFSET + HASHCODE_BYTES);
+          start = start.minus(HASHCODE_BYTES);
         }
       }
     }
-    return obj.toAddress().minus(OBJECT_REF_OFFSET);
+    if (USE_PREFIX_FIELD_MARKS_FOR_SCALARS) {
+      TIB tib = getTIB(obj);
+      RVMType type = tib.getType();
+      if (type.isClassType())
+        start = start.minus(((RVMClass) type).getAlignedFieldMarkBytes());
+    }
+    return start;
   }
 
   /**
@@ -332,11 +341,27 @@ public class JavaHeader {
    * @return the object reference for the object
    */
   public static ObjectReference getObjectFromStartAddress(Address start) {
-    /* Skip over any alignment fill */
-    while ((start.loadInt()) == ALIGNMENT_VALUE) {
+    do {
+      ObjectReference rtn;
+      /* Skip over any alignment fill */
+      while ((start.loadInt()) == ALIGNMENT_VALUE) {
+        start = start.plus(BYTES_IN_INT);
+      }
+      rtn = start.plus(OBJECT_REF_OFFSET).toObjectReference();
+      if (looksValid(rtn)) // FIXME: this is completely unsound
+        return rtn;
       start = start.plus(BYTES_IN_INT);
-    }
-    return start.plus(OBJECT_REF_OFFSET).toObjectReference();
+    } while (true);
+  }
+
+  private static boolean looksValid(ObjectReference object) {
+    ObjectReference tib = object.toAddress().plus(TIB_OFFSET).loadObjectReference();
+    if (tib.isNull()) return false;
+    if (!Space.isMappedObject(tib)) return false;
+    ObjectReference tibtib = tib.toAddress().plus(TIB_OFFSET).loadObjectReference();
+    if (tibtib.isNull()) return false;
+    if (!Space.isMappedObject(tibtib)) return false;
+    return true;
   }
 
   /**

@@ -1158,7 +1158,7 @@ public class ObjectModel {
     }
     int align = getAlignment(klass);
     int offset = getOffsetForAlignment(klass, needsIdentityHash);
-    int prefix = USE_PREFIX_FIELD_MARKS_FOR_SCALARS ? klass.getAlignedFieldMarkBytes() : 0;
+    int prefix = true || USE_PREFIX_FIELD_MARKS_FOR_SCALARS ? klass.getAlignedFieldMarkBytes() : 0;
     Address ptr = bootImage.allocateDataStorage(size+prefix, align, offset);
     Address ref = JavaHeader.initializeScalarHeader(bootImage, ptr.plus(prefix), tib, size, needsIdentityHash, identityHashValue);
     MemoryManager.initializeHeader(bootImage, ref, tib, size);
