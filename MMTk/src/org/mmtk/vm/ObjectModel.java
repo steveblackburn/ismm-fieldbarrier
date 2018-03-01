@@ -246,6 +246,9 @@ public abstract class ObjectModel {
   public abstract void markFieldAsUnlogged(Word markFieldReference);
   public abstract void markAllFieldsAsUnlogged(ObjectReference obj);
   public abstract void markAllFieldsAsUnlogged(ObjectReference obj, ObjectReference tib);
+  public abstract void logFieldAccessStats(ObjectReference object, Address slot, boolean logRequired);
+  public abstract void resetFieldAccessStats();
+  public abstract void dumpFieldAccessStats();
 
   /*
    * NOTE: The following methods must be implemented by subclasses of this

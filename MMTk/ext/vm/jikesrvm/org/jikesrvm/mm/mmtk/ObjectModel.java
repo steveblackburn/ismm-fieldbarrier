@@ -27,6 +27,7 @@ import org.mmtk.plan.CollectorContext;
 import org.mmtk.utility.alloc.Allocator;
 import org.mmtk.vm.VM;
 import org.vmmagic.pragma.Inline;
+import org.vmmagic.pragma.NoInline;
 import org.vmmagic.pragma.Uninterruptible;
 import org.vmmagic.unboxed.Address;
 import org.vmmagic.unboxed.ObjectReference;
@@ -323,10 +324,26 @@ import org.vmmagic.unboxed.Word;
     org.jikesrvm.objectmodel.ObjectModel.markFieldAsUnlogged(fieldMarkReference);
   }
 
+  @NoInline
+  public void logFieldAccessStats(ObjectReference object, Address slot, boolean logRequired) {
+    org.jikesrvm.objectmodel.ObjectModel.logFieldAccessStats(object, slot, logRequired);
+  }
+
+  public void resetFieldAccessStats() {
+    org.jikesrvm.objectmodel.ObjectModel.resetFieldAccessStats();
+  }
+
+  public void dumpFieldAccessStats() {
+    org.jikesrvm.objectmodel.ObjectModel.dumpFieldAccessStats();
+  }
+
+
 
   @Override
   public void dumpObject(ObjectReference object) {
     DebugUtil.dumpRef(object);
   }
+
+
 }
 

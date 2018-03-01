@@ -501,6 +501,8 @@ public final class RVMArray extends RVMType {
       doesImplement = DynamicTypeCheck.buildDoesImplement(this);
       publishResolved(allocatedTib, superclassIds, doesImplement);
 
+      referencePattern = elementType.isReferenceType() ? REF_ARRAY : NONREF_ARRAY;
+
       MemoryManager.notifyClassResolved(this);
     }
   }

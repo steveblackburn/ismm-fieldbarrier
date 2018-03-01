@@ -222,6 +222,7 @@ public class RCBaseMutator extends StopTheWorldMutator {
                            ObjectReference tgt, Word metaDataA,
                            Word metaDataB, Word metaDataC, int mode) {
     if (USE_FIELD_BARRIER) {
+      VM.objectModel.logFieldAccessStats(src, slot, RCHeader.logRequired(src));
       if (VM.objectModel.isFieldUnlogged(src, metaDataC, mode == ARRAY_ELEMENT))
         coalescingFieldWriteBarrierSlow(src, slot, metaDataC, mode == ARRAY_ELEMENT);
     } else if (RCHeader.logRequired(src)) {

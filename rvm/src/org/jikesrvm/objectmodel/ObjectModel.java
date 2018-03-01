@@ -229,6 +229,133 @@ public class ObjectModel {
     }
   }
 
+  static final int LOG_FIELD_ACCESS_STATS_TABLE = 16;
+  static final int FIELD_ACCESS_STATS_TABLE = 1<<LOG_FIELD_ACCESS_STATS_TABLE;
+  static final int REF_DEPTH = 3;
+  static long[][] fastpathfieldaccess = new long[FIELD_ACCESS_STATS_TABLE][REF_DEPTH+1];
+  static long[][] slowpathobjectaccess = new long[FIELD_ACCESS_STATS_TABLE][REF_DEPTH+1];
+  static long[][] slowpathfieldaccess = new long[FIELD_ACCESS_STATS_TABLE][REF_DEPTH+1];
+
+  public static void logFieldAccessStats(ObjectReference object, Address slot, boolean logRequired) {
+    RVMType type = getTIB(object).getType();
+    int index = 0;
+    int row = 0;
+    boolean fieldUnlogged = false;
+    if (type.isArrayType()) {
+      index = slot.diff(object.toAddress()).toInt() >> LOG_BYTES_IN_ADDRESS;
+      if (VM.VerifyAssertions) VM._assert(index >= 0 && index < Magic.getArrayLength(object));
+      fieldUnlogged = isArrayFieldUnlogged(object, index);
+      row = FIELD_ACCESS_STATS_TABLE - 1;
+    } else {
+      int offset = slot.diff(object.toAddress()).toInt();
+      index = ((RVMClass) type).getReferenceIndex(offset);
+      fieldUnlogged = internalIsFieldUnlogged(object,(offset - FIELD_ZERO_OFFSET.toInt())>>2);
+      row = type.referencePattern & (FIELD_ACCESS_STATS_TABLE - 1);
+    }
+    if (index > REF_DEPTH) index = REF_DEPTH;
+
+    fastpathfieldaccess[row][index]++;
+
+    if (logRequired)
+      slowpathobjectaccess[row][index]++;
+
+    if (fieldUnlogged)
+      slowpathfieldaccess[row][index]++;
+  }
+
+  public static void resetFieldAccessStats() {
+    zerotable(fastpathfieldaccess);
+    zerotable(slowpathobjectaccess);
+    zerotable(slowpathfieldaccess);
+  }
+
+  private static void zerotable(long[][] table) {
+    for (int i = 0; i < FIELD_ACCESS_STATS_TABLE; i++)
+      for (int j = 0; j < REF_DEPTH+1; j++)
+        table[i][j] = 0;
+  }
+
+  public static void dumpFieldAccessStats() {
+    VM.sysWriteln("Fast path");
+    dumpFieldAccessStats(fastpathfieldaccess);
+    VM.sysWriteln();
+    VM.sysWriteln("Object Slow");
+    dumpFieldAccessStats(slowpathobjectaccess);
+    VM.sysWriteln();
+    VM.sysWriteln("Field Slow");
+    dumpFieldAccessStats(slowpathfieldaccess);
+  }
+
+  private static long[] total = new long[REF_DEPTH+1];
+  private static long[] remainder = new long[REF_DEPTH+1];
+  private static final int ROW_DUMP_SCOPE = FIELD_ACCESS_STATS_TABLE - 1;
+  private static final int ROW_DUMP_BITS = LOG_FIELD_ACCESS_STATS_TABLE;
+
+  private static void dumpFieldAccessStats(long[][] table) {
+    for (int j = 0; j < REF_DEPTH+1; j++) {
+      total[j] = 0;
+      remainder[j] = 0;
+    }
+    for (int i = 0; i < FIELD_ACCESS_STATS_TABLE; i++) {
+      for (int j = 0; j < REF_DEPTH+1; j++) {
+        total[j] += table[i][j];
+      }
+    }
+
+    for (int i = 0; i < ROW_DUMP_SCOPE; i++)
+      dumpRow(i, table[i], total);
+
+    for (int i = ROW_DUMP_SCOPE; i < FIELD_ACCESS_STATS_TABLE - 1; i++) {
+      for (int j = 0; j < REF_DEPTH+1; j++) {
+        remainder[j] += table[i][j];
+      }
+    }
+    VM.sysWrite("        ");VM.sysWrite("********, ");
+    dumpRowVals(remainder, total);
+    VM.sysWrite("        ");VM.sysWrite("RefArray, ");
+    dumpRowVals(table[FIELD_ACCESS_STATS_TABLE-1], total);
+    VM.sysWrite("           TOTAL, ");
+    dumpRowVals(total, total);
+
+    for (int j = 0; j < REF_DEPTH+1; j++) {
+      total[j] -= table[FIELD_ACCESS_STATS_TABLE-1][j];
+    }
+    VM.sysWrite("    Scalar TOTAL, ");
+    dumpRowVals(total, total);
+  }
+
+  private static void dumpRow(int index, long[] row, long[] total) {
+    long rowtotal = 0;
+    for (int j = 0; j < REF_DEPTH+1; j++)
+      rowtotal += row[j];
+
+    if (rowtotal > 0) {
+      for (int i = 0; i < ROW_DUMP_BITS; i++) {
+        VM.sysWrite(((index & (1 << i)) == 0) ? '0' : '1');
+      }
+      VM.sysWrite(", ");
+      dumpRowVals(row, total);
+    }
+  }
+
+  private static void dumpRowVals(long[] row, long[] totals) {
+    long total = 0;
+    for (int i = 0; i <= REF_DEPTH; i++)
+      total += totals[i];
+
+    for (int i = 0; i <= REF_DEPTH; i++) {
+      if (total == 0)
+        VM.sysWrite("-, ");
+      else
+        VM.sysWrite((float) ((double) row[i]/(double) total), ", ");
+    }
+    VM.sysWrite(" | ");
+    for (int i = 0; i <= REF_DEPTH; i++) {
+      VM.sysWrite((int) row[i], ", ");
+    }
+    VM.sysWriteln();
+  }
+
   public static int getFieldMarkStateBaseOffset(ObjectReference object) {
     // FIXME need to move all this crap off fast path ---> move state to front of object
     RVMType type = ObjectModel.getTIB(object).getType();

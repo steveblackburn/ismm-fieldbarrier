@@ -63,6 +63,13 @@ import org.vmmagic.unboxed.Offset;
 @NonMoving
 public abstract class RVMType extends AnnotatedElement {
 
+  /* encode the pattern of reference and non-reference words within an object, for the sake of analysis */
+  public int referencePattern;
+  public static final int REF_ARRAY = -1;
+  static final int NONREF_ARRAY = -2;
+  static final int OVERFLOW_PATTERN = Integer.MIN_VALUE;  // reference pattern can't be captured in 16 bits
+  static final int NOREFS = 0;
+
   /**
    * A zero-length array, used as GC metadata for primitive
    * arrays.

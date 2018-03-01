@@ -31,11 +31,14 @@ import static org.jikesrvm.classloader.ClassLoaderConstants.CLASS_RESOLVED;
 import static org.jikesrvm.classloader.ClassLoaderConstants.CP_MEMBER;
 import static org.jikesrvm.classloader.ClassLoaderConstants.CP_UTF;
 import static org.jikesrvm.mm.mminterface.MemoryManagerConstants.USE_FIELD_BARRIER_FOR_PUTFIELD;
+import static org.jikesrvm.objectmodel.JavaHeaderConstants.FIELD_ZERO_OFFSET;
 import static org.jikesrvm.objectmodel.ObjectModel.calculateMarkOffsetForField;
 import static org.jikesrvm.runtime.JavaSizeConstants.BYTES_IN_DOUBLE;
 import static org.jikesrvm.runtime.JavaSizeConstants.BYTES_IN_INT;
 import static org.jikesrvm.runtime.JavaSizeConstants.BYTES_IN_LONG;
 import static org.jikesrvm.runtime.UnboxedSizeConstants.BYTES_IN_ADDRESS;
+import static org.jikesrvm.runtime.UnboxedSizeConstants.LOG_BITS_IN_ADDRESS;
+import static org.mmtk.vm.VM.LOG_BYTES_IN_ADDRESS;
 
 import java.lang.annotation.Annotation;
 import java.lang.annotation.Inherited;
@@ -1293,12 +1296,20 @@ public final class RVMClass extends RVMType {
 
     // record offsets of those instance fields that contain references
     //
+    referencePattern = NOREFS;
     if (typeRef.isRuntimeTable()) {
       referenceOffsets = MemoryManager.newNonMovingIntArray(0);
     } else {
       referenceOffsets = MemoryManager.newNonMovingIntArray(referenceFieldCount);
       int j = 0;
       for (RVMField field : instanceFields) {
+        int idx = (field.getOffset().toInt()-FIELD_ZERO_OFFSET.toInt())>>LOG_BYTES_IN_ADDRESS;
+        if (idx > 31)
+          referencePattern = OVERFLOW_PATTERN;
+        else
+          referencePattern |= 1<<idx;
+        if (VM.VerifyAssertions) VM._assert(idx >= 0);
+      //  if (VM.VerifyAssertions) VM._assert(idx >= j<<LOG_BYTES_IN_ADDRESS);
         if (field.isTraced()) {
           referenceOffsets[j++] = field.getOffset().toInt();
           if (USE_FIELD_BARRIER_FOR_PUTFIELD)
@@ -1384,6 +1395,24 @@ public final class RVMClass extends RVMType {
     }
 
     if (VM.TraceClassLoading && VM.runningVM) VM.sysWriteln("RVMClass: (end)   resolve " + this);
+  }
+
+
+  @Uninterruptible
+  public int getReferenceIndex(int offset) {
+    for (int i = 0; i < referenceOffsets.length; i++) {
+      if (referenceOffsets[i] == offset)
+        return i;
+    }
+    if (VM.VerifyAssertions) {
+      VM.sysWrite("Seem to have a bad index: ", offset);
+      VM.sysWrite(" ");
+      VM.sysWrite(sourceName);
+      VM.sysWrite(" ", referenceOffsets.length);
+      VM.sysWriteln();
+      VM._assert(false);
+    }
+    return Integer.MAX_VALUE;
   }
 
   /**

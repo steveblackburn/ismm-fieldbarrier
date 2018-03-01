@@ -781,6 +781,7 @@ public abstract class Plan {
     Options.fullHeapSystemGC.setValue(oldFullHeap);
 
     // Start statistics
+    VM.objectModel.resetFieldAccessStats();
     insideHarness = true;
     Stats.startAll();
   }
@@ -796,6 +797,7 @@ public abstract class Plan {
   public static void harnessEnd()  {
     Stats.stopAll();
     insideHarness = false;
+    VM.objectModel.dumpFieldAccessStats();
   }
 
   /****************************************************************************
