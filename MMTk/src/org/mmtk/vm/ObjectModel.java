@@ -247,6 +247,7 @@ public abstract class ObjectModel {
   public abstract void markAllFieldsAsUnlogged(ObjectReference obj);
   public abstract void markAllFieldsAsUnlogged(ObjectReference obj, ObjectReference tib);
   public abstract void logFieldAccessStats(ObjectReference object, Address slot, boolean logRequired);
+  public abstract void logAllocation(ObjectReference object);
   public abstract void resetFieldAccessStats();
   public abstract void dumpFieldAccessStats();
 

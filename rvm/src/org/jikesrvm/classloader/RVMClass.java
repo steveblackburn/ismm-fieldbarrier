@@ -1415,6 +1415,9 @@ public final class RVMClass extends RVMType {
     return Integer.MAX_VALUE;
   }
 
+  @Uninterruptible
+  public int getReferenceCount() { return referenceOffsets.length; }
+
   /**
    * Atomically initialize the important parts of the TIB and let the world know this type is
    * resolved.

@@ -1,0 +1,2059 @@
+
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:87	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:93	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:120	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:134	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:142	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:147	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:156	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:159	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:161	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:187	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:190	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:192	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:214	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:225	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:236	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:239	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:241	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:259	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:317	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:382	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:385	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:387	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:424	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:445	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:453	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:461	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:472	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:475	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:477	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:497	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:515	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:518	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:520	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:540	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:557	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:560	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:562	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:578	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:580	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:583	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:593	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:604	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:607	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:609	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:630	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:640	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:648	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:683	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:694	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:705	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:708	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:710	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:731	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:739	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:749	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:752	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:754	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:774	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:792	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:795	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:797	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:818	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:828	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:831	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:833	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:853	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:870	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:873	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:875	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:920	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:937	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:940	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:942	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1033	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1036	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1038	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1058	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1076	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1079	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1081	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1103	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1113	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1116	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1118	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1137	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1211	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1214	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1216	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1264	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1274	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1282	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1293	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1296	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1298	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1318	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1329	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1351	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1354	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1356	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1379	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1396	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1399	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1401	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1433	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1445	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1456	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1459	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1461	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1480	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1508	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1519	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1522	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1524	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1545	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1556	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1562	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1567	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1576	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1585	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1588	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1590	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1638	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1669	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1672	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1674	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1695	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1706	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1709	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1711	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1756	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1759	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1761	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1791	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1802	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1824	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1827	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1829	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1849	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1854	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1864	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1878	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1881	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1883	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1903	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1921	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1924	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1926	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1961	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1977	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1980	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1982	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2018	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2021	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2023	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2132	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2135	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2137	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2159	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2188	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2205	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2208	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2210	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2246	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2256	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2259	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2261	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2377	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2387	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2390	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2392	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2411	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2428	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2431	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2433	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2452	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2469	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2472	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2474	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2493	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2510	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2513	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2515	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2534	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2551	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2554	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2556	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2575	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2592	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2595	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2597	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2617	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2647	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2650	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2652	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2674	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2684	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2687	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2689	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2711	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2749	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2752	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2754	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2772	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2802	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2805	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2807	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2827	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2857	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2860	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2862	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2883	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2917	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2920	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2922	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2999	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3002	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3004	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3028	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3031	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3033	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3057	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3060	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3062	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3139	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3142	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3144	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3226	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3229	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3231	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3266	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3276	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3279	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3281	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3322	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3325	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3327	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3345	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3359	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3362	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3364	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3392	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3395	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3397	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3470	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3473	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3475	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3537	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3540	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3542	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3602	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3605	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3607	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3696	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3707	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3710	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3712	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3731	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3748	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3751	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3753	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3782	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3796	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3819	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3822	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3824	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3849	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3857	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3873	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3896	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3899	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3901	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4003	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4006	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4008	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4034	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4037	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4039	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4057	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4066	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4075	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4078	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4080	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4115	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4118	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4120	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4139	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4165	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4182	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4185	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4187	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4268	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4286	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4289	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4291	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4315	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4325	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4341	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4344	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4346	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4384	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4387	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4389	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4416	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4429	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4432	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4434	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4461	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4464	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4466	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4495	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4498	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4500	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4581	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4616	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4647	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4666	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4669	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4671	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4728	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4731	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4733	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4752	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4769	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4772	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4774	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4797	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4800	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4802	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4824	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4848	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4897	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4908	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4911	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4913	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4938	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4941	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4943	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4970	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4973	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4975	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4995	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5009	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5019	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5022	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5024	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5051	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5054	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5056	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5080	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5083	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5085	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5110	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5121	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5124	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5126	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5146	Avoid empty if statements
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5169	Avoid empty if statements
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5212	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5215	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5217	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5240	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5251	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5254	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5256	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5280	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5283	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5285	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5312	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5315	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5317	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5336	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5353	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5356	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5358	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5384	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5387	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5389	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5452	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5455	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5457	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5476	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5489	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5500	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5503	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5505	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5534	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5537	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5539	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5581	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5598	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5601	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5603	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5653	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5709	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5712	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5714	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5738	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5741	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5743	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:9319	Avoid empty catch blocks
+
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:87	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:93	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:120	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:134	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:142	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:147	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:156	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:159	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:161	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:187	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:190	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:192	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:214	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:225	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:236	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:239	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:241	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:259	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:317	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:382	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:385	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:387	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:424	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:445	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:453	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:461	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:472	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:475	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:477	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:497	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:515	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:518	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:520	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:540	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:557	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:560	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:562	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:578	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:580	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:583	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:593	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:604	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:607	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:609	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:630	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:640	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:648	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:683	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:694	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:705	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:708	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:710	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:731	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:739	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:749	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:752	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:754	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:774	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:792	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:795	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:797	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:818	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:828	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:831	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:833	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:853	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:870	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:873	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:875	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:920	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:937	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:940	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:942	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1033	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1036	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1038	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1058	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1076	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1079	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1081	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1103	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1113	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1116	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1118	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1137	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1211	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1214	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1216	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1264	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1274	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1282	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1293	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1296	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1298	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1318	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1329	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1351	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1354	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1356	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1379	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1396	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1399	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1401	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1433	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1445	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1456	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1459	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1461	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1480	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1508	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1519	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1522	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1524	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1545	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1556	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1562	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1567	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1576	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1585	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1588	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1590	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1638	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1669	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1672	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1674	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1695	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1706	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1709	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1711	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1756	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1759	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1761	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1791	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1802	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1824	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1827	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1829	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1849	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1854	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1864	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1878	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1881	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1883	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1903	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1921	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1924	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1926	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1961	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1977	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1980	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:1982	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2018	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2021	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2023	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2132	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2135	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2137	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2159	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2188	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2205	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2208	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2210	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2246	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2256	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2259	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2261	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2377	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2387	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2390	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2392	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2411	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2428	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2431	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2433	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2452	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2469	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2472	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2474	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2493	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2510	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2513	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2515	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2534	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2551	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2554	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2556	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2575	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2592	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2595	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2597	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2617	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2647	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2650	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2652	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2674	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2684	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2687	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2689	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2711	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2749	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2752	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2754	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2772	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2802	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2805	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2807	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2827	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2857	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2860	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2862	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2883	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2917	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2920	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2922	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:2999	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3002	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3004	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3028	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3031	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3033	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3057	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3060	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3062	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3139	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3142	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3144	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3226	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3229	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3231	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3266	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3276	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3279	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3281	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3322	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3325	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3327	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3345	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3359	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3362	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3364	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3392	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3395	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3397	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3470	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3473	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3475	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3537	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3540	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3542	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3602	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3605	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3607	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3696	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3707	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3710	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3712	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3731	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3748	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3751	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3753	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3782	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3796	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3819	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3822	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3824	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3849	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3857	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3873	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3896	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3899	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:3901	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4003	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4006	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4008	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4034	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4037	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4039	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4057	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4066	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4075	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4078	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4080	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4115	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4118	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4120	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4139	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4165	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4182	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4185	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4187	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4268	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4286	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4289	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4291	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4315	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4325	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4341	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4344	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4346	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4384	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4387	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4389	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4416	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4429	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4432	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4434	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4461	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4464	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4466	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4495	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4498	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4500	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4581	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4616	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4647	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4666	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4669	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4671	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4728	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4731	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4733	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4752	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4769	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4772	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4774	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4797	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4800	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4802	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4824	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4848	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4897	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4908	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4911	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4913	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4938	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4941	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4943	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4970	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4973	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4975	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:4995	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5009	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5019	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5022	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5024	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5051	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5054	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5056	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5080	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5083	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5085	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5110	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5121	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5124	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5126	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5146	Avoid empty if statements
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5169	Avoid empty if statements
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5212	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5215	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5217	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5240	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5251	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5254	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5256	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5280	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5283	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5285	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5312	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5315	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5317	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5336	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5353	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5356	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5358	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5384	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5387	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5389	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5452	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5455	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5457	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5476	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5489	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5500	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5503	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5505	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5534	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5537	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5539	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5581	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5598	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5601	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5603	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5653	An empty statement (semicolon) not part of a loop
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5709	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5712	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5714	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5738	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5741	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:5743	Do not use if statements that are always true or always false
+/home/steveb/devel/jksrvm/jikesrvm-fieldbarrier/./scratch/pmd/net/sourceforge/pmd/ast/JavaParser.java:9319	Avoid empty catch blocks
+============================ MMTk Statistics Totals ============================
+GC	time.mu	time.gc	refType	scan	finalize	prepare	stacks	root	forward	release	init	finish	old-root	new-root	mods	decs	closure-bt	inc.mu	inc.gc	dec.mu	dec.gc	
+141	5278.48	799.30	0.00	6.25	0.00	11.16	9.70	11.28	0.00	154.93	8.82	8.55	6.92	20.09	470.01	67.78	25.92	0	10131887	0	1228961	
+Total time: 6077.78 ms
+------------------------------ End MMTk Statistics -----------------------------
+Fast path
+1, 0.16, 0.00, 0.00, 0.00,  | 16247K, 0, 0, 0, 
+2, 0.15, 0.11, 0.00, 0.00,  | 15919K, 11639K, 0, 0, 
+3, 0.06, 0.13, 0.08, 0.00,  | 6148K, 13216K, 7953K, 0, 
+4, 0.00, 0.00, 0.00, 0.00,  | 392K, 346K, 308K, 170K, 
+5, 0.00, 0.00, 0.00, 0.01,  | 217K, 246K, 247K, 660K, 
+6, 0.00, 0.00, 0.00, 0.00,  | 83909, 73630, 210K, 58489, 
+7, 0.00, 0.00, 0.00, 0.00,  | 16730, 4059, 37411, 35487, 
+8, 0.00, 0.00, 0.00, 0.00,  | 11633, 10318, 12330, 41299, 
+9, 0.00, 0.00, 0.00, 0.00,  | 11317, 6061, 13141, 93740, 
+10, 0.00, 0.00, 0.00, 0.00,  | 88, 139, 169, 12008, 
+11, 0.00, 0.00, 0.00, 0.00,  | 37, 37, 37, 316, 
+12, 0.00, 0.00, 0.00, 0.03,  | 12308, 31570, 79575, 3531K, 
+14, 0.00, 0.00, 0.00, 0.00,  | 94, 270, 274, 780, 
+17, 0.00, 0.00, 0.00, 0.00,  | 1, 1, 1, 20, 
+19, 0.00, 0.00, 0.00, 0.00,  | 31, 31, 31, 551, 
+22, 0.00, 0.00, 0.00, 0.00,  | 1, 2, 1, 19, 
+23, 0.00, 0.00, 0.00, 0.00,  | 1, 1, 1, 20, 
+24, 0.00, 0.00, 0.00, 0.00,  | 1824, 1854, 1854, 34659, 
+29, 0.00, 0.00, 0.00, 0.00,  | 0, 0, 0, 324, 
+33, 0.00, 0.00, 0.00, 0.00,  | 2, 1, 1, 23, 
+34, 0.00, 0.00, 0.00, 0.00,  | 2, 1, 1, 20, 
+35, 0.00, 0.00, 0.00, 0.00,  | 1, 0, 0, 273, 
+43, 0.00, 0.00, 0.00, 0.00,  | 2, 2, 2, 40, 
+44, 0.00, 0.00, 0.00, 0.00,  | 1, 1, 1, 235, 
+45, 0.00, 0.00, 0.00, 0.00,  | 1, 1, 1, 45, 
+        ********, 0.00, 0.00, 0.00, 0.00,  | 0, 0, 0, 0, 
+        RefArray, 0.01, 0.00, 0.00, 0.23,  | 611K, 164K, 131K, 24234K, 
+           TOTAL, 0.38, 0.25, 0.09, 0.28,  | 39675K, 25740K, 8997K, 28874K, 
+    Scalar TOTAL, 0.50, 0.33, 0.11, 0.06,  | 39064K, 25576K, 8865K, 4640K, 
+
+Object Slow
+1, 0.00, 0.00, 0.00, 0.00,  | 2579, 0, 0, 0, 
+2, 0.01, 0.00, 0.00, 0.00,  | 116K, 6652, 0, 0, 
+3, 0.00, 0.25, 0.08, 0.00,  | 1322, 2586K, 893K, 0, 
+4, 0.00, 0.00, 0.00, 0.00,  | 9493, 4153, 20621, 17793, 
+5, 0.00, 0.00, 0.00, 0.01,  | 20857, 27106, 24126, 137K, 
+6, 0.00, 0.00, 0.00, 0.00,  | 2041, 91, 99, 13021, 
+7, 0.00, 0.00, 0.00, 0.00,  | 48, 1, 208, 6095, 
+8, 0.00, 0.00, 0.00, 0.00,  | 8, 2, 8, 44, 
+9, 0.00, 0.00, 0.00, 0.00,  | 14, 2, 5, 267, 
+10, 0.00, 0.00, 0.00, 0.00,  | 3, 1, 1, 636, 
+11, 0.00, 0.00, 0.00, 0.00,  | 6, 6, 0, 17, 
+12, 0.00, 0.00, 0.00, 0.25,  | 3542, 6282, 43275, 2668K, 
+14, 0.00, 0.00, 0.00, 0.00,  | 2, 4, 4, 4, 
+19, 0.00, 0.00, 0.00, 0.00,  | 0, 0, 0, 41, 
+24, 0.00, 0.00, 0.00, 0.00,  | 0, 0, 0, 6, 
+29, 0.00, 0.00, 0.00, 0.00,  | 0, 0, 0, 324, 
+        ********, 0.00, 0.00, 0.00, 0.00,  | 0, 0, 0, 0, 
+        RefArray, 0.01, 0.00, 0.00, 0.36,  | 83229, 9280, 6938, 3831K, 
+           TOTAL, 0.02, 0.25, 0.09, 0.63,  | 239K, 2639K, 989K, 6676K, 
+    Scalar TOTAL, 0.02, 0.40, 0.15, 0.43,  | 156K, 2630K, 982K, 2844K, 
+
+Field Slow
+1, 0.00, 0.00, 0.00, 0.00,  | 1432, 0, 0, 0, 
+2, 0.00, 0.00, 0.00, 0.00,  | 3323, 1004, 0, 0, 
+3, 0.00, 0.00, 0.33, 0.00,  | 981, 141, 759K, 0, 
+4, 0.00, 0.00, 0.00, 0.00,  | 5754, 82, 4480, 1993, 
+5, 0.00, 0.00, 0.00, 0.01,  | 8610, 10956, 10260, 22477, 
+6, 0.00, 0.00, 0.00, 0.00,  | 1710, 91, 99, 6868, 
+7, 0.00, 0.00, 0.00, 0.00,  | 47, 1, 12, 6088, 
+8, 0.00, 0.00, 0.00, 0.00,  | 6, 2, 5, 37, 
+9, 0.00, 0.00, 0.00, 0.00,  | 7, 2, 5, 61, 
+10, 0.00, 0.00, 0.00, 0.00,  | 3, 1, 1, 7, 
+11, 0.00, 0.00, 0.00, 0.00,  | 6, 6, 0, 17, 
+12, 0.00, 0.00, 0.00, 0.01,  | 871, 2750, 2757, 11772, 
+14, 0.00, 0.00, 0.00, 0.00,  | 1, 1, 1, 2, 
+19, 0.00, 0.00, 0.00, 0.00,  | 0, 0, 0, 28, 
+24, 0.00, 0.00, 0.00, 0.00,  | 0, 0, 0, 6, 
+29, 0.00, 0.00, 0.00, 0.00,  | 0, 0, 0, 174, 
+        ********, 0.00, 0.00, 0.00, 0.00,  | 0, 0, 0, 0, 
+        RefArray, 0.00, 0.00, 0.00, 0.62,  | 2936, 2606, 1654, 1396K, 
+           TOTAL, 0.01, 0.01, 0.34, 0.64,  | 25687, 17643, 779K, 1445K, 
+    Scalar TOTAL, 0.03, 0.02, 0.90, 0.06,  | 22751, 15037, 777K, 49530, 
+Array Alloc
+10950.00K, 692.00M
+0, 38.60, 38.60, 0x00407f06
+1, 44.27, 82.87, 0x0049f8ca
+2, 0.90, 83.77, 98688
+3, 1.11, 84.88, 121435
+4, 0.19, 85.07, 20670
+5, 3.07, 88.14, 336680
+6, 0.43, 88.57, 47235
+7, 0.10, 88.67, 11030
+8, 0.14, 88.81, 15184
+9, 0.05, 88.87, 5889
+10, 1.30, 90.17, 142692
+11, 0.01, 90.18, 955
+12, 0.02, 90.20, 2551
+13, 0.00, 90.21, 429
+14, 0.00, 90.21, 245
+15, 0.03, 90.24, 3327
+16, 1.75, 91.99, 191690
+17, 0.00, 91.99, 146
+18, 0.00, 91.99, 159
+19, 0.00, 91.99, 214
+20, 0.28, 92.27, 30582
+21, 0.00, 92.27, 134
+22, 0.00, 92.28, 85
+23, 0.00, 92.28, 171
+24, 0.01, 92.28, 684
+25, 0.00, 92.28, 132
+26, 0.00, 92.28, 64
+27, 0.00, 92.29, 52
+28, 0.00, 92.29, 201
+29, 0.01, 92.29, 598
+30, 0.00, 92.29, 41
+31, 0.00, 92.29, 33
+32, 0.00, 92.30, 302
+33, 0.05, 92.34, 5323
+34, 0.00, 92.34, 27
+35, 0.00, 92.35, 157
+36, 0.00, 92.35, 45
+37, 0.00, 92.35, 86
+38, 0.00, 92.35, 71
+39, 0.00, 92.35, 35
+40, 0.08, 92.43, 9205
+41, 0.00, 92.43, 24
+42, 0.00, 92.43, 36
+43, 0.00, 92.43, 76
+44, 0.00, 92.43, 39
+45, 0.00, 92.43, 41
+46, 0.00, 92.43, 41
+47, 0.00, 92.44, 85
+48, 0.00, 92.44, 346
+49, 0.00, 92.44, 18
+50, 0.00, 92.44, 27
+51, 0.00, 92.44, 21
+52, 0.00, 92.44, 70
+53, 0.00, 92.44, 21
+54, 0.00, 92.44, 25
+55, 0.00, 92.44, 11
+56, 0.00, 92.44, 27
+57, 0.00, 92.44, 9
+58, 0.00, 92.44, 16
+59, 0.00, 92.44, 32
+60, 0.00, 92.44, 17
+61, 0.00, 92.44, 16
+62, 0.00, 92.44, 25
+63, 0.00, 92.44, 17
+64, 0.00, 92.44, 73
+65, 0.00, 92.44, 21
+66, 0.00, 92.44, 19
+67, 0.05, 92.49, 4965
+68, 0.00, 92.49, 156
+69, 0.00, 92.49, 16
+70, 0.00, 92.49, 10
+71, 0.00, 92.49, 180
+72, 0.00, 92.49, 16
+73, 0.00, 92.49, 81
+74, 0.00, 92.49, 8
+75, 0.00, 92.49, 13
+76, 0.00, 92.49, 40
+77, 0.00, 92.49, 21
+78, 0.00, 92.49, 23
+79, 0.00, 92.49, 16
+80, 0.05, 92.54, 4953
+81, 0.00, 92.54, 35
+82, 0.00, 92.54, 18
+83, 0.00, 92.54, 15
+84, 0.00, 92.54, 245
+85, 0.00, 92.54, 10
+86, 0.01, 92.55, 928
+87, 0.00, 92.55, 64
+88, 0.00, 92.55, 21
+89, 0.00, 92.55, 39
+90, 0.00, 92.55, 3
+91, 0.00, 92.55, 20
+92, 0.00, 92.55, 10
+93, 0.00, 92.55, 81
+94, 0.00, 92.55, 102
+95, 0.00, 92.55, 18
+96, 0.00, 92.56, 252
+97, 0.00, 92.56, 18
+98, 0.00, 92.56, 50
+99, 0.00, 92.56, 46
+100, 0.00, 92.56, 69
+101, 0.00, 92.56, 24
+102, 0.00, 92.56, 24
+103, 0.00, 92.56, 31
+104, 0.00, 92.56, 10
+105, 0.00, 92.56, 68
+106, 0.00, 92.56, 2
+107, 0.00, 92.56, 6
+108, 0.00, 92.56, 5
+109, 0.00, 92.56, 57
+110, 0.00, 92.56, 59
+111, 0.00, 92.56, 12
+112, 0.00, 92.56, 14
+113, 0.00, 92.56, 3
+114, 0.00, 92.56, 27
+115, 0.00, 92.56, 49
+116, 0.00, 92.56, 6
+117, 0.00, 92.56, 5
+118, 0.00, 92.56, 28
+119, 0.00, 92.56, 33
+120, 0.00, 92.56, 1
+121, 0.00, 92.56, 16
+122, 0.00, 92.56, 2
+123, 0.00, 92.56, 4
+124, 0.00, 92.56, 3
+125, 0.00, 92.56, 2
+126, 0.00, 92.56, 27
+127, 0.00, 92.56, 5
+128, 0.00, 92.56, 16
+129, 0.00, 92.56, 63
+130, 0.00, 92.56, 58
+131, 0.00, 92.56, 66
+132, 0.00, 92.56, 3
+133, 0.00, 92.56, 13
+134, 0.00, 92.56, 14
+135, 0.04, 92.61, 4772
+136, 0.00, 92.61, 2
+137, 0.00, 92.61, 7
+138, 0.00, 92.61, 31
+139, 0.00, 92.61, 2
+140, 0.00, 92.61, 1
+141, 0.00, 92.61, 1
+145, 0.00, 92.61, 19
+146, 0.00, 92.61, 25
+147, 0.00, 92.61, 19
+148, 0.00, 92.61, 55
+150, 0.00, 92.61, 18
+151, 0.00, 92.61, 7
+153, 0.00, 92.61, 32
+154, 0.00, 92.61, 36
+155, 0.00, 92.61, 7
+156, 0.00, 92.61, 46
+157, 0.00, 92.61, 47
+158, 0.00, 92.61, 42
+159, 0.00, 92.61, 77
+160, 0.04, 92.65, 4335
+161, 0.00, 92.65, 28
+162, 0.00, 92.65, 5
+163, 0.00, 92.65, 1
+166, 0.00, 92.65, 46
+167, 0.00, 92.65, 1
+168, 0.00, 92.65, 36
+169, 0.00, 92.65, 1
+170, 0.00, 92.65, 1
+171, 0.00, 92.65, 1
+172, 0.00, 92.65, 1
+174, 0.00, 92.65, 1
+176, 0.00, 92.65, 28
+178, 0.00, 92.65, 2
+179, 0.00, 92.65, 1
+181, 0.00, 92.65, 84
+182, 0.00, 92.65, 31
+183, 0.00, 92.65, 3
+184, 0.00, 92.65, 1
+186, 0.00, 92.65, 1
+187, 0.00, 92.65, 26
+189, 0.00, 92.65, 12
+190, 0.00, 92.65, 2
+191, 0.00, 92.66, 40
+192, 0.00, 92.66, 117
+193, 0.00, 92.66, 1
+195, 0.00, 92.66, 36
+196, 0.00, 92.66, 6
+197, 0.00, 92.66, 5
+198, 0.00, 92.66, 55
+199, 0.00, 92.66, 3
+200, 0.00, 92.66, 1
+201, 0.00, 92.66, 1
+202, 0.00, 92.66, 5
+203, 0.00, 92.66, 60
+204, 0.00, 92.66, 88
+205, 0.00, 92.66, 1
+207, 0.00, 92.66, 1
+208, 0.00, 92.66, 1
+209, 0.00, 92.66, 7
+210, 0.00, 92.66, 3
+211, 0.00, 92.66, 4
+214, 0.00, 92.66, 7
+215, 0.00, 92.66, 1
+216, 0.00, 92.66, 16
+217, 0.00, 92.66, 5
+218, 0.00, 92.66, 11
+219, 0.00, 92.66, 4
+220, 0.00, 92.66, 5
+221, 0.00, 92.66, 8
+222, 0.00, 92.66, 16
+223, 0.00, 92.66, 3
+224, 0.00, 92.66, 5
+225, 0.00, 92.66, 3
+226, 0.00, 92.66, 5
+227, 0.00, 92.66, 8
+228, 0.00, 92.66, 5
+229, 0.00, 92.66, 12
+230, 0.00, 92.66, 1
+231, 0.00, 92.66, 1
+232, 0.00, 92.66, 56
+234, 0.00, 92.66, 6
+235, 0.00, 92.66, 42
+237, 0.00, 92.66, 67
+239, 0.00, 92.66, 2
+240, 0.00, 92.66, 1
+243, 0.00, 92.66, 1
+244, 0.00, 92.66, 1
+245, 0.00, 92.66, 1
+246, 0.00, 92.66, 1
+248, 0.00, 92.66, 210
+249, 0.00, 92.66, 21
+250, 0.00, 92.66, 31
+251, 0.00, 92.66, 1
+253, 0.00, 92.66, 2
+255, 0.00, 92.66, 2
+256, 0.00, 92.66, 3
+257, 0.00, 92.66, 4
+258, 0.00, 92.66, 14
+259, 0.00, 92.66, 54
+260, 0.00, 92.67, 45
+261, 0.00, 92.67, 100
+262, 0.00, 92.67, 10
+263, 0.00, 92.67, 4
+264, 0.00, 92.67, 4
+265, 0.00, 92.67, 1
+268, 0.00, 92.67, 1
+269, 0.00, 92.67, 7
+270, 0.00, 92.67, 2
+271, 0.04, 92.70, 3970
+273, 0.00, 92.70, 1
+274, 0.00, 92.70, 2
+276, 0.00, 92.70, 4
+277, 0.00, 92.70, 4
+279, 0.00, 92.70, 42
+280, 0.00, 92.70, 4
+281, 0.00, 92.70, 3
+282, 0.00, 92.71, 240
+284, 0.00, 92.71, 4
+285, 0.00, 92.71, 5
+286, 0.00, 92.71, 108
+289, 0.00, 92.71, 1
+290, 0.00, 92.71, 34
+291, 0.00, 92.71, 217
+294, 0.00, 92.71, 3
+295, 0.00, 92.71, 12
+296, 0.00, 92.71, 50
+298, 0.00, 92.71, 75
+299, 0.00, 92.71, 4
+300, 0.00, 92.71, 2
+301, 0.00, 92.71, 48
+303, 0.00, 92.71, 1
+304, 0.00, 92.71, 10
+305, 0.00, 92.71, 1
+306, 0.00, 92.71, 16
+307, 0.00, 92.71, 5
+308, 0.00, 92.71, 73
+309, 0.00, 92.71, 111
+310, 0.00, 92.71, 1
+312, 0.00, 92.71, 7
+313, 0.00, 92.71, 4
+314, 0.00, 92.71, 54
+316, 0.00, 92.71, 132
+317, 0.00, 92.71, 1
+318, 0.00, 92.71, 12
+319, 0.00, 92.71, 3
+320, 0.03, 92.75, 3380
+321, 0.00, 92.75, 44
+322, 0.00, 92.75, 4
+324, 0.00, 92.75, 217
+325, 0.00, 92.75, 1
+326, 0.00, 92.75, 1
+329, 0.00, 92.75, 271
+330, 0.00, 92.75, 1
+331, 0.00, 92.75, 2
+333, 0.00, 92.75, 1
+335, 0.00, 92.75, 66
+337, 0.00, 92.75, 120
+340, 0.00, 92.75, 1
+342, 0.00, 92.75, 1
+343, 0.00, 92.75, 72
+344, 0.00, 92.75, 1
+347, 0.00, 92.75, 12
+348, 0.00, 92.75, 1
+350, 0.00, 92.75, 198
+351, 0.00, 92.75, 1
+354, 0.00, 92.75, 1
+357, 0.00, 92.75, 62
+358, 0.00, 92.76, 137
+359, 0.00, 92.76, 58
+360, 0.00, 92.76, 43
+361, 0.00, 92.76, 67
+362, 0.00, 92.76, 133
+366, 0.00, 92.76, 66
+369, 0.00, 92.76, 109
+371, 0.00, 92.76, 31
+372, 0.00, 92.76, 2
+376, 0.00, 92.76, 78
+378, 0.00, 92.76, 16
+380, 0.00, 92.76, 1
+383, 0.00, 92.76, 10
+384, 0.00, 92.76, 130
+385, 0.00, 92.76, 67
+387, 0.00, 92.76, 1
+393, 0.00, 92.76, 1
+394, 0.00, 92.76, 96
+396, 0.00, 92.76, 2
+399, 0.00, 92.76, 5
+400, 0.00, 92.76, 6
+401, 0.00, 92.77, 78
+407, 0.00, 92.77, 90
+418, 0.00, 92.77, 1
+420, 0.00, 92.77, 1
+421, 0.00, 92.77, 120
+422, 0.00, 92.77, 44
+424, 0.00, 92.77, 3
+425, 0.00, 92.77, 84
+430, 0.00, 92.77, 96
+432, 0.00, 92.77, 78
+435, 0.00, 92.77, 144
+438, 0.00, 92.77, 1
+440, 0.00, 92.77, 1
+444, 0.00, 92.77, 216
+445, 0.00, 92.77, 2
+446, 0.00, 92.77, 1
+447, 0.00, 92.77, 88
+449, 0.00, 92.77, 3
+451, 0.00, 92.77, 1
+453, 0.00, 92.78, 136
+454, 0.00, 92.78, 222
+459, 0.00, 92.78, 54
+460, 0.00, 92.78, 1
+464, 0.00, 92.78, 2
+470, 0.00, 92.78, 165
+471, 0.00, 92.78, 1
+472, 0.00, 92.78, 15
+473, 0.00, 92.78, 2
+474, 0.00, 92.78, 1
+478, 0.00, 92.78, 1
+480, 0.00, 92.78, 1
+493, 0.00, 92.78, 96
+497, 0.00, 92.78, 106
+498, 0.00, 92.78, 1
+499, 0.00, 92.78, 93
+500, 0.00, 92.78, 104
+501, 0.00, 92.78, 1
+502, 0.00, 92.78, 1
+503, 0.00, 92.78, 2
+504, 0.00, 92.78, 28
+506, 0.00, 92.78, 1
+512, 0.00, 92.78, 1
+515, 0.00, 92.78, 96
+520, 0.00, 92.79, 151
+527, 0.00, 92.79, 36
+528, 0.00, 92.79, 2
+529, 0.00, 92.79, 46
+531, 0.00, 92.79, 2
+532, 0.00, 92.79, 108
+538, 0.00, 92.79, 1
+540, 0.00, 92.79, 1
+543, 0.03, 92.82, 3419
+546, 0.00, 92.82, 1
+552, 0.00, 92.82, 96
+553, 0.00, 92.82, 84
+554, 0.00, 92.82, 3
+555, 0.00, 92.82, 4
+557, 0.00, 92.82, 1
+560, 0.00, 92.82, 2
+561, 0.00, 92.82, 1
+562, 0.00, 92.82, 1
+568, 0.00, 92.82, 120
+572, 0.00, 92.82, 78
+576, 0.00, 92.82, 1
+580, 0.00, 92.82, 1
+584, 0.00, 92.82, 2
+587, 0.00, 92.82, 120
+588, 0.00, 92.82, 4
+598, 0.00, 92.82, 1
+600, 0.00, 92.82, 1
+609, 0.00, 92.82, 1
+612, 0.00, 92.83, 150
+613, 0.00, 92.83, 102
+616, 0.00, 92.83, 1
+620, 0.00, 92.83, 1
+624, 0.00, 92.83, 66
+626, 0.00, 92.83, 2
+632, 0.00, 92.83, 90
+638, 0.00, 92.83, 2
+639, 0.00, 92.83, 102
+640, 0.02, 92.85, 2637
+641, 0.00, 92.85, 90
+645, 0.00, 92.85, 2
+649, 0.00, 92.85, 1
+651, 0.00, 92.85, 1
+652, 0.00, 92.85, 26
+653, 0.00, 92.85, 4
+654, 0.00, 92.85, 1
+656, 0.00, 92.85, 126
+657, 0.00, 92.85, 3
+658, 0.00, 92.85, 6
+659, 0.00, 92.86, 183
+660, 0.00, 92.86, 2
+661, 0.00, 92.86, 2
+662, 0.00, 92.86, 1
+663, 0.00, 92.86, 1
+664, 0.00, 92.86, 256
+665, 0.00, 92.86, 3
+666, 0.00, 92.86, 6
+675, 0.00, 92.86, 168
+676, 0.00, 92.86, 19
+677, 0.00, 92.86, 18
+679, 0.00, 92.86, 1
+680, 0.00, 92.86, 1
+683, 0.00, 92.86, 144
+684, 0.00, 92.86, 24
+693, 0.00, 92.86, 156
+700, 0.00, 92.86, 1
+709, 0.00, 92.86, 102
+717, 0.00, 92.86, 1
+720, 0.00, 92.86, 1
+724, 0.00, 92.87, 108
+725, 0.00, 92.87, 1
+734, 0.00, 92.87, 1
+737, 0.00, 92.87, 102
+751, 0.00, 92.87, 30
+752, 0.00, 92.87, 38
+753, 0.00, 92.87, 1
+756, 0.00, 92.87, 1
+757, 0.00, 92.87, 5
+758, 0.00, 92.87, 1
+759, 0.00, 92.87, 1
+760, 0.00, 92.87, 2
+761, 0.00, 92.87, 11
+762, 0.00, 92.87, 1
+767, 0.00, 92.87, 7
+768, 0.00, 92.87, 26
+769, 0.00, 92.87, 150
+777, 0.00, 92.87, 1
+781, 0.00, 92.87, 1
+791, 0.00, 92.87, 8
+794, 0.00, 92.87, 8
+815, 0.00, 92.87, 1
+819, 0.00, 92.87, 1
+820, 0.00, 92.87, 1
+821, 0.00, 92.87, 1
+822, 0.00, 92.87, 1
+823, 0.00, 92.87, 1
+824, 0.00, 92.87, 1
+825, 0.00, 92.87, 1
+826, 0.00, 92.87, 1
+827, 0.00, 92.87, 1
+828, 0.00, 92.87, 1
+829, 0.00, 92.87, 1
+830, 0.00, 92.87, 1
+831, 0.00, 92.87, 1
+832, 0.00, 92.87, 1
+833, 0.00, 92.87, 1
+834, 0.00, 92.87, 1
+835, 0.00, 92.87, 16
+836, 0.00, 92.87, 1
+837, 0.00, 92.87, 40
+838, 0.00, 92.87, 1
+839, 0.00, 92.87, 43
+840, 0.00, 92.87, 1
+841, 0.00, 92.87, 1
+842, 0.00, 92.87, 1
+843, 0.00, 92.87, 2
+844, 0.00, 92.87, 1
+845, 0.00, 92.87, 139
+846, 0.00, 92.87, 1
+847, 0.00, 92.87, 1
+848, 0.00, 92.87, 1
+849, 0.00, 92.87, 1
+850, 0.00, 92.87, 1
+851, 0.00, 92.87, 1
+852, 0.00, 92.87, 1
+853, 0.00, 92.87, 1
+854, 0.00, 92.87, 1
+855, 0.00, 92.87, 1
+856, 0.00, 92.87, 1
+857, 0.00, 92.87, 1
+858, 0.00, 92.87, 1
+859, 0.00, 92.87, 1
+860, 0.00, 92.87, 1
+861, 0.00, 92.87, 1
+862, 0.00, 92.87, 1
+863, 0.00, 92.87, 1
+864, 0.00, 92.87, 1
+865, 0.00, 92.87, 1
+866, 0.00, 92.87, 1
+867, 0.00, 92.87, 1
+868, 0.00, 92.87, 1
+869, 0.00, 92.87, 1
+870, 0.00, 92.87, 1
+871, 0.00, 92.87, 1
+872, 0.00, 92.87, 1
+873, 0.00, 92.87, 1
+874, 0.00, 92.87, 1
+875, 0.00, 92.87, 1
+876, 0.00, 92.87, 1
+877, 0.00, 92.87, 1
+878, 0.00, 92.87, 1
+879, 0.00, 92.87, 1
+880, 0.00, 92.87, 1
+881, 0.00, 92.87, 1
+882, 0.00, 92.87, 1
+883, 0.00, 92.87, 1
+884, 0.00, 92.87, 1
+885, 0.00, 92.87, 1
+886, 0.00, 92.87, 2
+887, 0.00, 92.87, 1
+888, 0.00, 92.87, 1
+889, 0.00, 92.87, 1
+890, 0.00, 92.87, 1
+891, 0.00, 92.87, 1
+892, 0.00, 92.87, 1
+893, 0.00, 92.87, 1
+894, 0.00, 92.87, 1
+895, 0.00, 92.87, 1
+896, 0.00, 92.87, 1
+897, 0.00, 92.87, 6
+898, 0.00, 92.87, 5
+899, 0.00, 92.87, 8
+900, 0.00, 92.87, 8
+901, 0.00, 92.87, 7
+902, 0.00, 92.87, 2
+903, 0.00, 92.87, 14
+904, 0.00, 92.87, 1
+905, 0.00, 92.87, 1
+906, 0.00, 92.87, 1
+907, 0.00, 92.87, 1
+908, 0.00, 92.87, 1
+909, 0.00, 92.87, 1
+910, 0.00, 92.87, 1
+911, 0.00, 92.87, 1
+912, 0.00, 92.87, 1
+913, 0.00, 92.87, 1
+914, 0.00, 92.87, 2
+915, 0.00, 92.87, 1
+916, 0.00, 92.87, 1
+917, 0.00, 92.87, 1
+918, 0.00, 92.87, 1
+919, 0.00, 92.87, 1
+920, 0.00, 92.87, 1
+921, 0.00, 92.87, 2
+922, 0.00, 92.87, 1
+923, 0.00, 92.87, 1
+924, 0.00, 92.87, 3
+925, 0.00, 92.87, 1
+926, 0.00, 92.87, 1
+927, 0.00, 92.87, 1
+928, 0.00, 92.87, 3
+929, 0.00, 92.87, 1
+930, 0.00, 92.87, 1
+931, 0.00, 92.87, 1
+932, 0.00, 92.87, 5
+933, 0.00, 92.87, 5
+934, 0.00, 92.87, 1
+935, 0.00, 92.87, 1
+936, 0.00, 92.87, 1
+937, 0.00, 92.87, 1
+938, 0.00, 92.87, 1
+939, 0.00, 92.87, 1
+940, 0.00, 92.87, 1
+941, 0.00, 92.87, 1
+942, 0.00, 92.87, 1
+943, 0.00, 92.87, 1
+944, 0.00, 92.87, 1
+945, 0.00, 92.87, 1
+946, 0.00, 92.87, 1
+947, 0.00, 92.87, 1
+948, 0.00, 92.87, 1
+949, 0.00, 92.87, 1
+950, 0.00, 92.87, 3
+951, 0.00, 92.87, 1
+952, 0.00, 92.87, 1
+953, 0.00, 92.87, 1
+954, 0.00, 92.87, 1
+955, 0.00, 92.87, 1
+956, 0.00, 92.87, 1
+957, 0.00, 92.87, 1
+958, 0.00, 92.87, 1
+959, 0.00, 92.87, 1
+960, 0.00, 92.88, 331
+961, 0.00, 92.88, 1
+962, 0.00, 92.88, 1
+963, 0.00, 92.88, 1
+964, 0.00, 92.88, 1
+965, 0.00, 92.88, 1
+966, 0.00, 92.88, 1
+967, 0.00, 92.88, 1
+968, 0.00, 92.88, 1
+969, 0.00, 92.88, 1
+970, 0.00, 92.88, 1
+971, 0.00, 92.88, 1
+972, 0.00, 92.88, 1
+973, 0.00, 92.88, 2
+974, 0.00, 92.88, 1
+975, 0.00, 92.88, 1
+976, 0.00, 92.88, 1
+977, 0.00, 92.88, 1
+978, 0.00, 92.88, 1
+979, 0.00, 92.88, 1
+980, 0.00, 92.88, 1
+981, 0.00, 92.88, 1
+982, 0.00, 92.88, 1
+983, 0.00, 92.88, 1
+984, 0.00, 92.88, 1
+985, 0.00, 92.88, 1
+986, 0.00, 92.88, 1
+987, 0.00, 92.88, 1
+988, 0.00, 92.88, 1
+989, 0.00, 92.88, 1
+990, 0.00, 92.88, 1
+991, 0.00, 92.88, 1
+992, 0.00, 92.88, 1
+993, 0.00, 92.88, 1
+994, 0.00, 92.88, 1
+995, 0.00, 92.88, 1
+996, 0.00, 92.88, 1
+997, 0.00, 92.88, 1
+998, 0.00, 92.88, 1
+999, 0.00, 92.88, 1
+1000, 0.00, 92.88, 1
+1001, 0.00, 92.88, 1
+1002, 0.00, 92.88, 1
+1003, 0.00, 92.88, 1
+1004, 0.00, 92.88, 1
+1005, 0.00, 92.88, 1
+1006, 0.00, 92.88, 1
+1007, 0.00, 92.88, 1
+1008, 0.00, 92.88, 379
+1009, 0.00, 92.88, 1
+1010, 0.00, 92.88, 1
+1011, 0.00, 92.88, 1
+1012, 0.00, 92.88, 1
+1013, 0.00, 92.88, 1
+1014, 0.00, 92.88, 1
+1015, 0.00, 92.88, 1
+1016, 0.00, 92.88, 1
+1017, 0.00, 92.88, 1
+1018, 0.00, 92.88, 1
+1019, 0.00, 92.88, 1
+1020, 0.00, 92.88, 1
+1021, 0.00, 92.88, 1
+1022, 0.00, 92.88, 1
+1023, 0.00, 92.88, 1
+1024, 0.00, 92.88, 26
+1025, 0.00, 92.88, 1
+1026, 0.00, 92.88, 1
+1027, 0.00, 92.88, 1
+1028, 0.00, 92.88, 1
+1029, 0.00, 92.88, 1
+1030, 0.00, 92.88, 1
+1031, 0.00, 92.88, 1
+1032, 0.00, 92.88, 1
+1033, 0.00, 92.88, 1
+1034, 0.00, 92.88, 1
+1035, 0.00, 92.88, 1
+1036, 0.00, 92.88, 1
+1037, 0.00, 92.88, 1
+1038, 0.00, 92.88, 1
+1039, 0.00, 92.88, 1
+1040, 0.00, 92.88, 1
+1041, 0.00, 92.88, 1
+1042, 0.00, 92.88, 1
+1043, 0.00, 92.88, 1
+1044, 0.00, 92.88, 1
+1087, 0.02, 92.90, 2033
+1117, 0.00, 92.90, 151
+1125, 0.00, 92.90, 1
+1279, 0.00, 92.90, 69
+1280, 0.01, 92.91, 924
+1281, 0.00, 92.91, 65
+1283, 0.00, 92.91, 81
+1284, 0.00, 92.91, 15
+1286, 0.00, 92.91, 19
+1288, 0.00, 92.91, 18
+1289, 0.00, 92.91, 7
+1290, 0.00, 92.91, 64
+1306, 0.00, 92.91, 1
+1314, 0.00, 92.91, 1
+1342, 0.00, 92.91, 1
+1361, 0.00, 92.91, 12
+1411, 0.00, 92.91, 1
+1416, 0.00, 92.91, 1
+1418, 0.00, 92.91, 56
+1420, 0.00, 92.91, 65
+1422, 0.00, 92.91, 17
+1423, 0.00, 92.91, 8
+1424, 0.00, 92.91, 6
+1425, 0.00, 92.91, 9
+1426, 0.00, 92.91, 6
+1427, 0.00, 92.91, 9
+1428, 0.00, 92.91, 10
+1429, 0.00, 92.91, 1
+1430, 0.00, 92.91, 12
+1438, 0.00, 92.91, 16
+1439, 0.00, 92.91, 1
+1444, 0.00, 92.91, 1
+1500, 0.00, 92.91, 46
+1502, 0.00, 92.92, 65
+1504, 0.00, 92.92, 17
+1505, 0.00, 92.92, 8
+1506, 0.00, 92.92, 8
+1517, 0.00, 92.92, 1
+1535, 0.00, 92.92, 5
+1545, 0.00, 92.92, 1
+1596, 0.00, 92.92, 8
+1645, 0.00, 92.92, 1
+1856, 0.00, 92.92, 2
+1899, 0.00, 92.92, 1
+1900, 0.00, 92.92, 2
+2048, 0.00, 92.92, 1
+2049, 0.00, 92.92, 6
+2089, 0.00, 92.92, 1
+2093, 0.00, 92.92, 4
+2127, 0.00, 92.92, 1
+2163, 0.00, 92.92, 1
+2171, 0.00, 92.92, 2
+2172, 0.00, 92.92, 2
+2173, 0.00, 92.92, 2
+2174, 0.00, 92.92, 2
+2175, 0.00, 92.92, 462
+2176, 0.00, 92.92, 6
+2177, 0.00, 92.92, 35
+2178, 0.00, 92.92, 11
+2179, 0.00, 92.92, 11
+2180, 0.00, 92.92, 8
+2181, 0.00, 92.92, 26
+2182, 0.00, 92.92, 5
+2183, 0.00, 92.92, 6
+2184, 0.00, 92.92, 13
+2185, 0.00, 92.92, 5
+2186, 0.00, 92.92, 13
+2187, 0.00, 92.92, 12
+2188, 0.00, 92.92, 20
+2189, 0.00, 92.92, 15
+2190, 0.00, 92.92, 13
+2191, 0.00, 92.92, 88
+2248, 0.00, 92.92, 1
+2271, 0.00, 92.92, 1
+2275, 0.00, 92.92, 1
+2276, 0.00, 92.92, 1
+2285, 0.00, 92.92, 1
+2292, 0.00, 92.92, 2
+2293, 0.00, 92.92, 2
+2294, 0.00, 92.92, 2
+2295, 0.00, 92.92, 2
+2296, 0.00, 92.92, 2
+2297, 0.00, 92.92, 2
+2298, 0.00, 92.92, 6
+2299, 0.00, 92.92, 4
+2300, 0.00, 92.92, 3
+2301, 0.00, 92.92, 3
+2302, 0.00, 92.92, 3
+2303, 0.00, 92.92, 4
+2304, 0.00, 92.92, 3
+2305, 0.00, 92.92, 3
+2306, 0.00, 92.92, 2
+2307, 0.00, 92.92, 3
+2308, 0.00, 92.92, 6
+2309, 0.00, 92.92, 9
+2310, 0.00, 92.92, 10
+2311, 0.00, 92.92, 12
+2312, 0.00, 92.92, 12
+2313, 0.00, 92.92, 1
+2348, 0.00, 92.92, 1
+2354, 0.00, 92.92, 5
+2355, 0.00, 92.92, 3
+2356, 0.00, 92.92, 2
+2357, 0.00, 92.92, 3
+2358, 0.00, 92.92, 3
+2359, 0.00, 92.92, 2
+2360, 0.00, 92.92, 3
+2361, 0.00, 92.92, 2
+2362, 0.00, 92.92, 4
+2363, 0.00, 92.92, 3
+2364, 0.00, 92.92, 2
+2365, 0.00, 92.92, 3
+2366, 0.00, 92.92, 3
+2367, 0.00, 92.92, 2
+2368, 0.00, 92.92, 4
+2369, 0.00, 92.92, 12
+2370, 0.00, 92.92, 3
+2371, 0.00, 92.92, 5
+2372, 0.00, 92.92, 3
+2373, 0.00, 92.92, 11
+2374, 0.00, 92.92, 3
+2375, 0.00, 92.92, 4
+2376, 0.00, 92.92, 1
+2437, 0.00, 92.92, 1
+2489, 0.00, 92.92, 4
+2491, 0.00, 92.93, 109
+2493, 0.00, 92.93, 65
+2495, 0.00, 92.93, 13
+2496, 0.00, 92.93, 6
+2497, 0.00, 92.93, 18
+2498, 0.00, 92.93, 6
+2499, 0.00, 92.93, 33
+2500, 0.00, 92.93, 6
+2501, 0.00, 92.93, 18
+2502, 0.00, 92.93, 7
+2503, 0.00, 92.93, 1
+2504, 0.00, 92.93, 3
+2505, 0.00, 92.93, 2
+2506, 0.00, 92.93, 18
+2508, 0.00, 92.93, 2
+2516, 0.00, 92.93, 1
+2544, 0.00, 92.93, 1
+2560, 0.00, 92.93, 59
+2703, 0.00, 92.93, 1
+2781, 0.00, 92.93, 1
+2940, 0.00, 92.93, 13
+2941, 0.00, 92.93, 50
+2943, 0.00, 92.93, 65
+2945, 0.00, 92.93, 13
+2946, 0.00, 92.93, 9
+2947, 0.00, 92.93, 30
+2948, 0.00, 92.93, 9
+2949, 0.00, 92.93, 30
+2950, 0.00, 92.93, 12
+2955, 0.00, 92.93, 1
+2965, 0.00, 92.93, 1
+2993, 0.00, 92.93, 1
+3003, 0.00, 92.93, 1
+3015, 0.00, 92.93, 33
+3017, 0.00, 92.93, 20
+3019, 0.00, 92.93, 3
+3020, 0.00, 92.93, 24
+3021, 0.00, 92.93, 6
+3022, 0.00, 92.93, 8
+3023, 0.00, 92.93, 1
+3024, 0.00, 92.93, 51
+3025, 0.00, 92.93, 82
+3026, 0.00, 92.93, 7
+3027, 0.00, 92.93, 36
+3031, 0.00, 92.93, 1
+3042, 0.00, 92.93, 1
+3071, 0.00, 92.93, 4
+3190, 0.00, 92.93, 1
+3316, 0.00, 92.93, 1
+3378, 0.00, 92.93, 1
+3495, 0.00, 92.93, 46
+3497, 0.00, 92.93, 65
+3499, 0.00, 92.93, 17
+3500, 0.00, 92.93, 8
+3501, 0.00, 92.93, 6
+3502, 0.00, 92.93, 9
+3503, 0.00, 92.93, 55
+3505, 0.00, 92.94, 65
+3507, 0.00, 92.94, 17
+3508, 0.00, 92.94, 8
+3509, 0.00, 92.94, 6
+3510, 0.00, 92.94, 9
+3511, 0.00, 92.94, 43
+3531, 0.00, 92.94, 1
+3595, 0.00, 92.94, 1
+3604, 0.00, 92.94, 5
+3605, 0.00, 92.94, 5
+3606, 0.00, 92.94, 12
+3607, 0.00, 92.94, 10
+3608, 0.00, 92.94, 1
+3609, 0.00, 92.94, 3
+3610, 0.00, 92.94, 4
+3611, 0.00, 92.94, 1
+3612, 0.00, 92.94, 10
+3613, 0.00, 92.94, 13
+3614, 0.00, 92.94, 4
+3615, 0.00, 92.94, 1
+3616, 0.00, 92.94, 1
+3617, 0.00, 92.94, 4
+3618, 0.00, 92.94, 15
+3619, 0.00, 92.94, 34
+3620, 0.00, 92.94, 2
+3621, 0.00, 92.94, 29
+3623, 0.00, 92.94, 1
+3712, 0.00, 92.94, 2
+3800, 0.00, 92.94, 2
+4174, 0.00, 92.94, 4
+4265, 0.00, 92.94, 1
+4286, 0.00, 92.94, 1
+4293, 0.00, 92.94, 5
+4294, 0.00, 92.94, 3
+4295, 0.00, 92.94, 1
+4296, 0.00, 92.94, 12
+4298, 0.00, 92.94, 7
+4300, 0.00, 92.94, 3
+4301, 0.00, 92.94, 1
+4302, 0.00, 92.94, 22
+4303, 0.00, 92.94, 6
+4304, 0.00, 92.94, 1
+4305, 0.00, 92.94, 74
+4306, 0.00, 92.94, 6
+4307, 0.00, 92.94, 24
+4308, 0.00, 92.94, 17
+4309, 0.00, 92.94, 7
+4310, 0.00, 92.94, 11
+4314, 0.00, 92.94, 1
+4351, 0.00, 92.94, 93
+4567, 0.00, 92.94, 1
+4639, 0.00, 92.94, 1
+4985, 0.00, 92.94, 1
+4992, 0.00, 92.94, 5
+4993, 0.00, 92.94, 3
+4994, 0.00, 92.94, 1
+4995, 0.00, 92.94, 12
+4997, 0.00, 92.94, 7
+4999, 0.00, 92.94, 3
+5000, 0.00, 92.94, 1
+5001, 0.00, 92.94, 27
+5002, 0.00, 92.94, 6
+5003, 0.00, 92.94, 1
+5004, 0.00, 92.94, 79
+5005, 0.00, 92.94, 6
+5006, 0.00, 92.94, 24
+5007, 0.00, 92.94, 24
+5008, 0.00, 92.94, 7
+5009, 0.00, 92.94, 12
+5013, 0.00, 92.94, 1
+5120, 0.00, 92.94, 55
+5154, 0.00, 92.94, 2
+5155, 0.00, 92.94, 4
+5156, 0.00, 92.94, 2
+5157, 0.00, 92.94, 4
+5158, 0.00, 92.94, 2
+5159, 0.00, 92.94, 2
+5160, 0.00, 92.94, 4
+5161, 0.00, 92.94, 2
+5162, 0.00, 92.94, 4
+5163, 0.00, 92.94, 2
+5164, 0.00, 92.94, 4
+5165, 0.00, 92.94, 2
+5166, 0.00, 92.94, 4
+5167, 0.00, 92.94, 2
+5168, 0.00, 92.94, 17
+5169, 0.00, 92.94, 1
+5170, 0.00, 92.94, 3
+5171, 0.00, 92.94, 1
+5172, 0.00, 92.94, 3
+5173, 0.00, 92.94, 1
+5174, 0.00, 92.94, 3
+5175, 0.00, 92.94, 1
+5176, 0.00, 92.94, 4
+5177, 0.00, 92.94, 1
+5178, 0.00, 92.94, 3
+5179, 0.00, 92.94, 1
+5180, 0.00, 92.94, 3
+5181, 0.00, 92.94, 1
+5182, 0.00, 92.94, 2
+5183, 0.00, 92.94, 1
+5184, 0.00, 92.94, 1
+5185, 0.00, 92.94, 2
+5186, 0.00, 92.94, 1
+5187, 0.00, 92.94, 1
+5188, 0.00, 92.94, 2
+5189, 0.00, 92.94, 1
+5190, 0.00, 92.94, 1
+5191, 0.00, 92.94, 2
+5192, 0.00, 92.94, 1
+5193, 0.00, 92.94, 1
+5194, 0.00, 92.94, 2
+5195, 0.00, 92.94, 1
+5196, 0.00, 92.94, 1
+5197, 0.00, 92.94, 2
+5198, 0.00, 92.94, 1
+5199, 0.00, 92.94, 1
+5200, 0.00, 92.94, 2
+5201, 0.00, 92.94, 1
+5202, 0.00, 92.94, 1
+5203, 0.00, 92.94, 99
+5204, 0.00, 92.94, 1
+6143, 0.00, 92.94, 1
+7263, 0.00, 92.94, 4
+7424, 0.00, 92.94, 2
+7600, 0.00, 92.94, 2
+7994, 0.00, 92.94, 4
+8437, 0.00, 92.94, 1
+8506, 0.00, 92.94, 1
+8703, 0.00, 92.95, 71
+10240, 0.00, 92.95, 54
+11493, 0.00, 92.95, 7
+11494, 0.00, 92.95, 1
+11495, 0.00, 92.95, 13
+11497, 0.00, 92.95, 7
+11499, 0.00, 92.95, 3
+11500, 0.00, 92.95, 12
+11502, 0.00, 92.95, 7
+11504, 0.00, 92.95, 3
+11505, 0.00, 92.95, 12
+11506, 0.00, 92.95, 6
+11507, 0.00, 92.95, 6
+11508, 0.00, 92.95, 7
+11509, 0.00, 92.95, 33
+11510, 0.00, 92.95, 50
+11511, 0.00, 92.95, 13
+11512, 0.00, 92.95, 9
+11513, 0.00, 92.95, 9
+11514, 0.00, 92.95, 6
+11515, 0.00, 92.95, 16
+11516, 0.00, 92.95, 2
+11517, 0.00, 92.95, 3
+11518, 0.00, 92.95, 6
+11519, 0.00, 92.95, 19
+11520, 0.00, 92.95, 30
+11521, 0.00, 92.95, 1
+11522, 0.00, 92.95, 1
+11523, 0.00, 92.95, 4
+11524, 0.00, 92.95, 19
+11525, 0.00, 92.95, 1
+11526, 0.00, 92.95, 4
+11527, 0.00, 92.95, 13
+11528, 0.00, 92.95, 2
+11529, 0.00, 92.95, 5
+11530, 0.00, 92.95, 8
+11531, 0.00, 92.95, 3
+11532, 0.00, 92.95, 6
+11533, 0.00, 92.95, 3
+11534, 0.00, 92.95, 3
+11535, 0.00, 92.95, 4
+11536, 0.00, 92.95, 6
+11537, 0.00, 92.95, 4
+11538, 0.00, 92.95, 12
+11539, 0.00, 92.95, 220
+11540, 0.00, 92.95, 34
+11588, 0.00, 92.95, 1
+11616, 0.00, 92.95, 7
+11617, 0.00, 92.95, 2
+11618, 0.00, 92.95, 13
+11620, 0.00, 92.95, 7
+11622, 0.00, 92.95, 3
+11623, 0.00, 92.95, 12
+11625, 0.00, 92.95, 7
+11627, 0.00, 92.95, 3
+11628, 0.00, 92.95, 17
+11629, 0.00, 92.95, 6
+11630, 0.00, 92.95, 6
+11631, 0.00, 92.95, 7
+11632, 0.00, 92.95, 33
+11633, 0.00, 92.95, 50
+11634, 0.00, 92.95, 13
+11635, 0.00, 92.95, 9
+11636, 0.00, 92.95, 9
+11637, 0.00, 92.95, 6
+11638, 0.00, 92.95, 16
+11639, 0.00, 92.95, 2
+11640, 0.00, 92.95, 3
+11641, 0.00, 92.95, 6
+11642, 0.00, 92.95, 19
+11643, 0.00, 92.95, 30
+11644, 0.00, 92.95, 1
+11645, 0.00, 92.95, 2
+11646, 0.00, 92.95, 4
+11647, 0.00, 92.95, 19
+11648, 0.00, 92.95, 1
+11649, 0.00, 92.95, 4
+11650, 0.00, 92.95, 13
+11651, 0.00, 92.95, 2
+11652, 0.00, 92.95, 5
+11653, 0.00, 92.96, 8
+11654, 0.00, 92.96, 3
+11655, 0.00, 92.96, 6
+11656, 0.00, 92.96, 3
+11657, 0.00, 92.96, 3
+11658, 0.00, 92.96, 4
+11659, 0.00, 92.96, 6
+11660, 0.00, 92.96, 4
+11661, 0.00, 92.96, 12
+11662, 0.00, 92.96, 222
+11663, 0.00, 92.96, 35
+11740, 0.00, 92.96, 1
+11768, 0.00, 92.96, 1
+12184, 0.00, 92.96, 3
+12432, 0.00, 92.96, 1
+14116, 0.00, 92.96, 2
+15200, 0.00, 92.96, 2
+17407, 0.00, 92.96, 67
+19785, 0.00, 92.96, 16
+19786, 0.00, 92.96, 17
+19787, 0.00, 92.96, 1
+19788, 0.00, 92.96, 11
+19789, 0.00, 92.96, 33
+19790, 0.00, 92.96, 1
+19791, 0.00, 92.96, 6
+19792, 0.00, 92.96, 20
+19793, 0.00, 92.96, 5
+19794, 0.00, 92.96, 24
+19795, 0.00, 92.96, 14
+19796, 0.00, 92.96, 12
+19797, 0.00, 92.96, 32
+19798, 0.00, 92.96, 6
+19799, 0.00, 92.96, 14
+19800, 0.00, 92.96, 5
+19801, 0.00, 92.96, 14
+19802, 0.00, 92.96, 6
+19803, 0.00, 92.96, 51
+19805, 0.00, 92.96, 65
+19807, 0.00, 92.96, 13
+19808, 0.00, 92.96, 6
+19809, 0.00, 92.96, 18
+19810, 0.00, 92.96, 6
+19811, 0.00, 92.96, 33
+19812, 0.00, 92.96, 23
+19814, 0.00, 92.96, 65
+19816, 0.00, 92.96, 13
+19817, 0.00, 92.96, 13
+19818, 0.00, 92.96, 7
+19819, 0.00, 92.96, 38
+19821, 0.00, 92.96, 65
+19823, 0.00, 92.96, 13
+19824, 0.00, 92.96, 6
+19825, 0.00, 92.96, 18
+19826, 0.00, 92.96, 6
+19827, 0.00, 92.97, 33
+19828, 0.00, 92.97, 8
+19829, 0.00, 92.97, 7
+19830, 0.00, 92.97, 19
+19831, 0.00, 92.97, 7
+19832, 0.00, 92.97, 17
+19833, 0.00, 92.97, 18
+19834, 0.00, 92.97, 16
+19835, 0.00, 92.97, 48
+19836, 0.00, 92.97, 48
+19872, 0.00, 92.97, 1
+19900, 0.00, 92.97, 1
+20480, 0.00, 92.97, 54
+30400, 0.00, 92.97, 2
+34815, 0.00, 92.97, 56
+40960, 0.00, 92.97, 54
+58692, 0.00, 92.97, 1
+60800, 0.00, 92.97, 2
+65535, 0.00, 92.97, 388
+Scalar Alloc
+64899.00K, 1308.00M
+0, 1.04, 1.04, 676812
+1, 51.09, 52.13, 0x01f9e55e
+2, 29.89, 82.02, 0x0127fc26
+3, 14.28, 96.30, 0x008d73a8
+4, 1.54, 97.84, 998291
+5, 1.89, 99.73, 0x0012af23
+6, 0.76, 100.49, 496064
+7, 0.11, 100.60, 69369
+8, 0.15, 100.75, 96428
+9, 0.08, 100.83, 51800
+10, 0.02, 100.85, 12381
+11, 0.00, 100.85, 2687
+12, 0.12, 100.97, 79364
+14, 0.00, 100.97, 84
+17, 0.00, 100.97, 2
+19, 0.00, 100.97, 130
+22, 0.00, 100.97, 2
+23, 0.00, 100.97, 2
+24, 0.02, 100.99, 12552
+29, 0.00, 100.99, 18
+32, 0.00, 100.99, 914
+33, 0.00, 100.99, 2
+34, 0.00, 100.99, 2
+35, 0.00, 100.99, 2
+43, 0.00, 100.99, 2
+44, 0.00, 100.99, 2
+45, 0.00, 100.99, 2

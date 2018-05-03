@@ -1,0 +1,1175 @@
+Running antlr on grammar antlr/cpp/calc.g
+Running antlr on grammar antlr/cpp/column.g
+Running antlr on grammar antlr/cpp/data.g
+Running antlr on grammar antlr/cpp/expr.g
+Running antlr on grammar antlr/cpp/html.g
+Running antlr on grammar antlr/cpp/idl.g
+Running antlr on grammar antlr/cpp/instr.g
+Running antlr on grammar antlr/cpp/javadoclex.g
+Running antlr on grammar antlr/cpp/javadocparse.g
+Running antlr on grammar antlr/cpp/java.g
+Running antlr on grammar antlr/cpp/javalex.g
+Running antlr on grammar antlr/cpp/javaparse.g
+Running antlr on grammar antlr/cpp/java.tree.g
+Running antlr on grammar antlr/cpp/lexer.g
+Running antlr on grammar antlr/cpp/parser1.g
+Running antlr on grammar antlr/cpp/parser2.g
+Running antlr on grammar antlr/cpp/P.g
+Running antlr on grammar antlr/cpp/rewrite.g
+Running antlr on grammar antlr/cpp/subc.g
+Running antlr on grammar antlr/cpp/t.g
+Running antlr on grammar antlr/cpp/treewalk.g
+Running antlr on grammar antlr/csharp/calc.g
+Running antlr on grammar antlr/csharp/data.g
+Running antlr on grammar antlr/csharp/expr.g
+Running antlr on grammar antlr/csharp/html.g
+Running antlr on grammar antlr/csharp/idl.g
+Running antlr on grammar antlr/csharp/instr.g
+Running antlr on grammar antlr/csharp/javadoclex.g
+Running antlr on grammar antlr/csharp/javadocparse.g
+Running antlr on grammar antlr/csharp/java.g
+Running antlr on grammar antlr/csharp/javalex.g
+Running antlr on grammar antlr/csharp/javaparse.g
+Running antlr on grammar antlr/csharp/java.tree.g
+Running antlr on grammar antlr/csharp/lexer.g
+Running antlr on grammar antlr/csharp/t.g
+Running antlr on grammar antlr/csharp/tinyc.g
+Running antlr on grammar antlr/csharp/track.g
+Running antlr on grammar antlr/csharp/unicode.g
+Running antlr on grammar antlr/java/calc.g
+Running antlr on grammar antlr/java/data.g
+Running antlr on grammar antlr/java/expr.g
+Running antlr on grammar antlr/java/html.g
+Running antlr on grammar antlr/java/idl.g
+Running antlr on grammar antlr/java/instr.g
+Running antlr on grammar antlr/java/javadoclex.g
+Running antlr on grammar antlr/java/javadocparse.g
+Running antlr on grammar antlr/java/java.g
+Running antlr on grammar antlr/java/javalex.g
+Running antlr on grammar antlr/java/javaparse.g
+Running antlr on grammar antlr/java/java.tree.g
+Running antlr on grammar antlr/java/lexer.g
+Running antlr on grammar antlr/java/links.g
+Running antlr on grammar antlr/java/pascal.g
+Running antlr on grammar antlr/java/P.g
+Running antlr on grammar antlr/java/rewrite.g
+Running antlr on grammar antlr/java/subc.g
+Running antlr on grammar antlr/java/t.g
+Running antlr on grammar antlr/java/TinyBasic.g
+Running antlr on grammar antlr/java/TinyBasicTreeWalker.g
+Running antlr on grammar antlr/java/tinyc.g
+Running antlr on grammar antlr/java/track.g
+Running antlr on grammar antlr/java/treewalk.g
+Running antlr on grammar antlr/java/unicode.g
+Running antlr on grammar antlr/java/xml.g
+Running antlr on grammar antlr/cpp/calc.g
+Running antlr on grammar antlr/cpp/column.g
+Running antlr on grammar antlr/cpp/data.g
+Running antlr on grammar antlr/cpp/expr.g
+Running antlr on grammar antlr/cpp/html.g
+Running antlr on grammar antlr/cpp/idl.g
+Running antlr on grammar antlr/cpp/instr.g
+Running antlr on grammar antlr/cpp/javadoclex.g
+Running antlr on grammar antlr/cpp/javadocparse.g
+Running antlr on grammar antlr/cpp/java.g
+Running antlr on grammar antlr/cpp/javalex.g
+Running antlr on grammar antlr/cpp/javaparse.g
+Running antlr on grammar antlr/cpp/java.tree.g
+Running antlr on grammar antlr/cpp/lexer.g
+Running antlr on grammar antlr/cpp/parser1.g
+Running antlr on grammar antlr/cpp/parser2.g
+Running antlr on grammar antlr/cpp/P.g
+Running antlr on grammar antlr/cpp/rewrite.g
+Running antlr on grammar antlr/cpp/subc.g
+Running antlr on grammar antlr/cpp/t.g
+Running antlr on grammar antlr/cpp/treewalk.g
+Running antlr on grammar antlr/csharp/calc.g
+Running antlr on grammar antlr/csharp/data.g
+Running antlr on grammar antlr/csharp/expr.g
+Running antlr on grammar antlr/csharp/html.g
+Running antlr on grammar antlr/csharp/idl.g
+Running antlr on grammar antlr/csharp/instr.g
+Running antlr on grammar antlr/csharp/javadoclex.g
+Running antlr on grammar antlr/csharp/javadocparse.g
+Running antlr on grammar antlr/csharp/java.g
+Running antlr on grammar antlr/csharp/javalex.g
+Running antlr on grammar antlr/csharp/javaparse.g
+Running antlr on grammar antlr/csharp/java.tree.g
+Running antlr on grammar antlr/csharp/lexer.g
+Running antlr on grammar antlr/csharp/t.g
+Running antlr on grammar antlr/csharp/tinyc.g
+Running antlr on grammar antlr/csharp/track.g
+Running antlr on grammar antlr/csharp/unicode.g
+Running antlr on grammar antlr/java/calc.g
+Running antlr on grammar antlr/java/data.g
+Running antlr on grammar antlr/java/expr.g
+Running antlr on grammar antlr/java/html.g
+Running antlr on grammar antlr/java/idl.g
+Running antlr on grammar antlr/java/instr.g
+Running antlr on grammar antlr/java/javadoclex.g
+Running antlr on grammar antlr/java/javadocparse.g
+Running antlr on grammar antlr/java/java.g
+Running antlr on grammar antlr/java/javalex.g
+Running antlr on grammar antlr/java/javaparse.g
+Running antlr on grammar antlr/java/java.tree.g
+Running antlr on grammar antlr/java/lexer.g
+Running antlr on grammar antlr/java/links.g
+Running antlr on grammar antlr/java/pascal.g
+Running antlr on grammar antlr/java/P.g
+Running antlr on grammar antlr/java/rewrite.g
+Running antlr on grammar antlr/java/subc.g
+Running antlr on grammar antlr/java/t.g
+Running antlr on grammar antlr/java/TinyBasic.g
+Running antlr on grammar antlr/java/TinyBasicTreeWalker.g
+Running antlr on grammar antlr/java/tinyc.g
+Running antlr on grammar antlr/java/track.g
+Running antlr on grammar antlr/java/treewalk.g
+Running antlr on grammar antlr/java/unicode.g
+Running antlr on grammar antlr/java/xml.g
+Running antlr on grammar antlr/cpp/calc.g
+Running antlr on grammar antlr/cpp/column.g
+Running antlr on grammar antlr/cpp/data.g
+Running antlr on grammar antlr/cpp/expr.g
+Running antlr on grammar antlr/cpp/html.g
+Running antlr on grammar antlr/cpp/idl.g
+Running antlr on grammar antlr/cpp/instr.g
+Running antlr on grammar antlr/cpp/javadoclex.g
+Running antlr on grammar antlr/cpp/javadocparse.g
+Running antlr on grammar antlr/cpp/java.g
+Running antlr on grammar antlr/cpp/javalex.g
+Running antlr on grammar antlr/cpp/javaparse.g
+Running antlr on grammar antlr/cpp/java.tree.g
+Running antlr on grammar antlr/cpp/lexer.g
+Running antlr on grammar antlr/cpp/parser1.g
+Running antlr on grammar antlr/cpp/parser2.g
+Running antlr on grammar antlr/cpp/P.g
+Running antlr on grammar antlr/cpp/rewrite.g
+Running antlr on grammar antlr/cpp/subc.g
+Running antlr on grammar antlr/cpp/t.g
+Running antlr on grammar antlr/cpp/treewalk.g
+Running antlr on grammar antlr/csharp/calc.g
+Running antlr on grammar antlr/csharp/data.g
+Running antlr on grammar antlr/csharp/expr.g
+Running antlr on grammar antlr/csharp/html.g
+Running antlr on grammar antlr/csharp/idl.g
+Running antlr on grammar antlr/csharp/instr.g
+Running antlr on grammar antlr/csharp/javadoclex.g
+Running antlr on grammar antlr/csharp/javadocparse.g
+Running antlr on grammar antlr/csharp/java.g
+Running antlr on grammar antlr/csharp/javalex.g
+Running antlr on grammar antlr/csharp/javaparse.g
+Running antlr on grammar antlr/csharp/java.tree.g
+Running antlr on grammar antlr/csharp/lexer.g
+Running antlr on grammar antlr/csharp/t.g
+Running antlr on grammar antlr/csharp/tinyc.g
+Running antlr on grammar antlr/csharp/track.g
+Running antlr on grammar antlr/csharp/unicode.g
+Running antlr on grammar antlr/java/calc.g
+Running antlr on grammar antlr/java/data.g
+Running antlr on grammar antlr/java/expr.g
+Running antlr on grammar antlr/java/html.g
+Running antlr on grammar antlr/java/idl.g
+Running antlr on grammar antlr/java/instr.g
+Running antlr on grammar antlr/java/javadoclex.g
+Running antlr on grammar antlr/java/javadocparse.g
+Running antlr on grammar antlr/java/java.g
+Running antlr on grammar antlr/java/javalex.g
+Running antlr on grammar antlr/java/javaparse.g
+Running antlr on grammar antlr/java/java.tree.g
+Running antlr on grammar antlr/java/lexer.g
+Running antlr on grammar antlr/java/links.g
+Running antlr on grammar antlr/java/pascal.g
+Running antlr on grammar antlr/java/P.g
+Running antlr on grammar antlr/java/rewrite.g
+Running antlr on grammar antlr/java/subc.g
+Running antlr on grammar antlr/java/t.g
+Running antlr on grammar antlr/java/TinyBasic.g
+Running antlr on grammar antlr/java/TinyBasicTreeWalker.g
+Running antlr on grammar antlr/java/tinyc.g
+Running antlr on grammar antlr/java/track.g
+Running antlr on grammar antlr/java/treewalk.g
+Running antlr on grammar antlr/java/unicode.g
+Running antlr on grammar antlr/java/xml.g
+Running antlr on grammar antlr/cpp/calc.g
+Running antlr on grammar antlr/cpp/column.g
+Running antlr on grammar antlr/cpp/data.g
+Running antlr on grammar antlr/cpp/expr.g
+Running antlr on grammar antlr/cpp/html.g
+Running antlr on grammar antlr/cpp/idl.g
+Running antlr on grammar antlr/cpp/instr.g
+Running antlr on grammar antlr/cpp/javadoclex.g
+Running antlr on grammar antlr/cpp/javadocparse.g
+Running antlr on grammar antlr/cpp/java.g
+Running antlr on grammar antlr/cpp/javalex.g
+Running antlr on grammar antlr/cpp/javaparse.g
+Running antlr on grammar antlr/cpp/java.tree.g
+Running antlr on grammar antlr/cpp/lexer.g
+Running antlr on grammar antlr/cpp/parser1.g
+Running antlr on grammar antlr/cpp/parser2.g
+Running antlr on grammar antlr/cpp/P.g
+Running antlr on grammar antlr/cpp/rewrite.g
+Running antlr on grammar antlr/cpp/subc.g
+Running antlr on grammar antlr/cpp/t.g
+Running antlr on grammar antlr/cpp/treewalk.g
+Running antlr on grammar antlr/csharp/calc.g
+Running antlr on grammar antlr/csharp/data.g
+Running antlr on grammar antlr/csharp/expr.g
+Running antlr on grammar antlr/csharp/html.g
+Running antlr on grammar antlr/csharp/idl.g
+Running antlr on grammar antlr/csharp/instr.g
+Running antlr on grammar antlr/csharp/javadoclex.g
+Running antlr on grammar antlr/csharp/javadocparse.g
+Running antlr on grammar antlr/csharp/java.g
+Running antlr on grammar antlr/csharp/javalex.g
+Running antlr on grammar antlr/csharp/javaparse.g
+Running antlr on grammar antlr/csharp/java.tree.g
+Running antlr on grammar antlr/csharp/lexer.g
+Running antlr on grammar antlr/csharp/t.g
+Running antlr on grammar antlr/csharp/tinyc.g
+Running antlr on grammar antlr/csharp/track.g
+Running antlr on grammar antlr/csharp/unicode.g
+Running antlr on grammar antlr/java/calc.g
+Running antlr on grammar antlr/java/data.g
+Running antlr on grammar antlr/java/expr.g
+Running antlr on grammar antlr/java/html.g
+Running antlr on grammar antlr/java/idl.g
+Running antlr on grammar antlr/java/instr.g
+Running antlr on grammar antlr/java/javadoclex.g
+Running antlr on grammar antlr/java/javadocparse.g
+Running antlr on grammar antlr/java/java.g
+Running antlr on grammar antlr/java/javalex.g
+Running antlr on grammar antlr/java/javaparse.g
+Running antlr on grammar antlr/java/java.tree.g
+Running antlr on grammar antlr/java/lexer.g
+Running antlr on grammar antlr/java/links.g
+Running antlr on grammar antlr/java/pascal.g
+Running antlr on grammar antlr/java/P.g
+Running antlr on grammar antlr/java/rewrite.g
+Running antlr on grammar antlr/java/subc.g
+Running antlr on grammar antlr/java/t.g
+Running antlr on grammar antlr/java/TinyBasic.g
+Running antlr on grammar antlr/java/TinyBasicTreeWalker.g
+Running antlr on grammar antlr/java/tinyc.g
+Running antlr on grammar antlr/java/track.g
+Running antlr on grammar antlr/java/treewalk.g
+Running antlr on grammar antlr/java/unicode.g
+Running antlr on grammar antlr/java/xml.g
+============================ MMTk Statistics Totals ============================
+GC	time.mu	time.gc	refType	scan	finalize	prepare	stacks	root	forward	release	init	finish	old-root	new-root	mods	decs	closure-bt	inc.mu	inc.gc	dec.mu	dec.gc	
+70	1282.99	198.58	0.00	3.08	0.00	5.63	3.95	6.55	0.00	44.33	4.84	3.85	3.13	8.56	88.41	14.57	12.67	0	1953616	0	215946	
+Total time: 1481.57 ms
+------------------------------ End MMTk Statistics -----------------------------
+Fast path
+1, 0.12, 0.00, 0.00, 0.00,  | 2723K, 0, 0, 0, 
+2, 0.04, 0.08, 0.00, 0.00,  | 976K, 1688K, 0, 0, 
+3, 0.06, 0.15, 0.03, 0.00,  | 1323K, 3314K, 621K, 0, 
+4, 0.04, 0.03, 0.01, 0.01,  | 886K, 681K, 328K, 289K, 
+5, 0.03, 0.04, 0.04, 0.08,  | 731K, 806K, 837K, 1879K, 
+6, 0.00, 0.00, 0.00, 0.02,  | 33585, 23313, 31232, 517K, 
+7, 0.00, 0.00, 0.01, 0.01,  | 62687, 65853, 128K, 175K, 
+8, 0.00, 0.00, 0.00, 0.01,  | 42030, 38322, 47246, 154K, 
+9, 0.00, 0.00, 0.00, 0.02,  | 49147, 25962, 45608, 350K, 
+10, 0.00, 0.00, 0.00, 0.00,  | 1331, 1386, 1430, 80749, 
+11, 0.00, 0.00, 0.00, 0.00,  | 50, 50, 51, 442, 
+12, 0.00, 0.01, 0.01, 0.03,  | 40311, 119K, 126K, 697K, 
+13, 0.00, 0.00, 0.00, 0.00,  | 582, 198, 582, 3310, 
+14, 0.00, 0.00, 0.00, 0.00,  | 551, 592, 857, 21447, 
+15, 0.00, 0.00, 0.00, 0.00,  | 100, 100, 100, 1860, 
+16, 0.00, 0.00, 0.00, 0.00,  | 4368, 0, 0, 52600, 
+17, 0.00, 0.00, 0.00, 0.00,  | 94, 94, 94, 1996, 
+19, 0.00, 0.00, 0.00, 0.00,  | 44, 44, 44, 769, 
+21, 0.00, 0.00, 0.00, 0.00,  | 50, 642, 206, 19690, 
+22, 0.00, 0.00, 0.00, 0.00,  | 34, 428, 138, 12368, 
+24, 0.00, 0.00, 0.00, 0.01,  | 6003, 6647, 6175, 125K, 
+29, 0.00, 0.00, 0.00, 0.00,  | 0, 0, 0, 114, 
+        ********, 0.00, 0.00, 0.00, 0.00,  | 0, 0, 0, 0, 
+        RefArray, 0.02, 0.02, 0.01, 0.05,  | 411K, 357K, 178K, 1087K, 
+           TOTAL, 0.33, 0.32, 0.11, 0.25,  | 7292K, 7130K, 2353K, 5470K, 
+    Scalar TOTAL, 0.34, 0.34, 0.11, 0.22,  | 6881K, 6772K, 2175K, 4382K, 
+
+Object Slow
+1, 0.02, 0.00, 0.00, 0.00,  | 21102, 0, 0, 0, 
+2, 0.01, 0.00, 0.00, 0.00,  | 12787, 2562, 0, 0, 
+3, 0.00, 0.00, 0.00, 0.00,  | 3704, 3043, 4182, 0, 
+4, 0.03, 0.01, 0.02, 0.01,  | 33970, 17957, 20436, 11278, 
+5, 0.08, 0.10, 0.10, 0.20,  | 99817, 122K, 118K, 236K, 
+6, 0.00, 0.00, 0.00, 0.04,  | 617, 26, 30, 43950, 
+7, 0.00, 0.00, 0.00, 0.00,  | 699, 72, 1437, 194, 
+8, 0.00, 0.00, 0.00, 0.00,  | 97, 136, 71, 85, 
+9, 0.00, 0.00, 0.00, 0.00,  | 83, 21, 44, 887, 
+10, 0.00, 0.00, 0.00, 0.02,  | 15, 5, 5, 19578, 
+11, 0.00, 0.00, 0.00, 0.00,  | 15, 15, 0, 47, 
+12, 0.02, 0.03, 0.03, 0.10,  | 20722, 35815, 36382, 123K, 
+13, 0.00, 0.00, 0.00, 0.00,  | 0, 5, 0, 16, 
+14, 0.00, 0.00, 0.00, 0.00,  | 248, 184, 186, 2406, 
+15, 0.00, 0.00, 0.00, 0.00,  | 0, 6, 6, 0, 
+16, 0.00, 0.00, 0.00, 0.00,  | 0, 0, 0, 7, 
+17, 0.00, 0.00, 0.00, 0.00,  | 0, 14, 14, 2, 
+19, 0.00, 0.00, 0.00, 0.00,  | 0, 0, 0, 61, 
+21, 0.00, 0.00, 0.00, 0.01,  | 0, 159, 18, 7866, 
+22, 0.00, 0.00, 0.00, 0.00,  | 0, 65, 4, 2498, 
+24, 0.00, 0.00, 0.00, 0.00,  | 0, 117, 6, 3432, 
+29, 0.00, 0.00, 0.00, 0.00,  | 0, 0, 0, 114, 
+        ********, 0.00, 0.00, 0.00, 0.00,  | 0, 0, 0, 0, 
+        RefArray, 0.03, 0.04, 0.01, 0.08,  | 36003, 47092, 17706, 99962, 
+           TOTAL, 0.19, 0.19, 0.16, 0.46,  | 229K, 229K, 199K, 551K, 
+    Scalar TOTAL, 0.19, 0.18, 0.18, 0.45,  | 193K, 182K, 181K, 451K, 
+
+Field Slow
+1, 0.02, 0.00, 0.00, 0.00,  | 11775, 0, 0, 0, 
+2, 0.01, 0.00, 0.00, 0.00,  | 6086, 668, 0, 0, 
+3, 0.00, 0.00, 0.01, 0.00,  | 1033, 488, 3589, 0, 
+4, 0.01, 0.00, 0.02, 0.01,  | 5570, 43, 11039, 2616, 
+5, 0.10, 0.14, 0.13, 0.25,  | 48593, 68582, 64068, 127K, 
+6, 0.00, 0.00, 0.00, 0.00,  | 475, 26, 30, 1239, 
+7, 0.00, 0.00, 0.00, 0.00,  | 699, 59, 59, 103, 
+8, 0.00, 0.00, 0.00, 0.00,  | 96, 47, 61, 85, 
+9, 0.00, 0.00, 0.00, 0.00,  | 42, 21, 22, 278, 
+10, 0.00, 0.00, 0.00, 0.00,  | 15, 5, 5, 72, 
+11, 0.00, 0.00, 0.00, 0.00,  | 15, 15, 0, 47, 
+12, 0.02, 0.02, 0.02, 0.11,  | 7631, 12092, 12148, 54962, 
+13, 0.00, 0.00, 0.00, 0.00,  | 0, 5, 0, 16, 
+14, 0.00, 0.00, 0.00, 0.00,  | 81, 47, 48, 293, 
+15, 0.00, 0.00, 0.00, 0.00,  | 0, 6, 6, 0, 
+16, 0.00, 0.00, 0.00, 0.00,  | 0, 0, 0, 7, 
+17, 0.00, 0.00, 0.00, 0.00,  | 0, 14, 14, 2, 
+19, 0.00, 0.00, 0.00, 0.00,  | 0, 0, 0, 53, 
+21, 0.00, 0.00, 0.00, 0.00,  | 0, 16, 8, 127, 
+22, 0.00, 0.00, 0.00, 0.00,  | 0, 9, 2, 50, 
+24, 0.00, 0.00, 0.00, 0.00,  | 0, 13, 3, 106, 
+29, 0.00, 0.00, 0.00, 0.00,  | 0, 0, 0, 56, 
+        ********, 0.00, 0.00, 0.00, 0.00,  | 0, 0, 0, 0, 
+        RefArray, 0.03, 0.04, 0.02, 0.04,  | 16520, 20451, 8885, 18641, 
+           TOTAL, 0.19, 0.20, 0.20, 0.41,  | 98626, 102K, 99978, 205K, 
+    Scalar TOTAL, 0.19, 0.19, 0.21, 0.42,  | 82106, 82153, 91093, 187K, 
+Array Alloc
+5611.00K, 564.00M
+0, 0.42, 0.42, 23395
+1, 1.01, 1.43, 56667
+2, 1.90, 3.33, 106853
+3, 2.16, 5.49, 121210
+4, 0.28, 5.77, 15777
+5, 7.70, 13.47, 431830
+6, 0.74, 14.21, 41364
+7, 0.31, 14.52, 17626
+8, 0.17, 14.69, 9727
+9, 0.11, 14.80, 6153
+10, 0.95, 15.75, 53073
+11, 0.76, 16.51, 42649
+12, 0.04, 16.55, 2034
+13, 0.01, 16.55, 533
+14, 0.01, 16.56, 342
+15, 0.03, 16.59, 1661
+16, 1.02, 17.61, 57132
+17, 0.00, 17.61, 85
+18, 0.00, 17.61, 112
+19, 0.01, 17.62, 309
+20, 0.34, 17.95, 18842
+21, 0.00, 17.96, 126
+22, 0.00, 17.96, 66
+23, 0.02, 17.97, 881
+24, 0.01, 17.99, 809
+25, 0.00, 17.99, 182
+26, 0.00, 17.99, 49
+27, 0.00, 17.99, 38
+28, 0.00, 17.99, 166
+29, 0.00, 18.00, 135
+30, 0.00, 18.00, 39
+31, 0.00, 18.00, 50
+32, 0.01, 18.00, 282
+33, 0.02, 18.02, 874
+34, 0.00, 18.02, 20
+35, 0.00, 18.02, 155
+36, 0.00, 18.02, 26
+37, 0.00, 18.03, 154
+38, 0.00, 18.03, 135
+39, 0.00, 18.03, 29
+40, 0.02, 18.04, 893
+41, 0.00, 18.05, 27
+42, 0.00, 18.05, 17
+43, 0.00, 18.05, 141
+44, 0.00, 18.05, 34
+45, 0.00, 18.05, 16
+46, 0.00, 18.05, 23
+47, 0.00, 18.05, 246
+48, 0.01, 18.06, 451
+49, 0.00, 18.06, 16
+50, 0.00, 18.06, 21
+51, 0.00, 18.06, 25
+52, 0.00, 18.06, 15
+53, 0.00, 18.06, 18
+54, 0.00, 18.06, 11
+55, 0.00, 18.06, 5
+56, 0.00, 18.06, 3
+57, 0.00, 18.06, 4
+58, 0.00, 18.06, 14
+59, 0.00, 18.06, 11
+60, 0.00, 18.06, 6
+61, 0.00, 18.06, 20
+62, 0.00, 18.06, 11
+63, 0.00, 18.06, 14
+64, 0.00, 18.07, 96
+65, 0.00, 18.07, 5
+66, 0.00, 18.07, 22
+67, 0.01, 18.08, 615
+68, 0.00, 18.08, 71
+69, 0.00, 18.08, 22
+70, 0.00, 18.08, 5
+71, 0.00, 18.08, 3
+72, 0.00, 18.08, 6
+73, 0.00, 18.08, 2
+74, 0.00, 18.08, 7
+75, 0.00, 18.08, 14
+76, 0.00, 18.08, 2
+77, 0.00, 18.08, 27
+78, 0.00, 18.08, 44
+79, 0.00, 18.08, 7
+80, 0.01, 18.09, 281
+81, 0.00, 18.09, 10
+82, 0.00, 18.09, 24
+83, 0.00, 18.09, 5
+84, 0.00, 18.09, 20
+85, 0.00, 18.09, 2
+86, 0.00, 18.09, 2
+87, 0.00, 18.09, 1
+88, 0.00, 18.09, 2
+89, 0.00, 18.09, 7
+90, 0.00, 18.09, 2
+91, 0.00, 18.09, 22
+92, 0.00, 18.09, 1
+93, 0.00, 18.09, 5
+94, 0.00, 18.09, 2
+95, 0.00, 18.09, 173
+96, 0.01, 18.10, 386
+97, 0.00, 18.10, 6
+98, 0.00, 18.10, 17
+99, 0.00, 18.10, 13
+100, 0.02, 18.12, 1238
+101, 0.00, 18.12, 22
+102, 0.00, 18.12, 5
+103, 0.00, 18.12, 4
+104, 0.00, 18.12, 1
+105, 0.00, 18.12, 3
+106, 0.00, 18.12, 4
+107, 0.00, 18.12, 1
+108, 0.00, 18.12, 6
+109, 0.00, 18.12, 2
+110, 0.00, 18.12, 5
+111, 0.00, 18.12, 5
+112, 0.00, 18.12, 1
+113, 0.00, 18.12, 4
+114, 0.00, 18.12, 22
+115, 0.00, 18.12, 17
+116, 0.00, 18.12, 9
+117, 0.00, 18.12, 1
+118, 0.00, 18.12, 25
+119, 0.00, 18.12, 5
+120, 0.00, 18.12, 10
+121, 0.00, 18.12, 5
+123, 0.00, 18.12, 3
+124, 0.00, 18.12, 6
+125, 0.00, 18.12, 10
+126, 0.00, 18.12, 5
+127, 0.00, 18.12, 6
+128, 0.00, 18.13, 73
+129, 0.00, 18.13, 11
+130, 0.00, 18.13, 11
+131, 0.00, 18.13, 6
+132, 0.00, 18.13, 6
+133, 0.00, 18.13, 9
+134, 0.00, 18.13, 1
+135, 0.01, 18.13, 402
+136, 0.00, 18.13, 4
+137, 0.00, 18.13, 1
+138, 0.00, 18.13, 8
+139, 0.00, 18.13, 4
+140, 0.00, 18.13, 1
+141, 0.00, 18.13, 2
+145, 0.00, 18.13, 1
+148, 0.00, 18.13, 1
+151, 0.00, 18.13, 2
+153, 0.00, 18.13, 3
+155, 0.00, 18.13, 1
+160, 0.00, 18.14, 100
+161, 0.00, 18.14, 3
+162, 0.00, 18.14, 10
+163, 0.00, 18.14, 2
+164, 0.00, 18.14, 2
+166, 0.00, 18.14, 2
+167, 0.00, 18.14, 6
+168, 0.00, 18.14, 6
+169, 0.00, 18.14, 1
+170, 0.00, 18.14, 1
+171, 0.00, 18.14, 1
+172, 0.00, 18.14, 1
+174, 0.00, 18.14, 2
+175, 0.00, 18.14, 2
+176, 0.00, 18.14, 1
+177, 0.00, 18.14, 1
+179, 0.00, 18.14, 1
+180, 0.00, 18.14, 1
+181, 0.00, 18.14, 1
+183, 0.00, 18.14, 1
+186, 0.00, 18.14, 2
+187, 0.00, 18.14, 1
+190, 0.00, 18.14, 1
+191, 0.00, 18.14, 105
+192, 0.00, 18.14, 179
+194, 0.00, 18.14, 7
+195, 0.00, 18.14, 3
+198, 0.00, 18.14, 14
+199, 0.00, 18.14, 3
+200, 0.00, 18.14, 47
+201, 0.00, 18.14, 39
+202, 0.00, 18.14, 8
+203, 0.00, 18.14, 5
+205, 0.00, 18.14, 8
+207, 0.00, 18.14, 1
+210, 0.00, 18.14, 1
+213, 0.00, 18.14, 9
+215, 0.00, 18.14, 2
+218, 0.00, 18.14, 1
+219, 0.00, 18.14, 3
+220, 0.00, 18.14, 3
+221, 0.00, 18.15, 9
+222, 0.00, 18.15, 8
+223, 0.00, 18.15, 11
+224, 0.00, 18.15, 8
+225, 0.00, 18.15, 6
+226, 0.00, 18.15, 8
+227, 0.00, 18.15, 18
+228, 0.00, 18.15, 3
+229, 0.00, 18.15, 6
+230, 0.00, 18.15, 1
+231, 0.00, 18.15, 7
+232, 0.00, 18.15, 4
+233, 0.00, 18.15, 1
+234, 0.00, 18.15, 1
+235, 0.00, 18.15, 1
+236, 0.00, 18.15, 13
+238, 0.00, 18.15, 1
+239, 0.00, 18.15, 1
+240, 0.00, 18.15, 1
+241, 0.00, 18.15, 26
+242, 0.00, 18.15, 1
+243, 0.00, 18.15, 13
+244, 0.00, 18.15, 4
+245, 0.00, 18.15, 32
+246, 0.00, 18.15, 1
+247, 0.00, 18.15, 17
+248, 0.00, 18.15, 2
+249, 0.00, 18.15, 29
+250, 0.00, 18.15, 6
+251, 0.00, 18.15, 2
+253, 0.00, 18.15, 1
+255, 0.00, 18.15, 15
+256, 0.00, 18.15, 47
+257, 0.00, 18.15, 1
+260, 0.00, 18.15, 1
+262, 0.00, 18.15, 1
+263, 0.00, 18.15, 1
+264, 0.00, 18.15, 1
+265, 0.00, 18.15, 1
+271, 0.00, 18.16, 279
+272, 0.00, 18.16, 1
+273, 0.00, 18.16, 19
+275, 0.00, 18.16, 1
+276, 0.00, 18.16, 1
+277, 0.00, 18.16, 40
+279, 0.00, 18.16, 2
+286, 0.00, 18.16, 10
+287, 0.00, 18.16, 6
+288, 0.00, 18.16, 35
+289, 0.00, 18.16, 5
+290, 0.00, 18.16, 1
+291, 0.00, 18.16, 1
+292, 0.00, 18.16, 1
+295, 0.00, 18.16, 1
+297, 0.00, 18.16, 1
+298, 0.00, 18.16, 34
+300, 0.00, 18.16, 1
+301, 0.00, 18.16, 2
+302, 0.00, 18.16, 2
+307, 0.00, 18.16, 3
+309, 0.00, 18.16, 1
+310, 0.00, 18.16, 3
+313, 0.00, 18.16, 2
+315, 0.00, 18.16, 1
+320, 0.00, 18.16, 46
+323, 0.00, 18.16, 33
+324, 0.00, 18.16, 30
+325, 0.00, 18.16, 1
+326, 0.00, 18.16, 2
+327, 0.00, 18.16, 1
+331, 0.00, 18.16, 1
+333, 0.00, 18.16, 5
+334, 0.00, 18.16, 7
+335, 0.00, 18.16, 14
+336, 0.00, 18.16, 3
+339, 0.00, 18.16, 1
+340, 0.00, 18.16, 5
+341, 0.00, 18.16, 5
+350, 0.00, 18.16, 1
+352, 0.00, 18.16, 35
+353, 0.00, 18.16, 1
+354, 0.00, 18.16, 1
+355, 0.00, 18.16, 1
+359, 0.00, 18.16, 1
+360, 0.00, 18.16, 5
+361, 0.00, 18.16, 4
+367, 0.00, 18.16, 1
+368, 0.00, 18.16, 5
+369, 0.00, 18.16, 4
+379, 0.00, 18.16, 13
+381, 0.00, 18.16, 1
+383, 0.00, 18.16, 41
+384, 0.00, 18.16, 58
+393, 0.00, 18.16, 1
+396, 0.00, 18.16, 1
+399, 0.00, 18.16, 1
+405, 0.00, 18.16, 1
+412, 0.00, 18.16, 1
+415, 0.00, 18.16, 1
+427, 0.00, 18.16, 1
+439, 0.00, 18.16, 1
+447, 0.00, 18.16, 2
+449, 0.00, 18.16, 4
+451, 0.00, 18.16, 19
+455, 0.00, 18.16, 1
+459, 0.00, 18.17, 1
+462, 0.00, 18.17, 1
+467, 0.00, 18.17, 14
+468, 0.00, 18.17, 18
+469, 0.00, 18.17, 4
+470, 0.00, 18.17, 4
+471, 0.00, 18.17, 22
+477, 0.00, 18.17, 2
+479, 0.00, 18.17, 1
+480, 0.00, 18.17, 5
+481, 0.00, 18.17, 4
+483, 0.00, 18.17, 1
+485, 0.00, 18.17, 5
+486, 0.00, 18.17, 11
+487, 0.00, 18.17, 7
+488, 0.00, 18.17, 5
+489, 0.00, 18.17, 6
+490, 0.00, 18.17, 4
+491, 0.00, 18.17, 13
+499, 0.00, 18.17, 15
+500, 0.00, 18.17, 18
+501, 0.00, 18.17, 4
+502, 0.00, 18.17, 4
+503, 0.00, 18.17, 22
+505, 0.00, 18.17, 1
+511, 0.00, 18.17, 1
+512, 0.00, 18.17, 1
+516, 0.00, 18.17, 1
+520, 0.00, 18.17, 1
+528, 0.00, 18.17, 1
+531, 0.00, 18.17, 7
+532, 0.00, 18.17, 1
+533, 0.00, 18.17, 5
+534, 0.00, 18.17, 11
+543, 0.00, 18.17, 141
+548, 0.00, 18.17, 1
+554, 0.00, 18.17, 12
+555, 0.00, 18.17, 1
+556, 0.00, 18.17, 1
+640, 0.00, 18.17, 26
+648, 0.00, 18.17, 1
+652, 0.00, 18.17, 1
+670, 0.00, 18.17, 1
+673, 0.00, 18.17, 1
+697, 0.00, 18.17, 18
+698, 0.00, 18.17, 18
+699, 0.00, 18.17, 4
+700, 0.00, 18.17, 4
+701, 0.00, 18.17, 27
+729, 0.00, 18.17, 2
+736, 0.00, 18.17, 1
+741, 0.00, 18.17, 1
+742, 0.00, 18.17, 1
+756, 0.00, 18.17, 11
+758, 0.00, 18.17, 7
+760, 0.00, 18.17, 3
+761, 0.00, 18.18, 72
+763, 0.00, 18.18, 1
+764, 0.00, 18.18, 16
+765, 0.00, 18.18, 1
+766, 0.00, 18.18, 4
+767, 0.00, 18.18, 10
+768, 0.00, 18.18, 39
+770, 0.00, 18.18, 1
+819, 0.00, 18.18, 1
+820, 0.00, 18.18, 1
+821, 0.00, 18.18, 1
+822, 0.00, 18.18, 1
+823, 0.00, 18.18, 1
+824, 0.00, 18.18, 1
+825, 0.00, 18.18, 1
+826, 0.00, 18.18, 2
+827, 0.00, 18.18, 6
+828, 0.00, 18.18, 5
+829, 0.00, 18.18, 1
+830, 0.00, 18.18, 1
+831, 0.00, 18.18, 1
+832, 0.00, 18.18, 1
+833, 0.00, 18.18, 1
+834, 0.00, 18.18, 1
+835, 0.00, 18.18, 1
+836, 0.00, 18.18, 1
+837, 0.00, 18.18, 1
+838, 0.00, 18.18, 1
+839, 0.00, 18.18, 1
+840, 0.00, 18.18, 1
+841, 0.00, 18.18, 1
+842, 0.00, 18.18, 1
+843, 0.00, 18.18, 1
+844, 0.00, 18.18, 1
+845, 0.00, 18.18, 1
+846, 0.00, 18.18, 1
+847, 0.00, 18.18, 1
+848, 0.00, 18.18, 1
+849, 0.00, 18.18, 1
+850, 0.00, 18.18, 1
+851, 0.00, 18.18, 1
+852, 0.00, 18.18, 1
+853, 0.00, 18.18, 1
+854, 0.00, 18.18, 1
+855, 0.00, 18.18, 1
+856, 0.00, 18.18, 1
+857, 0.00, 18.18, 1
+858, 0.00, 18.18, 1
+859, 0.00, 18.18, 1
+860, 0.00, 18.18, 1
+861, 0.00, 18.18, 1
+862, 0.00, 18.18, 1
+863, 0.00, 18.18, 1
+864, 0.00, 18.18, 1
+865, 0.00, 18.18, 1
+866, 0.00, 18.18, 1
+867, 0.00, 18.18, 1
+868, 0.00, 18.18, 1
+869, 0.00, 18.18, 1
+870, 0.00, 18.18, 1
+871, 0.00, 18.18, 1
+872, 0.00, 18.18, 1
+873, 0.00, 18.18, 1
+874, 0.00, 18.18, 1
+875, 0.00, 18.18, 1
+876, 0.00, 18.18, 1
+877, 0.00, 18.18, 1
+878, 0.00, 18.18, 1
+879, 0.00, 18.18, 1
+880, 0.00, 18.18, 1
+881, 0.00, 18.18, 1
+882, 0.00, 18.18, 1
+883, 0.00, 18.18, 2
+884, 0.00, 18.18, 6
+885, 0.00, 18.18, 5
+886, 0.00, 18.18, 1
+887, 0.00, 18.18, 1
+888, 0.00, 18.18, 1
+889, 0.00, 18.18, 1
+890, 0.00, 18.18, 1
+891, 0.00, 18.18, 1
+892, 0.00, 18.18, 1
+893, 0.00, 18.18, 1
+894, 0.00, 18.18, 1
+895, 0.00, 18.18, 2
+896, 0.00, 18.18, 1
+897, 0.00, 18.18, 1
+898, 0.00, 18.18, 1
+899, 0.00, 18.18, 1
+900, 0.00, 18.18, 1
+901, 0.00, 18.18, 1
+902, 0.00, 18.18, 1
+903, 0.00, 18.18, 1
+904, 0.00, 18.18, 1
+905, 0.00, 18.18, 1
+906, 0.00, 18.18, 1
+907, 0.00, 18.18, 1
+908, 0.00, 18.18, 1
+909, 0.00, 18.18, 1
+910, 0.00, 18.18, 1
+971, 0.00, 18.18, 1
+972, 0.00, 18.18, 5
+973, 0.00, 18.18, 4
+978, 0.00, 18.18, 1
+997, 0.00, 18.18, 13
+999, 0.00, 18.18, 39
+1001, 0.00, 18.18, 15
+1002, 0.00, 18.18, 29
+1006, 0.00, 18.18, 1
+1024, 0.00, 18.18, 14
+1027, 0.00, 18.18, 1
+1030, 0.00, 18.18, 1
+1040, 0.00, 18.18, 23
+1042, 0.00, 18.18, 8
+1044, 0.00, 18.18, 79
+1055, 0.00, 18.18, 1
+1057, 0.00, 18.18, 2
+1061, 0.00, 18.18, 1
+1072, 0.00, 18.18, 26
+1074, 0.00, 18.18, 46
+1076, 0.00, 18.18, 34
+1077, 0.00, 18.18, 14
+1078, 0.00, 18.19, 102
+1080, 0.00, 18.19, 12
+1082, 0.00, 18.19, 12
+1084, 0.00, 18.19, 3
+1085, 0.00, 18.19, 3
+1086, 0.00, 18.19, 84
+1087, 0.00, 18.19, 67
+1089, 0.00, 18.19, 1
+1109, 0.00, 18.19, 1
+1124, 0.00, 18.19, 28
+1126, 0.00, 18.19, 65
+1128, 0.00, 18.19, 17
+1129, 0.00, 18.19, 8
+1130, 0.00, 18.19, 9
+1137, 0.00, 18.19, 1
+1138, 0.00, 18.19, 1
+1159, 0.00, 18.19, 1
+1221, 0.00, 18.19, 25
+1222, 0.00, 18.19, 18
+1223, 0.00, 18.19, 3
+1224, 0.00, 18.19, 2
+1225, 0.00, 18.19, 7
+1226, 0.00, 18.19, 4
+1227, 0.00, 18.19, 17
+1228, 0.00, 18.19, 3
+1229, 0.00, 18.19, 27
+1239, 0.00, 18.19, 1
+1246, 0.00, 18.19, 14
+1247, 0.00, 18.20, 31
+1248, 0.00, 18.20, 12
+1249, 0.00, 18.20, 10
+1250, 0.00, 18.20, 3
+1251, 0.00, 18.20, 83
+1252, 0.00, 18.20, 85
+1255, 0.00, 18.20, 2
+1256, 0.00, 18.20, 1
+1266, 0.00, 18.20, 17
+1268, 0.00, 18.20, 65
+1270, 0.00, 18.20, 17
+1271, 0.00, 18.20, 8
+1272, 0.00, 18.20, 15
+1278, 0.00, 18.20, 1
+1279, 0.00, 18.20, 1
+1280, 0.00, 18.20, 13
+1284, 0.00, 18.20, 1
+1292, 0.00, 18.20, 17
+1294, 0.00, 18.20, 23
+1296, 0.00, 18.20, 17
+1297, 0.00, 18.20, 7
+1298, 0.00, 18.20, 53
+1306, 0.00, 18.20, 1
+1327, 0.00, 18.20, 1
+1336, 0.00, 18.20, 2
+1360, 0.00, 18.20, 1
+1362, 0.00, 18.20, 1
+1365, 0.00, 18.20, 1
+1417, 0.00, 18.20, 14
+1419, 0.00, 18.20, 15
+1421, 0.00, 18.20, 17
+1422, 0.00, 18.20, 7
+1423, 0.00, 18.20, 8
+1424, 0.00, 18.20, 7
+1425, 0.00, 18.20, 7
+1426, 0.00, 18.20, 7
+1427, 0.00, 18.20, 8
+1428, 0.00, 18.20, 7
+1429, 0.00, 18.21, 68
+1445, 0.00, 18.21, 1
+1450, 0.00, 18.21, 1
+1454, 0.00, 18.21, 1
+1469, 0.00, 18.21, 31
+1471, 0.00, 18.21, 65
+1473, 0.00, 18.21, 17
+1474, 0.00, 18.21, 8
+1475, 0.00, 18.21, 14
+1479, 0.00, 18.21, 1
+1482, 0.00, 18.21, 1
+1522, 0.00, 18.21, 1
+1535, 0.00, 18.21, 3
+1536, 0.00, 18.21, 10
+1588, 0.00, 18.21, 1
+1714, 0.00, 18.21, 1
+1924, 0.00, 18.21, 1
+2048, 0.00, 18.21, 1
+2175, 0.00, 18.21, 41
+2184, 0.00, 18.21, 1
+2187, 0.00, 18.21, 1
+2192, 0.00, 18.21, 1
+2196, 0.00, 18.21, 16
+2198, 0.00, 18.21, 54
+2200, 0.00, 18.21, 25
+2201, 0.00, 18.21, 39
+2202, 0.00, 18.21, 45
+2203, 0.00, 18.21, 11
+2204, 0.00, 18.22, 130
+2205, 0.00, 18.22, 32
+2206, 0.00, 18.22, 106
+2207, 0.00, 18.22, 73
+2208, 0.00, 18.22, 55
+2209, 0.00, 18.22, 78
+2210, 0.00, 18.22, 1
+2212, 0.00, 18.22, 1
+2214, 0.00, 18.22, 23
+2215, 0.00, 18.22, 1
+2216, 0.00, 18.22, 21
+2218, 0.00, 18.22, 17
+2219, 0.00, 18.22, 7
+2220, 0.00, 18.22, 24
+2222, 0.00, 18.22, 65
+2224, 0.00, 18.22, 17
+2225, 0.00, 18.22, 8
+2226, 0.00, 18.23, 57
+2238, 0.00, 18.23, 1
+2339, 0.00, 18.23, 5
+2340, 0.00, 18.23, 9
+2341, 0.00, 18.23, 19
+2343, 0.00, 18.23, 65
+2345, 0.00, 18.23, 33
+2347, 0.00, 18.23, 65
+2349, 0.00, 18.23, 20
+2508, 0.00, 18.23, 2
+2557, 0.00, 18.23, 1
+2560, 0.00, 18.23, 4
+2585, 0.00, 18.23, 1
+2704, 0.00, 18.23, 1
+2708, 0.00, 18.23, 31
+2710, 0.00, 18.23, 66
+2712, 0.00, 18.23, 17
+2713, 0.00, 18.23, 8
+2714, 0.00, 18.23, 20
+2716, 0.00, 18.23, 65
+2718, 0.00, 18.23, 17
+2719, 0.00, 18.23, 8
+2720, 0.00, 18.23, 13
+2732, 0.00, 18.23, 1
+2739, 0.00, 18.23, 1
+2742, 0.00, 18.23, 1
+2808, 0.00, 18.23, 1
+2952, 0.00, 18.23, 1
+3071, 0.00, 18.23, 2
+3309, 0.00, 18.23, 8
+3311, 0.00, 18.23, 2
+3313, 0.00, 18.23, 1
+3315, 0.00, 18.24, 115
+3317, 0.00, 18.24, 64
+3319, 0.00, 18.24, 41
+3321, 0.00, 18.24, 65
+3323, 0.00, 18.24, 33
+3376, 0.00, 18.24, 28
+3378, 0.00, 18.24, 65
+3380, 0.00, 18.24, 17
+3381, 0.00, 18.24, 8
+3382, 0.00, 18.24, 22
+3383, 0.00, 18.24, 1
+3384, 0.00, 18.24, 65
+3386, 0.00, 18.24, 17
+3387, 0.00, 18.24, 8
+3388, 0.00, 18.24, 20
+3390, 0.00, 18.25, 65
+3392, 0.00, 18.25, 17
+3393, 0.00, 18.25, 8
+3394, 0.00, 18.25, 13
+3411, 0.00, 18.25, 1
+3607, 0.00, 18.25, 33
+3609, 0.00, 18.25, 65
+3611, 0.00, 18.25, 17
+3612, 0.00, 18.25, 8
+3613, 0.00, 18.25, 21
+3614, 0.00, 18.25, 1
+3615, 0.00, 18.25, 65
+3617, 0.00, 18.25, 17
+3618, 0.00, 18.25, 8
+3619, 0.00, 18.25, 21
+3621, 0.00, 18.25, 65
+3623, 0.00, 18.25, 17
+3624, 0.00, 18.25, 8
+3625, 0.00, 18.25, 16
+3641, 0.00, 18.25, 1
+3642, 0.00, 18.25, 1
+3669, 0.00, 18.25, 1
+4273, 0.00, 18.25, 1
+4351, 0.00, 18.25, 14
+4405, 0.00, 18.25, 1
+4502, 0.00, 18.25, 32
+4504, 0.00, 18.26, 65
+4506, 0.00, 18.26, 17
+4507, 0.00, 18.26, 8
+4508, 0.00, 18.26, 21
+4510, 0.00, 18.26, 65
+4512, 0.00, 18.26, 17
+4513, 0.00, 18.26, 8
+4514, 0.00, 18.26, 24
+4516, 0.00, 18.26, 66
+4518, 0.00, 18.26, 17
+4519, 0.00, 18.26, 8
+4520, 0.00, 18.26, 21
+4522, 0.00, 18.26, 65
+4524, 0.00, 18.26, 17
+4525, 0.00, 18.26, 8
+4526, 0.00, 18.26, 14
+4548, 0.00, 18.26, 1
+5120, 0.00, 18.26, 1
+5742, 0.00, 18.26, 1
+6143, 0.00, 18.26, 1
+7595, 0.00, 18.26, 20
+7597, 0.00, 18.26, 14
+7599, 0.00, 18.26, 16
+7600, 0.00, 18.26, 7
+7601, 0.00, 18.26, 5
+7602, 0.00, 18.26, 7
+7603, 0.00, 18.26, 5
+7604, 0.00, 18.26, 7
+7605, 0.00, 18.26, 5
+7606, 0.00, 18.26, 7
+7607, 0.00, 18.26, 17
+7609, 0.00, 18.26, 14
+7611, 0.00, 18.26, 16
+7612, 0.00, 18.26, 7
+7613, 0.00, 18.26, 5
+7614, 0.00, 18.26, 7
+7615, 0.00, 18.26, 5
+7616, 0.00, 18.26, 7
+7617, 0.00, 18.27, 15
+7619, 0.00, 18.27, 14
+7621, 0.00, 18.27, 17
+7622, 0.00, 18.27, 7
+7623, 0.00, 18.27, 5
+7624, 0.00, 18.27, 7
+7625, 0.00, 18.27, 5
+7626, 0.00, 18.27, 7
+7627, 0.00, 18.27, 5
+7628, 0.00, 18.27, 7
+7629, 0.00, 18.27, 5
+7630, 0.00, 18.27, 7
+7631, 0.00, 18.27, 15
+7633, 0.00, 18.27, 14
+7635, 0.00, 18.27, 17
+7636, 0.00, 18.27, 7
+7637, 0.00, 18.27, 5
+7638, 0.00, 18.27, 7
+7639, 0.00, 18.27, 5
+7640, 0.00, 18.27, 7
+7641, 0.00, 18.27, 15
+7643, 0.00, 18.27, 14
+7645, 0.00, 18.27, 17
+7646, 0.00, 18.27, 7
+7647, 0.00, 18.27, 5
+7648, 0.00, 18.27, 7
+7649, 0.00, 18.27, 5
+7650, 0.00, 18.27, 7
+7651, 0.00, 18.27, 20
+7653, 0.00, 18.27, 65
+7655, 0.00, 18.27, 17
+7656, 0.00, 18.27, 8
+7657, 0.01, 18.28, 335
+7707, 0.00, 18.28, 1
+7735, 0.00, 18.28, 1
+7861, 0.00, 18.28, 12
+7863, 0.00, 18.28, 8
+7865, 0.00, 18.28, 20
+7867, 0.00, 18.28, 8
+7869, 0.00, 18.28, 10
+7870, 0.00, 18.28, 7
+7871, 0.00, 18.28, 27
+7873, 0.00, 18.28, 23
+7875, 0.00, 18.28, 17
+7876, 0.00, 18.28, 7
+7877, 0.00, 18.28, 5
+7878, 0.00, 18.28, 7
+7879, 0.00, 18.28, 5
+7880, 0.00, 18.28, 7
+7881, 0.00, 18.28, 17
+7883, 0.00, 18.28, 14
+7885, 0.00, 18.28, 16
+7886, 0.00, 18.28, 7
+7887, 0.00, 18.28, 16
+7889, 0.00, 18.28, 8
+7891, 0.00, 18.28, 10
+7892, 0.00, 18.28, 7
+7893, 0.00, 18.28, 17
+7895, 0.00, 18.28, 39
+7897, 0.00, 18.28, 17
+7898, 0.00, 18.28, 7
+7899, 0.00, 18.29, 160
+7901, 0.00, 18.29, 65
+7903, 0.00, 18.29, 17
+7904, 0.00, 18.29, 8
+7905, 0.00, 18.29, 230
+7918, 0.00, 18.29, 1
+7946, 0.00, 18.29, 1
+8703, 0.00, 18.29, 5
+9221, 0.00, 18.29, 45
+9223, 0.00, 18.29, 65
+9225, 0.00, 18.29, 17
+9226, 0.00, 18.29, 8
+9227, 0.00, 18.30, 29
+9229, 0.00, 18.30, 65
+9231, 0.00, 18.30, 17
+9232, 0.00, 18.30, 8
+9233, 0.00, 18.30, 20
+9235, 0.00, 18.30, 65
+9237, 0.00, 18.30, 17
+9238, 0.00, 18.30, 8
+9239, 0.00, 18.30, 20
+9241, 0.00, 18.30, 65
+9243, 0.00, 18.30, 17
+9244, 0.00, 18.30, 8
+9245, 0.00, 18.30, 20
+9247, 0.00, 18.30, 65
+9249, 0.00, 18.30, 17
+9250, 0.00, 18.30, 8
+9251, 0.00, 18.30, 20
+9253, 0.00, 18.30, 65
+9255, 0.00, 18.30, 17
+9256, 0.00, 18.30, 8
+9257, 0.00, 18.30, 22
+9259, 0.00, 18.31, 65
+9261, 0.00, 18.31, 17
+9262, 0.00, 18.31, 8
+9263, 0.00, 18.31, 22
+9265, 0.00, 18.31, 65
+9267, 0.00, 18.31, 17
+9268, 0.00, 18.31, 8
+9269, 0.00, 18.31, 37
+9283, 0.00, 18.31, 1
+9311, 0.00, 18.31, 1
+9897, 0.00, 18.31, 1
+10393, 0.00, 18.31, 1
+11434, 0.00, 18.31, 1
+12184, 0.00, 18.31, 3
+14116, 0.00, 18.31, 2
+17407, 0.00, 18.31, 3
+58692, 0.00, 18.31, 1
+Scalar Alloc
+10253.00K, 267.00M
+0, 2.95, 2.95, 302953
+1, 36.52, 39.47, 0x00392293
+2, 16.19, 55.67, 0x001955ac
+3, 23.69, 79.35, 0x00250f4d
+4, 7.13, 86.49, 731340
+5, 10.67, 97.16, 0x0010b1f0
+6, 1.06, 98.22, 109046
+7, 1.15, 99.37, 118032
+8, 0.99, 100.36, 101675
+9, 0.58, 100.95, 59981
+10, 0.13, 101.08, 13298
+11, 0.02, 101.09, 1640
+12, 0.68, 101.77, 69299
+13, 0.01, 101.78, 1164
+14, 0.00, 101.78, 386
+15, 0.00, 101.79, 200
+16, 0.09, 101.87, 8736
+17, 0.00, 101.87, 188
+19, 0.00, 101.87, 133
+21, 0.00, 101.87, 100
+22, 0.00, 101.88, 68
+24, 0.10, 101.98, 10638
+29, 0.00, 101.98, 18
+32, 0.00, 101.98, 435

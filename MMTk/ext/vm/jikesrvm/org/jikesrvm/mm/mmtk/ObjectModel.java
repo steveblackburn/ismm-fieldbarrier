@@ -329,7 +329,13 @@ import org.vmmagic.unboxed.Word;
     org.jikesrvm.objectmodel.ObjectModel.logFieldAccessStats(object, slot, logRequired);
   }
 
-  public void resetFieldAccessStats() {
+  @NoInline
+  public void logAllocation(ObjectReference object) {
+    org.jikesrvm.objectmodel.ObjectModel.logAllocation(object);
+  }
+
+
+    public void resetFieldAccessStats() {
     org.jikesrvm.objectmodel.ObjectModel.resetFieldAccessStats();
   }
 

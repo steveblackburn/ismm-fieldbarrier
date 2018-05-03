@@ -104,6 +104,7 @@ public class RCBaseMutator extends StopTheWorldMutator {
   @Override
   @Inline
   public void postAlloc(ObjectReference ref, ObjectReference typeRef, int bytes, int allocator) {
+    VM.objectModel.logAllocation(ref);
     if (VM.VERIFY_ASSERTIONS) VM.assertions._assert(!(BUILD_FOR_GENRC && USE_FIELD_BARRIER)); // FIXME: how does the field barrier affect the following cases?
     switch (allocator) {
     case RCBase.ALLOC_DEFAULT:

@@ -235,6 +235,39 @@ public class ObjectModel {
   static long[][] fastpathfieldaccess = new long[FIELD_ACCESS_STATS_TABLE][REF_DEPTH+1];
   static long[][] slowpathobjectaccess = new long[FIELD_ACCESS_STATS_TABLE][REF_DEPTH+1];
   static long[][] slowpathfieldaccess = new long[FIELD_ACCESS_STATS_TABLE][REF_DEPTH+1];
+  static long totalArraysAllocated = 0;
+  static long totalArrayBytesAllocated = 0;
+  static long totalObjectsAllocated = 0;
+  static long totalObjectsBytesAllocated = 0;
+  static long[] referenceArraysAllocated = new long[FIELD_ACCESS_STATS_TABLE];
+  static long[] referenceScalarsAllocated = new long[FIELD_ACCESS_STATS_TABLE];
+
+
+  public static void logAllocation(ObjectReference object) {
+    RVMType type = getTIB(object).getType();
+    if (type.isArrayType()) {
+      int numElements = Magic.getArrayLength(object);
+      totalArraysAllocated++;
+      totalArrayBytesAllocated += ((RVMArray) type).getInstanceSizeNoPad(numElements);
+      if (((RVMArray) type).getElementType().isReferenceType()) {
+        if (numElements < referenceArraysAllocated.length)
+          referenceArraysAllocated[numElements]++;
+        else
+          referenceArraysAllocated[referenceArraysAllocated.length - 1]++;
+      }
+    } else {
+      int bytes = ((RVMClass) type).getInstanceSize();
+      Address markState = object.toAddress().plus(((RVMClass) type).getFieldMarkStateBaseOffset());
+      int pad = getObjectEndAddress(object, type.asClass()).diff(markState).toInt();
+      if (VM.VerifyAssertions) VM._assert(pad >= 0 && pad < bytes);
+      bytes -= pad;
+      totalObjectsAllocated++;
+      totalObjectsBytesAllocated += bytes;
+      if (((RVMClass) type).isReferenceType()) {
+        referenceScalarsAllocated[((RVMClass) type).getReferenceCount()]++;
+      }
+    }
+  }
 
   public static void logFieldAccessStats(ObjectReference object, Address slot, boolean logRequired) {
     RVMType type = getTIB(object).getType();
@@ -250,7 +283,7 @@ public class ObjectModel {
       int offset = slot.diff(object.toAddress()).toInt();
       index = ((RVMClass) type).getReferenceIndex(offset);
       fieldUnlogged = internalIsFieldUnlogged(object,(offset - FIELD_ZERO_OFFSET.toInt())>>2);
-      row = type.referencePattern & (FIELD_ACCESS_STATS_TABLE - 1);
+      row = ((RVMClass) type).getReferenceCount(); // type.referencePattern & (FIELD_ACCESS_STATS_TABLE - 1);
     }
     if (index > REF_DEPTH) index = REF_DEPTH;
 
@@ -284,12 +317,31 @@ public class ObjectModel {
     VM.sysWriteln();
     VM.sysWriteln("Field Slow");
     dumpFieldAccessStats(slowpathfieldaccess);
+    VM.sysWriteln("Array Alloc");
+    dumpAllocStats(referenceArraysAllocated, totalArraysAllocated, totalArrayBytesAllocated);
+    VM.sysWriteln("Scalar Alloc");
+    dumpAllocStats(referenceScalarsAllocated, totalObjectsAllocated, totalObjectsBytesAllocated);
   }
 
   private static long[] total = new long[REF_DEPTH+1];
   private static long[] remainder = new long[REF_DEPTH+1];
   private static final int ROW_DUMP_SCOPE = FIELD_ACCESS_STATS_TABLE - 1;
   private static final int ROW_DUMP_BITS = LOG_FIELD_ACCESS_STATS_TABLE;
+
+  private static void dumpAllocStats(long[] table, long allocs, long bytes) {
+    VM.sysWrite(allocs/1000, "K, "); VM.sysWriteln(bytes/1000000, "M");
+    int total = 0;
+    for (int i = 0; i < table.length; i++) {
+      if (table[i] != 0) {
+        total += table[i];
+        VM.sysWrite(i, ", ");
+        VM.sysWrite((double)(100*(((double)table[i])/(double)allocs)), ", ");
+        VM.sysWrite((double)(100*(((double)total)/(double)allocs)), ", ");
+        VM.sysWriteln((int) table[i]);
+      }
+    }
+  }
+
 
   private static void dumpFieldAccessStats(long[][] table) {
     for (int j = 0; j < REF_DEPTH+1; j++) {
@@ -330,10 +382,10 @@ public class ObjectModel {
       rowtotal += row[j];
 
     if (rowtotal > 0) {
-      for (int i = 0; i < ROW_DUMP_BITS; i++) {
-        VM.sysWrite(((index & (1 << i)) == 0) ? '0' : '1');
-      }
-      VM.sysWrite(", ");
+   //   for (int i = 0; i < ROW_DUMP_BITS; i++) {
+   //     VM.sysWrite(((index & (1 << i)) == 0) ? '0' : '1');
+   //   }
+      VM.sysWrite(index, ", ");
       dumpRowVals(row, total);
     }
   }
@@ -351,7 +403,12 @@ public class ObjectModel {
     }
     VM.sysWrite(" | ");
     for (int i = 0; i <= REF_DEPTH; i++) {
-      VM.sysWrite((int) row[i], ", ");
+      if (row[i] < 100000)
+        VM.sysWrite((int) row[i], ", ");
+      else if (row[i] < 100000000)
+        VM.sysWrite((int) (row[i]/1000), "K, ");
+      else
+        VM.sysWrite((int) (row[i]/1000000), "M, ");
     }
     VM.sysWriteln();
   }
