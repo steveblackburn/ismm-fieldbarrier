@@ -33,10 +33,9 @@ public class Config {
 
   public void printConfig() {
     Log.writeln("================ MMTk Configuration ================");
-    Log.writeln("plan = ");
-    Log.writeln(ACTIVE_PLAN);
-    Log.writeln("HEADER_MARK_BITS = ", HEADER_MARK_BITS);
-    Log.writeln("ZERO_PAGES_ON_RELEASE = ", ZERO_PAGES_ON_RELEASE);
+    Log.write("plan = ");  Log.writeln(ACTIVE_PLAN);
+    Log.write("HEADER_MARK_BITS = "); Log.writeln(HEADER_MARK_BITS);
+    Log.write("ZERO_PAGES_ON_RELEASE = "); Log.writeln(ZERO_PAGES_ON_RELEASE);
     Log.writeln("====================================================");
   }
 

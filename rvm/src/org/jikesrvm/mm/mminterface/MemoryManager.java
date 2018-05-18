@@ -503,9 +503,6 @@ public final class MemoryManager {
     Address region = allocateSpace(mutator, size+prefix, align, offset, allocator, site);
     Object result = ObjectModel.initializeScalar(region.plus(prefix), tib, size);
     mutator.postAlloc(ObjectReference.fromObject(result), ObjectReference.fromObject(tib), size, allocator);
-    VM.sysWrite("S: ", region);
-    VM.sysWrite(" e: ",region.plus(size+prefix));
-    VM.sysWriteln(" o: ",ObjectReference.fromObject(result));
     return result;
   }
 

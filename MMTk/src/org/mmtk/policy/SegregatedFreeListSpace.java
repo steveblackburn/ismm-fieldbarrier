@@ -14,6 +14,7 @@ package org.mmtk.policy;
 
 import static org.mmtk.utility.Constants.*;
 
+import org.mmtk.utility.Log;
 import org.mmtk.utility.alloc.BlockAllocator;
 import org.mmtk.utility.alloc.EmbeddedMetaData;
 import org.mmtk.utility.heap.FreeListPageResource;
@@ -74,6 +75,9 @@ public abstract class SegregatedFreeListSpace extends Space {
   private static final int METADATA_OVERHEAD = META_DATA_PAGES_PER_REGION_WITH_BITMAP; // worst case scenario
   public static final float WORST_CASE_FRAGMENTATION = 1 + ((NEW_SIZECLASS_OVERHEAD + METADATA_OVERHEAD) / (float) EmbeddedMetaData.BYTES_IN_REGION);
 
+  // maximum difference between start of cell and object reference, excluding padding due to field barrier
+  private static final int BASE_HEADER_FLEX = 28;  // empirically determined (presumably due to TIB alignment)
+
   /****************************************************************************
    *
    * Instance variables
@@ -89,6 +93,7 @@ public abstract class SegregatedFreeListSpace extends Space {
 
   private final int[] cellSize = new int[sizeClassCount()];
   private final byte[] blockSizeClass = new byte[sizeClassCount()];
+  private final int[] headerFlex = new int[sizeClassCount()];
   private final int[] blockHeaderSize = new int[sizeClassCount()];
 
   /**
@@ -254,11 +259,31 @@ public abstract class SegregatedFreeListSpace extends Space {
    */
 
   /**
+   * Determine the maximum number of additional header bytes for
+   * objects of this size, given field remembering barrier.   This
+   * then determines how much variability there may be in the location
+   * of the object's mark bit (it may be offset by this amount).
+   *
+   * @param cellSize  The size of the cell in bytes (indicating the upper bound on object size)
+   * @return The upper bound on the number of additional header bytes due to a field remembering barrier plus an additional word due to the p
+   */
+  private int headerFlexFromCellSize(int cellSize) {
+    int fieldflex = 0;
+    int maxpointers = (cellSize - 8) >> LOG_BYTES_IN_ADDRESS;  // FIXME 8 is default base header size
+    int bytes = (true) ? maxpointers : maxpointers >> LOG_BITS_IN_BYTE; // FIXME byte or bit map
+    fieldflex = ((bytes + (BYTES_IN_WORD - 1)) & (~(BYTES_IN_WORD - 1)));  // round up to word
+
+    int headerflex = BASE_HEADER_FLEX + fieldflex;
+    return headerflex > cellSize ? cellSize : headerflex;
+  }
+
+  /**
    * Initialize the size class data structures.
    */
   private void initSizeClasses() {
     for (int sc = 0; sc < sizeClassCount(); sc++) {
       cellSize[sc] = getBaseCellSize(sc);
+      headerFlex[sc] = headerFlexFromCellSize(cellSize[sc]);
       for (byte blk = 0; blk < BlockAllocator.BLOCK_SIZE_CLASSES; blk++) {
         int usableBytes = BlockAllocator.blockSize(blk);
         int cells = usableBytes / cellSize[sc];
@@ -628,9 +653,24 @@ public abstract class SegregatedFreeListSpace extends Space {
   /**
    * In the cell containing this object live?
    *
-   * @param object The object
+   * @param cell The start address of the cell
    * @return {@code true} if the cell is live
    */
+  @Inline
+  protected boolean isCellLive(Address cell, int headerFlex, int bound, int prefix) {
+    //return true;
+    /* Must override if not using the side bitmap */
+
+    if (VM.VERIFY_ASSERTIONS) VM.assertions._assert(maintainSideBitmap());
+    for (int offset = 0; offset < headerFlex; offset += BYTES_IN_ADDRESS) {
+      if (VM.VERIFY_ASSERTIONS) VM.assertions._assert(offset < bound);
+      if (liveBitSet(cell.plus(offset))) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   @Inline
   protected boolean isCellLive(ObjectReference object) {
     /* Must override if not using the side bitmap */
@@ -655,10 +695,14 @@ public abstract class SegregatedFreeListSpace extends Space {
     Address end = block.plus(blockSize);
     Extent cellExtent = Extent.fromIntSignExtend(cellSize[sizeClass]);
     while (cursor.LT(end)) {
-      ObjectReference current = VM.objectModel.getObjectFromStartAddress(cursor);
       boolean free = true;
-      if (!current.isNull()) {
-        free = !isCellLive(current);
+      if (maintainSideBitmap()) {
+        free = !isCellLive(cursor, headerFlex[sizeClass], cellSize[sizeClass], VM.objectModel.getObjectFromStartAddress(cursor).toAddress().diff(cursor).toInt());
+      } else {
+        ObjectReference current = VM.objectModel.getObjectFromStartAddress(cursor);
+        if (!current.isNull()) {
+          free = !isCellLive(current);
+        }
       }
       if (free) {
         if (firstFree.isZero()) {
@@ -792,8 +836,9 @@ public abstract class SegregatedFreeListSpace extends Space {
     Extent cellExtent = Extent.fromIntSignExtend(cellSize[sizeClass]);
     boolean containsLive = false;
     while (cursor.LT(end)) {
-      ObjectReference current = VM.objectModel.getObjectFromStartAddress(cursor);
+      VM.assertions._assert(false);   // FIXME this won't work with field barrier
       boolean free = true;
+      ObjectReference current = VM.objectModel.getObjectFromStartAddress(cursor);
       if (!current.isNull()) {
         free = !liveBitSet(current);
         if (!free) {
