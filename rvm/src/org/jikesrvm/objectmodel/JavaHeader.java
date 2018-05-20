@@ -28,6 +28,7 @@ import org.jikesrvm.scheduler.Lock;
 import org.jikesrvm.scheduler.RVMThread;
 import org.jikesrvm.scheduler.ThinLock;
 import org.mmtk.policy.Space;
+import org.mmtk.utility.Log;
 import org.vmmagic.pragma.Inline;
 import org.vmmagic.pragma.Interruptible;
 import org.vmmagic.pragma.NoInline;
@@ -833,6 +834,7 @@ public class JavaHeader {
    * @return whether the write occurred
    */
   public static boolean attemptAvailableBits(Object o, Word oldVal, Word newVal) {
+    // Log.writeln("aa: ",ObjectReference.fromObject(o));
     return Magic.attemptWord(o, STATUS_OFFSET, oldVal, newVal);
   }
 

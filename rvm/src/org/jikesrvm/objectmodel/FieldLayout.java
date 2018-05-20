@@ -157,7 +157,7 @@ public abstract class FieldLayout {
       int numReferences = (size + 3) >> 2; // conservative estimate
       int fieldMarkBytes = ObjectModel.fieldMarkBytes(numReferences);
       klass.setAlignedFieldMarkBytes(fieldMarkBytes);
-      if (!USE_PREFIX_FIELD_MARKS_FOR_SCALARS) {  // FIXME
+      if (!USE_PREFIX_FIELD_MARKS_FOR_SCALARS) {
         klass.setInstanceMarkStateOffsetInternal(size - (OBJECT_REF_OFFSET - SCALAR_HEADER_SIZE));
         size += fieldMarkBytes;
       }

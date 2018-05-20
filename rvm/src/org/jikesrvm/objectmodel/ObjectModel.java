@@ -32,6 +32,7 @@ import org.jikesrvm.runtime.Magic;
 import org.jikesrvm.runtime.Memory;
 import org.jikesrvm.scheduler.Lock;
 import org.jikesrvm.scheduler.RVMThread;
+import org.mmtk.policy.Space;
 import org.mmtk.utility.Log;
 import org.vmmagic.pragma.Entrypoint;
 import org.vmmagic.pragma.Inline;
@@ -294,6 +295,8 @@ public class ObjectModel {
         if (USE_PREFIX_FIELD_MARKS_FOR_SCALARS) {
           end = obj.toAddress().plus(SCALAR_FIELD_MARK_BASE_OFFSET.plus(1));
           cursor = end.minus(((RVMClass) type).getAlignedFieldMarkBytes());
+        //  Log.write("M: ", obj); Log.write(" "); Log.write(Space.getSpaceForObject(obj).getName()); Log.write(" ", cursor); Log.writeln("-", end);
+         // return;
         } else {
           end = getObjectEndAddress(obj.toObject(), type.asClass());
           cursor = Magic.objectAsAddress(obj).plus(getFieldMarkStateBaseOffset(obj));
@@ -304,10 +307,11 @@ public class ObjectModel {
         cursor = Magic.objectAsAddress(obj).plus(numElements << LOG_BYTES_IN_ADDRESS);
         end = cursor.plus(numElements);
       }
-      while (cursor.LT(end)) {
-        cursor.store((byte) 1);
-        cursor = cursor.plus(1);
-      }
+        while (cursor.LT(end)) {
+          //  if (cursor.GT(Address.fromIntSignExtend(0x680300a4)))
+          cursor.store((byte) 1); // <---
+          cursor = cursor.plus(1);
+        }
     }
   }
 
@@ -371,7 +375,7 @@ public class ObjectModel {
   @Inline
   public static void markFieldAsUnlogged(ObjectReference object, Address slot) {
     // FIXME: it's not clear that this is ever really needed
-    //if (VM.VerifyAssertions) VM._assert(VM.NOT_REACHED);
+    if (VM.VerifyAssertions) VM._assert(VM.NOT_REACHED);
     RVMType type = ObjectModel.getTIB(object).getType();
     if (VM.VerifyAssertions) VM._assert(!isFieldBarrierExcludedType(type));
     int markOffset;
@@ -453,6 +457,7 @@ public class ObjectModel {
       VM._assert(ObjectModel.getTIB(object).getType().isClassType());
       VM._assert(!isFieldBarrierExcludedType(object));
     }
+ //   VM._assert(false);
     if (USE_PREFIX_FIELD_MARKS_FOR_SCALARS) {
       Address mark = object.toAddress().plus(metaData.toInt());
       mark.store((byte) 0);

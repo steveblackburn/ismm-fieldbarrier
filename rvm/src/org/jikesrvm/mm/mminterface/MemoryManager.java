@@ -52,6 +52,7 @@ import org.jikesrvm.runtime.Magic;
 import org.mmtk.plan.CollectorContext;
 import org.mmtk.plan.Plan;
 import org.mmtk.policy.Space;
+import org.mmtk.utility.Log;
 import org.mmtk.utility.Memory;
 import org.mmtk.utility.alloc.Allocator;
 import org.mmtk.utility.gcspy.GCspy;
@@ -497,12 +498,13 @@ public final class MemoryManager {
    */
   @Inline
   public static Object allocateScalar(int prefix, int size, TIB tib, int allocator, int align, int offset, int site) {
-    prefix = true || USE_PREFIX_FIELD_MARKS_FOR_SCALARS ? prefix : 0;
+    prefix = USE_PREFIX_FIELD_MARKS_FOR_SCALARS ? prefix : 0;
     Selected.Mutator mutator = Selected.Mutator.get();
     allocator = mutator.checkAllocator(org.jikesrvm.runtime.Memory.alignUp(size+prefix, MIN_ALIGNMENT), align, allocator);
     Address region = allocateSpace(mutator, size+prefix, align, offset, allocator, site);
     Object result = ObjectModel.initializeScalar(region.plus(prefix), tib, size);
     mutator.postAlloc(ObjectReference.fromObject(result), ObjectReference.fromObject(tib), size, allocator);
+ //   Log.write("AS: ", ObjectReference.fromObject(result)); Log.write(" ", region); Log.writeln("-", region.plus(size+prefix));
     return result;
   }
 
@@ -573,9 +575,7 @@ public final class MemoryManager {
     Address region = allocateSpace(mutator, size, align, offset, allocator, site);
     Object result = ObjectModel.initializeArray(region, tib, numElements, size);
     mutator.postAlloc(ObjectReference.fromObject(result), ObjectReference.fromObject(tib), size, allocator);
-    VM.sysWrite("S: ", region);
-    VM.sysWrite(" e: ",region.plus(size));
-    VM.sysWriteln(" o: ",ObjectReference.fromObject(result));
+//     Log.write("AA: ", ObjectReference.fromObject(result)); Log.write(" ", region); Log.writeln("-", region.plus(size));
     return result;
   }
 
@@ -620,6 +620,7 @@ public final class MemoryManager {
   @Inline
   public static Address allocateSpace(CollectorContext context, int bytes, int align, int offset, int allocator,
                                       ObjectReference from) {
+
     /* MMTk requests must be in multiples of MIN_ALIGNMENT */
     bytes = org.jikesrvm.runtime.Memory.alignUp(bytes, MIN_ALIGNMENT);
 

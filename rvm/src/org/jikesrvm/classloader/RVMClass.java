@@ -31,6 +31,7 @@ import static org.jikesrvm.classloader.ClassLoaderConstants.CLASS_RESOLVED;
 import static org.jikesrvm.classloader.ClassLoaderConstants.CP_MEMBER;
 import static org.jikesrvm.classloader.ClassLoaderConstants.CP_UTF;
 import static org.jikesrvm.mm.mminterface.MemoryManagerConstants.USE_FIELD_BARRIER_FOR_PUTFIELD;
+import static org.jikesrvm.mm.mminterface.MemoryManagerConstants.USE_PREFIX_FIELD_MARKS_FOR_SCALARS;
 import static org.jikesrvm.objectmodel.ObjectModel.calculateMarkOffsetForField;
 import static org.jikesrvm.runtime.JavaSizeConstants.BYTES_IN_DOUBLE;
 import static org.jikesrvm.runtime.JavaSizeConstants.BYTES_IN_INT;
@@ -845,6 +846,7 @@ public final class RVMClass extends RVMType {
   @Uninterruptible
   public int getFieldMarkStateBaseOffset() {
     if (VM.VerifyAssertions) VM._assert(isResolved() && USE_FIELD_BARRIER_FOR_PUTFIELD);
+    if (VM.VerifyAssertions) VM._assert(!USE_PREFIX_FIELD_MARKS_FOR_SCALARS);
     return markStateOffset;
   }
 

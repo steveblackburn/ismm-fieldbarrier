@@ -93,6 +93,7 @@ public abstract class TraceLocal extends TransitiveClosure {
   @Override
   @Inline
   public final void processEdge(ObjectReference source, Address slot) {
+    Log.write("PE: ", source); Log.write(" "); Log.write(Space.getSpaceForObject(source).getName()); Log.writeln(" ", slot);
     ObjectReference object = VM.activePlan.global().loadObjectReference(slot);
     ObjectReference newObject = traceObject(object, false);
     if (overwriteReferenceDuringTrace()) {

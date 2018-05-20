@@ -314,5 +314,5 @@ import org.vmmagic.pragma.*;
 
   public boolean fieldBarrierUseByte() { return true; }
 
-  public boolean usePrefixFieldMarksForScalars() { return false; }
+  public boolean usePrefixFieldMarksForScalars() { return true; }
 }
