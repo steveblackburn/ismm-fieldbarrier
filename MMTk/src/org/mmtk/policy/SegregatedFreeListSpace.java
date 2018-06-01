@@ -875,7 +875,9 @@ public abstract class SegregatedFreeListSpace extends Space {
    */
   @Inline
   public static boolean testAndSetLiveBit(ObjectReference object) {
-    return updateLiveBit(VM.objectModel.objectStartRef(object), true, true);
+    Address addr = VM.objectModel.refToAddress(object); // VM.objectModel.objectStartRef(object)
+    Log.write("TS: ",object);  Log.writeln(" ",addr);
+    return updateLiveBit(addr, true, true);
   }
 
   /**
@@ -908,6 +910,7 @@ public abstract class SegregatedFreeListSpace extends Space {
    */
   @Inline
   public static boolean unsyncSetLiveBit(ObjectReference object) {
+    Log.writeln("US: ",object);
     return updateLiveBit(VM.objectModel.refToAddress(object), true, false);
   }
 
@@ -938,7 +941,12 @@ public abstract class SegregatedFreeListSpace extends Space {
 
   @Inline
   protected static boolean liveBitSet(ObjectReference object) {
-    return liveBitSet(VM.objectModel.refToAddress(object));
+    boolean rtn = liveBitSet(VM.objectModel.refToAddress(object));
+    if (!rtn) {
+      Log.write("LS: ", object);
+      Log.writeln(" ", VM.objectModel.refToAddress(object));
+    }
+    return rtn; /// <---- returning true here makes it work
   }
 
   @Inline
@@ -946,7 +954,11 @@ public abstract class SegregatedFreeListSpace extends Space {
     Address liveWord = getLiveWordAddress(address);
     Word mask = getMask(address, true);
     Word value = liveWord.loadWord();
-    return value.and(mask).EQ(mask);
+ /*   if (!value.and(mask).EQ(mask)) {
+      Log.write("No: ", address);
+      Log.writeln(" ", value);
+    }
+  */  return value.and(mask).EQ(mask);
   }
 
   /**
