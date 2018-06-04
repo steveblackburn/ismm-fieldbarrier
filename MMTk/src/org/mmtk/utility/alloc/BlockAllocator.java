@@ -122,6 +122,11 @@ public final class BlockAllocator {
   private static int pagesForSizeClass(int blockSizeClass) {
     return 1 << (LOG_MIN_BLOCK + blockSizeClass - LOG_BYTES_IN_PAGE);
   }
+  @Inline
+  private static int bytesForSizeClass(int blockSizeClass) {
+    return 1 << (LOG_MIN_BLOCK + blockSizeClass);
+  }
+
 
   /****************************************************************************
    *
@@ -171,7 +176,7 @@ public final class BlockAllocator {
   }
 
   /**
-   * Get the <i>address of the start of a block size class</i> a given page
+   * Get the <i>address of the start of a block size class</i> a given address
    * within the block.
    *
    * @param address The address of interest
@@ -182,6 +187,20 @@ public final class BlockAllocator {
     address = Conversions.pageAlign(address);
     byte offset = (byte) (getMetaAddress(address).loadByte(BMD_OFFSET) >>> BLOCK_PAGE_OFFSET_SHIFT);
     return address.minus(offset << LOG_BYTES_IN_PAGE);
+  }
+
+  /**
+   * Get the end of <i>address of the end of a block size class</i> a given address
+   * within the block.  (Returns the first byte <i>after</i> the block)
+   * @param address The address of interest
+   * @return The address of the first byte after the block containing the address
+   */
+  @Inline
+  public static Address getBlkEnd(Address address) {
+    address = Conversions.pageAlign(address);
+    byte offset = (byte) (getMetaAddress(address).loadByte(BMD_OFFSET) >>> BLOCK_PAGE_OFFSET_SHIFT);
+    Address start = address.minus(offset << LOG_BYTES_IN_PAGE);
+    return start.plus(bytesForSizeClass(getBlkSizeClass(address)));
   }
 
   /**

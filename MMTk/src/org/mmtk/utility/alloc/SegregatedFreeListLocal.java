@@ -14,6 +14,7 @@ package org.mmtk.utility.alloc;
 
 import org.mmtk.policy.SegregatedFreeListSpace;
 
+import org.mmtk.utility.Log;
 import org.mmtk.vm.VM;
 
 import org.vmmagic.pragma.*;

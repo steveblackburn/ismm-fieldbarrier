@@ -287,7 +287,7 @@ public final class MarkSweepSpace extends SegregatedFreeListSpace {
     if (HEADER_MARK_BITS) {
       return testMarkState(object);
     } else {
-      return liveBitSet(object);
+      return isLiveBitSet(object);
     }
   }
 

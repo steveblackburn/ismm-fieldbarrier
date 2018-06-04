@@ -270,13 +270,11 @@ public abstract class SegregatedFreeListSpace extends Space {
   private int headerFlexFromCellSize(int cellSize) {
     int headerflex = BASE_HEADER_FLEX;
 
-    if (!MARK_BIT_AT_CELL_BASE) {
-      int fieldflex = 0;
-      int maxpointers = (cellSize - 8) >> LOG_BYTES_IN_ADDRESS;  // FIXME 8 is default base header size
-      int bytes = (true) ? maxpointers : maxpointers >> LOG_BITS_IN_BYTE; // FIXME byte or bit map
-      fieldflex = ((bytes + (BYTES_IN_WORD - 1)) & (~(BYTES_IN_WORD - 1)));  // round up to word
-      headerflex += fieldflex;
-    }
+    int fieldflex = 0;
+    int maxpointers = (cellSize - 8) >> LOG_BYTES_IN_ADDRESS;  // FIXME 8 is default base header size
+    int bytes = (true) ? maxpointers : maxpointers >> LOG_BITS_IN_BYTE; // FIXME byte or bit map
+    fieldflex = ((bytes + (BYTES_IN_WORD - 1)) & (~(BYTES_IN_WORD - 1)));  // round up to word
+    headerflex += fieldflex;
 
     return headerflex > cellSize ? cellSize : headerflex;
   }
@@ -287,7 +285,8 @@ public abstract class SegregatedFreeListSpace extends Space {
   private void initSizeClasses() {
     for (int sc = 0; sc < sizeClassCount(); sc++) {
       cellSize[sc] = getBaseCellSize(sc);
-      headerFlex[sc] = headerFlexFromCellSize(cellSize[sc]);
+      if (!MARK_BIT_AT_CELL_BASE)
+        headerFlex[sc] = headerFlexFromCellSize(cellSize[sc]);
       for (byte blk = 0; blk < BlockAllocator.BLOCK_SIZE_CLASSES; blk++) {
         int usableBytes = BlockAllocator.blockSize(blk);
         int cells = usableBytes / cellSize[sc];
@@ -662,24 +661,28 @@ public abstract class SegregatedFreeListSpace extends Space {
    */
   @Inline
   protected boolean isCellLive(Address cell, int headerFlex, int bound, int prefix) {
-    //return true;
     /* Must override if not using the side bitmap */
-
     if (VM.VERIFY_ASSERTIONS) VM.assertions._assert(maintainSideBitmap());
-    for (int offset = 0; offset < headerFlex; offset += BYTES_IN_ADDRESS) {
-      if (VM.VERIFY_ASSERTIONS) VM.assertions._assert(offset < bound);
-      if (liveBitSet(cell.plus(offset))) {
-        return true;
+
+    if (MARK_BIT_AT_CELL_BASE)
+      return isLiveBitSet(cell);
+    else {
+      for (int offset = 0; offset < headerFlex; offset += BYTES_IN_ADDRESS) {
+        if (VM.VERIFY_ASSERTIONS) VM.assertions._assert(offset < bound);
+        if (isLiveBitSet(cell.plus(offset))) {
+          Log.writeln("CL: ", offset);
+          return true;
+        }
       }
+      return false;
     }
-    return false;
   }
 
   @Inline
   protected boolean isCellLive(ObjectReference object) {
     /* Must override if not using the side bitmap */
     if (VM.VERIFY_ASSERTIONS) VM.assertions._assert(maintainSideBitmap());
-    return liveBitSet(object);
+    return isLiveBitSet(object);
   }
 
   /**
@@ -844,7 +847,7 @@ public abstract class SegregatedFreeListSpace extends Space {
       boolean free = true;
       ObjectReference current = VM.objectModel.getObjectFromStartAddress(cursor);
       if (!current.isNull()) {
-        free = !liveBitSet(current);
+        free = !isLiveBitSet(current);
         if (!free) {
           free = sweeper.sweepCell(current);
           if (free) unsyncClearLiveBit(current);
@@ -874,6 +877,32 @@ public abstract class SegregatedFreeListSpace extends Space {
   /* Is mark bit located relative to base of cell or object header? */
   private static final boolean MARK_BIT_AT_CELL_BASE = true;
 
+  public final boolean verifyCellAddress(Address cell) {
+    return verifyCellAddress(cell, false);
+  }
+  public final boolean verifyCellAddress(Address cell, boolean verbose) {
+    VM.assertions._assert(VM.VERIFY_ASSERTIONS);
+    VM.assertions._assert(DEBUG_FREE_LIST_MARKS); // This is debugging code only
+
+    // FIXME (check that cell is in space)
+    Address blkStart = BlockAllocator.getBlkStart(cell);
+    Address blkEnd = BlockAllocator.getBlkEnd(cell);
+    int sc = BlockAllocator.getClientSizeClass(cell);
+
+    if (verbose) {
+      Log.write("VCA: ", cell); Log.write(" ", blkStart); Log.write("-", blkEnd); Log.writeln(" ", sc);
+    }
+
+    Address cursor = blkEnd.minus(cellSize[sc]);
+    while (cursor.GE(blkStart)) {
+      Log.writeln("VCA: ",cursor);
+      if (cursor.EQ(cell)) return true;
+      cursor = cursor.minus(cellSize[sc]);
+    }
+    return false;
+  }
+
+
   /**
    * Return the base address w.r.t. which the object's mark bit
    * is located.   It could either be at the address of the object
@@ -884,9 +913,20 @@ public abstract class SegregatedFreeListSpace extends Space {
    */
   @Inline
   private static Address normalizeAddress(ObjectReference object) {
-    if (MARK_BIT_AT_CELL_BASE)
-      return VM.objectModel.objectStartRef(object);
-    else
+    if (MARK_BIT_AT_CELL_BASE) {
+      Address rtn = VM.objectModel.objectStartRef(object);
+      if (VM.VERIFY_ASSERTIONS) {
+        SegregatedFreeListSpace sp = (SegregatedFreeListSpace) Space.getSpaceForObject(object);
+        boolean verified = sp.verifyCellAddress(rtn);
+        if (!verified) {
+          Log.write("Failed to verify: ", object);
+          Log.writeln(" ",rtn);
+          sp.verifyCellAddress(rtn, true);
+          VM.assertions._assert(false);
+        }
+      }
+      return rtn;
+    } else
       return VM.objectModel.refToAddress(object);
   }
 
@@ -963,8 +1003,8 @@ public abstract class SegregatedFreeListSpace extends Space {
   }
 
   @Inline
-  protected static boolean liveBitSet(ObjectReference object) {
-    boolean rtn = liveBitSet(normalizeAddress(object));
+  protected static boolean isLiveBitSet(ObjectReference object) {
+    boolean rtn = isLiveBitSet(normalizeAddress(object));
     if (!rtn) {
       Log.write("LS: ", object);
       Log.writeln(" ", normalizeAddress(object));
@@ -973,7 +1013,7 @@ public abstract class SegregatedFreeListSpace extends Space {
   }
 
   @Inline
-  protected static boolean liveBitSet(Address address) {
+  protected static boolean isLiveBitSet(Address address) {
     Address liveWord = getLiveWordAddress(address);
     Word mask = getMask(address, true);
     Word value = liveWord.loadWord();
@@ -991,17 +1031,7 @@ public abstract class SegregatedFreeListSpace extends Space {
    */
   @Inline
   protected static void clearLiveBit(ObjectReference object) {
-    clearLiveBit(normalizeAddress(object));
-  }
-
-  /**
-   * Clear the live bit for a given address
-   *
-   * @param address The address whose live bit is to be cleared.
-   */
-  @Inline
-  protected static void clearLiveBit(Address address) {
-    updateLiveBit(address, false, true);
+    updateLiveBit(normalizeAddress(object),false, true);
   }
 
   /**
@@ -1011,17 +1041,7 @@ public abstract class SegregatedFreeListSpace extends Space {
    */
   @Inline
   protected static void unsyncClearLiveBit(ObjectReference object) {
-    unsyncClearLiveBit(normalizeAddress(object));
-  }
-
-  /**
-   * Clear the live bit for a given address
-   *
-   * @param address The address whose live bit is to be cleared.
-   */
-  @Inline
-  protected static void unsyncClearLiveBit(Address address) {
-    updateLiveBit(address, false, false);
+    updateLiveBit(normalizeAddress(object), false, false);
   }
 
   /**

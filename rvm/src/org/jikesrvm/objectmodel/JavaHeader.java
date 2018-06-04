@@ -16,6 +16,7 @@ import static org.jikesrvm.mm.mminterface.MemoryManagerConstants.*;
 import static org.jikesrvm.objectmodel.JavaHeaderConstants.*;
 import static org.jikesrvm.objectmodel.MiscHeader.REQUESTED_BITS;
 import static org.jikesrvm.runtime.JavaSizeConstants.BYTES_IN_INT;
+import static org.jikesrvm.runtime.UnboxedSizeConstants.BYTES_IN_WORD;
 import static org.jikesrvm.runtime.UnboxedSizeConstants.LOG_BYTES_IN_ADDRESS;
 
 import org.jikesrvm.VM;
@@ -321,11 +322,30 @@ public class JavaHeader {
         }
       }
     }
+    TIB tib = getTIB(obj);  //  FIXME: the following could exploit TIB-encoding of this info
+    RVMType type = tib.getType();
+    if (type.isArrayType() || type == RVMType.TIBType) {
+      while (start.minus(BYTES_IN_INT).loadInt() == ALIGNMENT_VALUE) {
+        start = start.minus(BYTES_IN_INT);
+      }
+    }
+
     if (USE_PREFIX_FIELD_MARKS_FOR_SCALARS) {
-      TIB tib = getTIB(obj);  //  FIXME: the following could exploit TIB-encoding of this info
-      RVMType type = tib.getType();
-      if (type.isClassType())
+       if (type.isClassType() && !(type == RVMType.TIBType)) {
         start = start.minus(((RVMClass) type).getAlignedFieldMarkBytes());
+        VM.sysWrite("OSR: ", obj);
+        VM.sysWrite(" s: ", obj.toAddress().minus(OBJECT_REF_OFFSET));
+        VM.sysWrite(" b: ", ((RVMClass) type).getAlignedFieldMarkBytes());
+        VM.sysWrite(" s: ", start);
+        VM.sysWriteln(" ", ((RVMClass) type).getDescriptor());
+      } else if (type == RVMType.TIBType) {
+        VM.sysWrite("OSX: ", obj);
+        VM.sysWrite(" s: ", obj.toAddress().minus(OBJECT_REF_OFFSET));
+        VM.sysWrite(" b: ", ((RVMClass) type).getAlignedFieldMarkBytes());
+        VM.sysWrite(" s: ", start);
+        VM.sysWriteln(" ", ((RVMClass) type).getDescriptor());
+      } // else if (type.isArrayType())
+
     //  else
    //     start = start.minus(ObjectModel.fieldMarkBytes(Magic.getArrayLength(obj.toObject())));
     }

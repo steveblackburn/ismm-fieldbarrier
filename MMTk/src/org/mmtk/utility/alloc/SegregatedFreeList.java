@@ -14,6 +14,8 @@ package org.mmtk.utility.alloc;
 
 import org.mmtk.policy.SegregatedFreeListSpace;
 
+import org.mmtk.utility.Log;
+import org.mmtk.vm.VM;
 import org.vmmagic.pragma.*;
 import org.vmmagic.unboxed.*;
 
@@ -75,6 +77,9 @@ public abstract class SegregatedFreeList<S extends SegregatedFreeListSpace> exte
     int sizeClass = getSizeClass(alignedBytes);
     Address cell = freeList.get(sizeClass);
     if (!cell.isZero()) {
+      if (VM.VERIFY_ASSERTIONS) {
+        VM.assertions._assert(space.verifyCellAddress(cell));
+      }
       freeList.set(sizeClass, cell.loadAddress());
       /* Clear the free list link */
       cell.store(Address.zero());

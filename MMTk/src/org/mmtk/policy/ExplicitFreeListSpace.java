@@ -163,6 +163,6 @@ public final class ExplicitFreeListSpace extends SegregatedFreeListSpace {
   @Override
   @Inline
   public boolean isLive(ObjectReference object) {
-    return liveBitSet(object);
+    return isLiveBitSet(object);
   }
 }

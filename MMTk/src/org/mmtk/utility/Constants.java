@@ -82,6 +82,7 @@ public final class Constants {
    * Lazy sweeping - controlled from here because PlanConstraints needs to
    * tell the VM that we need to support linear scan.
    */
+  public static final boolean DEBUG_FREE_LIST_MARKS = true && VM.VERIFY_ASSERTIONS;
   public static final boolean LAZY_SWEEP = true;
 
   /****************************************************************************
