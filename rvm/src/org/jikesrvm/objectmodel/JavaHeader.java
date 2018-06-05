@@ -322,33 +322,30 @@ public class JavaHeader {
         }
       }
     }
-    TIB tib = getTIB(obj);  //  FIXME: the following could exploit TIB-encoding of this info
+
+    // FIXME: everything below could exploit TIB-encoding of this info
+    TIB tib = getTIB(obj);
     RVMType type = tib.getType();
-    if (type.isArrayType() || type == RVMType.TIBType) {
-      while (start.minus(BYTES_IN_INT).loadInt() == ALIGNMENT_VALUE) {
-        start = start.minus(BYTES_IN_INT);
+
+    if (USE_PREFIX_FIELD_MARKS_FOR_SCALARS) {
+      if (type.isClassType() && !(type == RVMType.TIBType)) {
+        start = start.minus(((RVMClass) type).getAlignedFieldMarkBytes());
       }
     }
 
-    if (USE_PREFIX_FIELD_MARKS_FOR_SCALARS) {
-       if (type.isClassType() && !(type == RVMType.TIBType)) {
-        start = start.minus(((RVMClass) type).getAlignedFieldMarkBytes());
-        VM.sysWrite("OSR: ", obj);
-        VM.sysWrite(" s: ", obj.toAddress().minus(OBJECT_REF_OFFSET));
-        VM.sysWrite(" b: ", ((RVMClass) type).getAlignedFieldMarkBytes());
-        VM.sysWrite(" s: ", start);
-        VM.sysWriteln(" ", ((RVMClass) type).getDescriptor());
+    if (USE_PREFIX_FIELD_MARKS_FOR_ARRAYS) {
+      if (type.isArrayType()) {
+        start = start.minus(((RVMArray) type).getAlignedFieldMarkBytes(Magic.getArrayLength(obj)));
       } else if (type == RVMType.TIBType) {
-        VM.sysWrite("OSX: ", obj);
-        VM.sysWrite(" s: ", obj.toAddress().minus(OBJECT_REF_OFFSET));
-        VM.sysWrite(" b: ", ((RVMClass) type).getAlignedFieldMarkBytes());
-        VM.sysWrite(" s: ", start);
-        VM.sysWriteln(" ", ((RVMClass) type).getDescriptor());
-      } // else if (type.isArrayType())
-
-    //  else
-   //     start = start.minus(ObjectModel.fieldMarkBytes(Magic.getArrayLength(obj.toObject())));
+        // FIXME: TIBS should never have field marks, right?
+        // start = start.minus(ObjectModel.fieldMarkBytes(Magic.getArrayLength(obj)));
+      }
     }
+
+
+    while (start.minus(BYTES_IN_INT).loadInt() == ALIGNMENT_VALUE)
+      start = start.minus(BYTES_IN_INT);
+
     return start;
   }
 

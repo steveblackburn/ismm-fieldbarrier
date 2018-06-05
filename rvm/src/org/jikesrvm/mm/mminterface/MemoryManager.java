@@ -538,11 +538,16 @@ public final class MemoryManager {
       throwLargeArrayOutOfMemoryError();
     }
     int size = elemBytes + headerSize;
+    int prefix = 0;
     if (USE_FIELD_BARRIER_FOR_AASTORE && ((RVMArray) tib.getType()).getElementType().isReferenceType()) {
-      size += ObjectModel.fieldMarkBytes(numElements);
+
+      int fieldmarks = org.jikesrvm.runtime.Memory.alignUp(ObjectModel.fieldMarkBytes(numElements), align);
+      size += fieldmarks;
+      if (USE_PREFIX_FIELD_MARKS_FOR_ARRAYS)
+        prefix = fieldmarks;
       if (VM.VerifyAssertions) VM._assert(org.jikesrvm.runtime.Memory.alignUp(size, MIN_ALIGNMENT) == size);
     }
-    return allocateArrayInternal(numElements, size, tib, allocator, align, offset, site);
+    return allocateArrayInternal(numElements, size, prefix, tib, allocator, align, offset, site);
   }
 
 
@@ -572,12 +577,12 @@ public final class MemoryManager {
    * See also: bytecode 0xbc ("newarray") and 0xbd ("anewarray")
    */
   @Inline
-  private static Object allocateArrayInternal(int numElements, int size, TIB tib, int allocator,
+  private static Object allocateArrayInternal(int numElements, int size, int prefix, TIB tib, int allocator,
                                               int align, int offset, int site) {
     Selected.Mutator mutator = Selected.Mutator.get();
     allocator = mutator.checkAllocator(org.jikesrvm.runtime.Memory.alignUp(size, MIN_ALIGNMENT), align, allocator);
     Address region = allocateSpace(mutator, size, align, offset, allocator, site);
-    Object result = ObjectModel.initializeArray(region, tib, numElements, size);
+    Object result = ObjectModel.initializeArray(region.plus(prefix), tib, numElements, size);
     mutator.postAlloc(ObjectReference.fromObject(result), ObjectReference.fromObject(tib), size, allocator);
     Log.write("AA: ", ObjectReference.fromObject(result)); Log.write(" ", region); Log.writeln("-", region.plus(size));
     return result;

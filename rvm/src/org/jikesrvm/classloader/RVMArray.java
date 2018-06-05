@@ -246,6 +246,24 @@ public final class RVMArray extends RVMType {
     return size;
   }
 
+  @Inline
+  @Pure
+  @Uninterruptible
+  public int getAlignedFieldMarkBytes(int numelts) {
+    if (USE_FIELD_BARRIER_FOR_AASTORE && referenceOffsets == REFARRAY_OFFSET_ARRAY)
+      return getAlignedFieldMarkBytesUnchecked(numelts);
+    else
+      return 0;
+  }
+
+  @Inline
+  @Pure
+  @Uninterruptible
+  public static int getAlignedFieldMarkBytesUnchecked(int numelts) {
+    if (VM.VerifyAssertions) VM._assert(USE_FIELD_BARRIER_FOR_AASTORE);
+    return ObjectModel.fieldMarkBytes(numelts);
+  }
+
   /**
    * Total size, in bytes, of an instance of this array type (including object header).
    * @param numelts number of array elements in the instance

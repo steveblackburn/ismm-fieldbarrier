@@ -12,9 +12,7 @@
  */
 package org.jikesrvm.objectmodel;
 
-import static org.jikesrvm.mm.mminterface.MemoryManagerConstants.USE_FIELD_BARRIER_FOR_AASTORE;
-import static org.jikesrvm.mm.mminterface.MemoryManagerConstants.USE_FIELD_BARRIER_FOR_PUTFIELD;
-import static org.jikesrvm.mm.mminterface.MemoryManagerConstants.USE_PREFIX_FIELD_MARKS_FOR_SCALARS;
+import static org.jikesrvm.mm.mminterface.MemoryManagerConstants.*;
 import static org.jikesrvm.objectmodel.JavaHeaderConstants.*;
 import static org.jikesrvm.runtime.JavaSizeConstants.BYTES_IN_INT;
 import static org.mmtk.utility.Constants.BYTES_IN_ADDRESS;
@@ -1163,7 +1161,7 @@ public class ObjectModel {
     }
     int align = getAlignment(klass);
     int offset = getOffsetForAlignment(klass, needsIdentityHash);
-    int prefix = true || USE_PREFIX_FIELD_MARKS_FOR_SCALARS ? klass.getAlignedFieldMarkBytes() : 0;
+    int prefix = USE_PREFIX_FIELD_MARKS_FOR_SCALARS ? klass.getAlignedFieldMarkBytes() : 0;
     Address ptr = bootImage.allocateDataStorage(size+prefix, align, offset);
     Address ref = JavaHeader.initializeScalarHeader(bootImage, ptr.plus(prefix), tib, size, needsIdentityHash, identityHashValue);
     MemoryManager.initializeHeader(bootImage, ref, tib, size);
@@ -1258,8 +1256,9 @@ public class ObjectModel {
     int padding = AlignmentEncoding.padding(alignCode);
     Address ptr = bootImage.allocateDataStorage(size + padding, align, offset);
     ptr = AlignmentEncoding.adjustRegion(alignCode, ptr);
-    Address ref = JavaHeader.initializeArrayHeader(bootImage, ptr, tib, size, numElements, needsIdentityHash, identityHashValue);
-    bootImage.setFullWord(ref.plus(getArrayLengthOffset()), numElements);
+    int prefix = USE_PREFIX_FIELD_MARKS_FOR_ARRAYS ? array.getAlignedFieldMarkBytes(numElements) : 0;
+    Address ref = JavaHeader.initializeArrayHeader(bootImage, ptr, tib, size+prefix, numElements, needsIdentityHash, identityHashValue);
+    bootImage.setFullWord(ref.plus(prefix).plus(getArrayLengthOffset()), numElements);
     MemoryManager.initializeHeader(bootImage, ref, tib, size, numElements, false);
     MiscHeader.initializeHeader(bootImage, ref, tib, size, false);
     return ref;
