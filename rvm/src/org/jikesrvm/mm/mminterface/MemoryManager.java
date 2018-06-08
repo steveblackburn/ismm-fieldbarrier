@@ -541,10 +541,12 @@ public final class MemoryManager {
     int prefix = 0;
     if (USE_FIELD_BARRIER_FOR_AASTORE && ((RVMArray) tib.getType()).getElementType().isReferenceType()) {
 
-      int fieldmarks = org.jikesrvm.runtime.Memory.alignUp(ObjectModel.fieldMarkBytes(numElements), align);
-      size += fieldmarks;
-      if (USE_PREFIX_FIELD_MARKS_FOR_ARRAYS)
-        prefix = fieldmarks;
+      int fieldmarkBytes = org.jikesrvm.runtime.Memory.alignUp(ObjectModel.fieldMarkBytes(numElements), align);
+      size += fieldmarkBytes;
+      if (USE_PREFIX_FIELD_MARKS_FOR_ARRAYS) {
+        prefix = fieldmarkBytes;
+        if (VM.VerifyAssertions) VM._assert(prefix != 0);
+      }
       if (VM.VerifyAssertions) VM._assert(org.jikesrvm.runtime.Memory.alignUp(size, MIN_ALIGNMENT) == size);
     }
     return allocateArrayInternal(numElements, size, prefix, tib, allocator, align, offset, site);
@@ -584,7 +586,7 @@ public final class MemoryManager {
     Address region = allocateSpace(mutator, size, align, offset, allocator, site);
     Object result = ObjectModel.initializeArray(region.plus(prefix), tib, numElements, size);
     mutator.postAlloc(ObjectReference.fromObject(result), ObjectReference.fromObject(tib), size, allocator);
-    Log.write("AA: ", ObjectReference.fromObject(result)); Log.write(" ", region); Log.writeln("-", region.plus(size));
+    Log.write("AA: ", ObjectReference.fromObject(result)); Log.write(" ", region); Log.write("-", region.plus(prefix)); Log.write("-", region.plus(size)); Log.writeln(" ", prefix);
     return result;
   }
 

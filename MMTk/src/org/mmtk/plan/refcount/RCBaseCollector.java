@@ -20,7 +20,6 @@ import org.mmtk.plan.TransitiveClosure;
 import org.mmtk.plan.refcount.backuptrace.BTTraceLocal;
 import org.mmtk.policy.Space;
 import org.mmtk.policy.ExplicitFreeListSpace;
-import org.mmtk.utility.Log;
 import org.mmtk.utility.deque.AddressPairDeque;
 import org.mmtk.utility.deque.ObjectReferenceDeque;
 import org.mmtk.vm.VM;
@@ -191,7 +190,7 @@ public abstract class RCBaseCollector extends StopTheWorldCollector {
         Address slot;
         while (!(slot = modFieldBuffer.pop1()).isZero()) {
           Word markAddressReference =  modFieldBuffer.pop2().toWord();
-          VM.objectModel.markFieldAsUnlogged(markAddressReference);
+          VM.objectModel.clearFieldMarks(markAddressReference);
         //  FIXME: how does this apply in the field-remembering context?? ---> as a hack, create another buffer and apply this to each remembered slot's parent
      /*   if (!RCBase.BUILD_FOR_GENRC) {
           if (Space.isInSpace(RCBase.REF_COUNT, current)) {

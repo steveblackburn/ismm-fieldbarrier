@@ -493,7 +493,7 @@ public final class ExpandRuntimeServices extends CompilerPhase {
                   inline(wb, ir, true);
                 }
               } else if (!field.isUntraced()) {  // field is resolved
-                IntConstantOperand  markBitOffset = IRTools.IC(field.getFieldMarkOffset());
+                IntConstantOperand  fieldMarkMetadata = IRTools.IC(field.getFieldMarkMetaData().toInt());
                 RVMMethod target = Entrypoints.objectFieldWriteBarrierMethod;
                 Instruction wb =
                     Call.create5(CALL,
@@ -505,7 +505,7 @@ public final class ExpandRuntimeServices extends CompilerPhase {
                                  PutField.getValue(inst).copy(),
                                  PutField.getOffset(inst).copy(),
                                  IRTools.IC(fieldRef.getId()),
-                                 markBitOffset
+                                 fieldMarkMetadata
                             );
                 replaceInstructionWithBarrier(inst, wb);
                 if (ir.options.H2L_INLINE_WRITE_BARRIER) {

@@ -242,8 +242,7 @@ public abstract class ObjectModel {
 
   public abstract boolean isFieldUnlogged(ObjectReference object, Word metaData, boolean isArray);
   public abstract Word markFieldAsLogged(ObjectReference object, Word metaData, boolean isArray);
-  public abstract void markFieldAsUnlogged(ObjectReference object, Address slot);
-  public abstract void markFieldAsUnlogged(Word markFieldReference);
+  public abstract void clearFieldMarks(Word fieldMarkReference);
   public abstract void markAllFieldsAsUnlogged(ObjectReference obj);
   public abstract void markAllFieldsAsUnlogged(ObjectReference obj, ObjectReference tib);
 

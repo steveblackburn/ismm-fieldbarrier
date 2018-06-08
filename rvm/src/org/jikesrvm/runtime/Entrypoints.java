@@ -343,7 +343,7 @@ public class Entrypoints {
   public static final NormalMethod unresolvedObjectFieldWriteBarrierMethod =
     getMethod(org.jikesrvm.mm.mminterface.Barriers.class, "unresolvedObjectFieldWrite", "(Ljava/lang/Object;Ljava/lang/Object;Lorg/vmmagic/unboxed/Offset;I)V");
   public static final NormalMethod objectFieldWriteBarrierMethod =
-    getMethod(org.jikesrvm.mm.mminterface.Barriers.class, "objectFieldWrite", "(Ljava/lang/Object;Ljava/lang/Object;Lorg/vmmagic/unboxed/Offset;II)V");
+    getMethod(org.jikesrvm.mm.mminterface.Barriers.class, "objectFieldWrite", "(Ljava/lang/Object;Ljava/lang/Object;Lorg/vmmagic/unboxed/Offset;ILorg/vmmagic/unboxed/Word;)V");
   public static final NormalMethod objectArrayWriteBarrierMethod =
     getMethod(org.jikesrvm.mm.mminterface.Barriers.class, "objectArrayWrite", "([Ljava/lang/Object;ILjava/lang/Object;)V");
   public static final NormalMethod objectFieldReadBarrierMethod =

@@ -24,6 +24,7 @@ import org.jikesrvm.ia32.RegisterConstants.GPR;
 import org.jikesrvm.runtime.Entrypoints;
 import org.vmmagic.pragma.Inline;
 import org.vmmagic.unboxed.Offset;
+import org.vmmagic.unboxed.Word;
 
 /**
  * Class called from baseline compiler to generate architecture specific
@@ -161,12 +162,13 @@ class Barriers {
    * @param asm the assembler to generate the code in
    * @param fieldOffset the offset of the field
    * @param locationMetadata meta-data about the location
+   *
    */
   @Inline
-  static void compilePutfieldBarrierImm(Assembler asm, Offset fieldOffset, int locationMetadata, int fieldMarkOffset) {
+  static void compilePutfieldBarrierImm(Assembler asm, Offset fieldOffset, int locationMetadata, Word fieldMarkOffset) {
     asm.emitPUSH_Imm(fieldOffset.toInt());
     asm.emitPUSH_Imm(locationMetadata);
-    asm.emitPUSH_Imm(fieldMarkOffset);
+    asm.emitPUSH_Imm(fieldMarkOffset.toInt());
     BaselineCompilerImpl.genParameterRegisterLoad(asm, 5);
     genNullCheck(asm, T0);
     asm.generateJTOCcall(Entrypoints.objectFieldWriteBarrierMethod.getOffset());

@@ -15,8 +15,8 @@ package org.jikesrvm.mm.mminterface;
 import static org.jikesrvm.classloader.MemberReference.getFieldRef;
 import static org.jikesrvm.mm.mminterface.MemoryManagerConstants.USE_FIELD_BARRIER_FOR_AASTORE;
 import static org.jikesrvm.mm.mminterface.MemoryManagerConstants.USE_FIELD_BARRIER_FOR_PUTFIELD;
-import static org.jikesrvm.objectmodel.ObjectModel.calculateMarkOffsetForField;
-import static org.jikesrvm.objectmodel.ObjectModel.calculateMarkOffsetForIndex;
+import static org.jikesrvm.objectmodel.ObjectModel.getFieldMarkMetadata;
+import static org.jikesrvm.objectmodel.ObjectModel.getFieldBarrierMetadata;
 import static org.jikesrvm.runtime.JavaSizeConstants.LOG_BYTES_IN_BOOLEAN;
 import static org.jikesrvm.runtime.JavaSizeConstants.LOG_BYTES_IN_DOUBLE;
 import static org.jikesrvm.runtime.JavaSizeConstants.LOG_BYTES_IN_FLOAT;
@@ -30,9 +30,7 @@ import static org.mmtk.utility.Constants.LOG_BYTES_IN_SHORT;
 
 import org.jikesrvm.VM;
 import org.jikesrvm.classloader.FieldReference;
-import org.jikesrvm.classloader.RVMClass;
 import org.jikesrvm.objectmodel.ObjectModel;
-import org.jikesrvm.objectmodel.TIB;
 import org.jikesrvm.runtime.Magic;
 import org.jikesrvm.runtime.Memory;
 import org.vmmagic.pragma.Entrypoint;
@@ -1255,8 +1253,8 @@ public class Barriers {
       ObjectReference src = ObjectReference.fromObject(ref);
       FieldReference fr = getFieldRef(locationMetadata);
       if (VM.VerifyAssertions) VM._assert(fr.isResolved());
-      int markOffset = USE_FIELD_BARRIER_FOR_PUTFIELD ? calculateMarkOffsetForField(fr.peekResolvedField()) : 0;
-      Selected.Mutator.get().objectReferenceWrite(src, src.toAddress().plus(offset), ObjectReference.fromObject(value), offset.toWord(), Word.fromIntZeroExtend(locationMetadata), Word.fromIntSignExtend(markOffset), INSTANCE_FIELD);
+      Word markOffset = USE_FIELD_BARRIER_FOR_PUTFIELD ? getFieldMarkMetadata(fr.peekResolvedField()) : Word.zero();
+      Selected.Mutator.get().objectReferenceWrite(src, src.toAddress().plus(offset), ObjectReference.fromObject(value), offset.toWord(), Word.fromIntZeroExtend(locationMetadata), markOffset, INSTANCE_FIELD);
     } else if (VM.VerifyAssertions)
       VM._assert(VM.NOT_REACHED);
   }
@@ -1271,10 +1269,10 @@ public class Barriers {
    */
   @Inline
   @Entrypoint
-  public static void objectFieldWrite(Object ref, Object value, Offset offset, int locationMetadata, int markOffset) {
+  public static void objectFieldWrite(Object ref, Object value, Offset offset, int locationMetadata, Word fieldMarkMetadata) {
     if (NEEDS_OBJECT_GC_WRITE_BARRIER) {
       ObjectReference src = ObjectReference.fromObject(ref);
-      Selected.Mutator.get().objectReferenceWrite(src, src.toAddress().plus(offset), ObjectReference.fromObject(value), offset.toWord(), Word.fromIntZeroExtend(locationMetadata), Word.fromIntZeroExtend(markOffset), INSTANCE_FIELD);
+      Selected.Mutator.get().objectReferenceWrite(src, src.toAddress().plus(offset), ObjectReference.fromObject(value), offset.toWord(), Word.fromIntZeroExtend(locationMetadata), fieldMarkMetadata, INSTANCE_FIELD);
     } else if (VM.VerifyAssertions)
       VM._assert(VM.NOT_REACHED);
   }
@@ -1294,10 +1292,8 @@ public class Barriers {
     if (NEEDS_OBJECT_GC_WRITE_BARRIER) {
       ObjectReference array = ObjectReference.fromObject(ref);
       Offset offset = Offset.fromIntZeroExtend(index << LOG_BYTES_IN_ADDRESS);
-      Word markoffset = Word.zero();
-      if (USE_FIELD_BARRIER_FOR_AASTORE)
-          markoffset = calculateMarkOffsetForIndex(index);
-      Selected.Mutator.get().objectReferenceWrite(array, array.toAddress().plus(offset), ObjectReference.fromObject(value), offset.toWord(), Word.zero(), markoffset, ARRAY_ELEMENT);
+      Word fieldMarkMetadata = USE_FIELD_BARRIER_FOR_AASTORE ? getFieldBarrierMetadata(index) : Word.zero();
+      Selected.Mutator.get().objectReferenceWrite(array, array.toAddress().plus(offset), ObjectReference.fromObject(value), offset.toWord(), Word.zero(), fieldMarkMetadata, ARRAY_ELEMENT);
     } else if (VM.VerifyAssertions)
       VM._assert(VM.NOT_REACHED);
   }
@@ -1429,7 +1425,7 @@ public class Barriers {
           ObjectReference.fromObject(value),
           offset.toWord(),
           Word.zero(), // do not have location metadata
-          ObjectModel.calculateMarkOffsetForCompareAndSwap(ObjectReference.fromObject(ref), offset),
+          ObjectModel.getFieldMarkMetadata(ObjectReference.fromObject(ref), offset),
           INSTANCE_FIELD);
     } else if (VM.VerifyAssertions)
       VM._assert(VM.NOT_REACHED);

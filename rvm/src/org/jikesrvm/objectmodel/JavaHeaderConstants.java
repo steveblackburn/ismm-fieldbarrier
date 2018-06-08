@@ -67,7 +67,7 @@ public final class JavaHeaderConstants {
   /** Offset of the garbage collection header from the object reference */
   public static final Offset GC_HEADER_OFFSET = MISC_HEADER_OFFSET.minus(GC_HEADER_BYTES);
   /** Offset from the object reference to the first byte before the regular header */
-  public static final Offset SCALAR_FIELD_MARK_BASE_OFFSET = GC_HEADER_OFFSET.minus(1);
+  public static final Offset SCALAR_FIELD_MARK_BASE_OFFSET = GC_HEADER_OFFSET.minus(1); // FIXME get rid of this
   /** Offset of first element of an array */
   public static final Offset ARRAY_BASE_OFFSET = Offset.zero();
 

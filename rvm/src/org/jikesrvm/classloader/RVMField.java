@@ -67,7 +67,7 @@ public final class RVMField extends RVMMember {
    * The fields's mark bit offset
    * Set by {@link RVMClass#resolve()}
    */
-  protected int fieldmarkoffset;
+  protected Word fieldMarkMetadata = Word.zero();
 
   /**
    * Create a field.
@@ -463,7 +463,7 @@ public final class RVMField extends RVMMember {
       }
     } else {
       if (NEEDS_OBJECT_PUTFIELD_BARRIER && !isUntraced()) {
-        Barriers.objectFieldWrite(obj, ref, getOffset(), getId(), getFieldMarkOffset());
+        Barriers.objectFieldWrite(obj, ref, getOffset(), getId(), getFieldMarkMetaData());
       } else {
         Magic.setObjectAtOffset(obj, getOffset(), ref);
       }
@@ -620,8 +620,8 @@ public final class RVMField extends RVMMember {
   }
 
 
-  public final int getFieldMarkOffset() {
-    return fieldmarkoffset;
+  public final Word getFieldMarkMetaData() {
+    return fieldMarkMetadata;
   }
 
 }

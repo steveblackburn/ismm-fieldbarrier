@@ -31,6 +31,7 @@ import org.vmmagic.unboxed.Address;
 
 import static org.jikesrvm.mm.mminterface.Barriers.*;
 import org.jikesrvm.runtime.SysCall;
+import org.vmmagic.unboxed.Word;
 
 /**
  * Our implementation of sun.misc.Unsafe maps the operations to
@@ -240,7 +241,7 @@ public final class Unsafe {
     Magic.storeStoreBarrier();
     if (NEEDS_OBJECT_PUTFIELD_BARRIER) {
       if (VM.VerifyAssertions) VM._assert(VM.NOT_REACHED);
-      objectFieldWrite(obj, value, off, 0, 0);
+      objectFieldWrite(obj, value, off, 0, Word.zero());
     } else {
       Magic.setObjectAtOffset(obj, off, value);
     }
@@ -596,7 +597,7 @@ public final class Unsafe {
     Offset off = Offset.fromLong(offset);
     if (NEEDS_OBJECT_PUTFIELD_BARRIER) {
       if (VM.VerifyAssertions) VM._assert(VM.NOT_REACHED);
-      objectFieldWrite(obj, value, off, 0, 0);
+      objectFieldWrite(obj, value, off, 0, Word.zero());
     } else {
       Magic.setObjectAtOffset(obj,off,value);
     }
@@ -608,7 +609,7 @@ public final class Unsafe {
     Magic.storeStoreBarrier();
     if (NEEDS_OBJECT_PUTFIELD_BARRIER) {
       if (VM.VerifyAssertions) VM._assert(VM.NOT_REACHED);
-      objectFieldWrite(obj, value, off, 0, 0);
+      objectFieldWrite(obj, value, off, 0, Word.zero());
     } else {
       Magic.setObjectAtOffset(obj, off, value);
     }

@@ -32,7 +32,7 @@ import static org.jikesrvm.classloader.ClassLoaderConstants.CP_MEMBER;
 import static org.jikesrvm.classloader.ClassLoaderConstants.CP_UTF;
 import static org.jikesrvm.mm.mminterface.MemoryManagerConstants.USE_FIELD_BARRIER_FOR_PUTFIELD;
 import static org.jikesrvm.mm.mminterface.MemoryManagerConstants.USE_PREFIX_FIELD_MARKS_FOR_SCALARS;
-import static org.jikesrvm.objectmodel.ObjectModel.calculateMarkOffsetForField;
+import static org.jikesrvm.objectmodel.ObjectModel.getFieldMarkMetadata;
 import static org.jikesrvm.runtime.JavaSizeConstants.BYTES_IN_DOUBLE;
 import static org.jikesrvm.runtime.JavaSizeConstants.BYTES_IN_INT;
 import static org.jikesrvm.runtime.JavaSizeConstants.BYTES_IN_LONG;
@@ -1314,7 +1314,7 @@ public final class RVMClass extends RVMType {
         if (field.isTraced()) {
           referenceOffsets[j++] = field.getOffset().toInt();
           if (USE_FIELD_BARRIER_FOR_PUTFIELD)
-            field.fieldmarkoffset = calculateMarkOffsetForField(field);
+            field.fieldMarkMetadata = getFieldMarkMetadata(field);
         }
       }
     }

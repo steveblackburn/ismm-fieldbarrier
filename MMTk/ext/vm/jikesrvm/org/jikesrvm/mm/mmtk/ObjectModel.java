@@ -312,19 +312,17 @@ import org.vmmagic.unboxed.Word;
     return org.jikesrvm.objectmodel.ObjectModel.isFieldUnlogged(object, metaData, isArray);
   }
 
+  /**
+   * @return The address of the word/byte containing the mark bit/byte that was logged
+   */
   @Inline
   public Word markFieldAsLogged(ObjectReference object, Word metaData, boolean isArray) {
     return org.jikesrvm.objectmodel.ObjectModel.markFieldAsLogged(object, metaData, isArray);
   }
 
   @Inline
-  public void markFieldAsUnlogged(ObjectReference object, Address slot) {
-    org.jikesrvm.objectmodel.ObjectModel.markFieldAsUnlogged(object, slot);
-  }
-
-  @Inline
-  public void markFieldAsUnlogged(Word fieldMarkReference) {
-    org.jikesrvm.objectmodel.ObjectModel.markFieldAsUnlogged(fieldMarkReference);
+  public void clearFieldMarks(Word fieldMarkReference) {
+    org.jikesrvm.objectmodel.ObjectModel.clearFieldMarks(fieldMarkReference);
   }
 
   @Override
