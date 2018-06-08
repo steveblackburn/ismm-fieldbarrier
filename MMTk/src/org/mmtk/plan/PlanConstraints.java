@@ -316,5 +316,5 @@ import org.vmmagic.pragma.*;
 
   public boolean usePrefixFieldMarksForScalars() { return true; }
 
-  public boolean usePrefixFieldMarksForArrays() { return false; }
+  public boolean usePrefixFieldMarksForArrays() { return true; }
 }

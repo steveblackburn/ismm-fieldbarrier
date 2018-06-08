@@ -1021,13 +1021,12 @@ public class JavaHeader {
    * @param bootImage The bootimage being written
    * @param ptr  The object ref to the storage to be initialized
    * @param tib  The TIB of the instance being created
-   * @param size The number of bytes allocated by the GC system for this object.
    * @param needsIdentityHash needs an identity hash value
    * @param identityHashValue the value for the identity hash
    * @return the address used for a reference to this object
    */
   @Interruptible
-  public static Address initializeScalarHeader(BootImageInterface bootImage, Address ptr, TIB tib, int size, boolean needsIdentityHash, int identityHashValue) {
+  public static Address initializeScalarHeader(BootImageInterface bootImage, Address ptr, TIB tib, boolean needsIdentityHash, int identityHashValue) {
     Address ref = ptr.plus(OBJECT_REF_OFFSET);
     if (needsIdentityHash) {
       bootImage.setFullWord(ref.plus(STATUS_OFFSET), HASH_STATE_HASHED_AND_MOVED.toInt());
@@ -1065,14 +1064,13 @@ public class JavaHeader {
    * @param bootImage the bootimage being written
    * @param ptr  the object ref to the storage to be initialized
    * @param tib the TIB of the instance being created
-   * @param size the number of bytes allocated by the GC system for this object.
    * @param numElements the number of elements in the array
    * @param needsIdentityHash needs an identity hash value
    * @param identityHashValue the value for the identity hash
    * @return the address used for a reference to this object
    */
   @Interruptible
-  public static Address initializeArrayHeader(BootImageInterface bootImage, Address ptr, TIB tib, int size, int numElements, boolean needsIdentityHash, int identityHashValue) {
+  public static Address initializeArrayHeader(BootImageInterface bootImage, Address ptr, TIB tib, int numElements, boolean needsIdentityHash, int identityHashValue) {
     Address ref = ptr.plus(OBJECT_REF_OFFSET);
     // (TIB set by BootImageWriter; array length set by ObjectModel)
     if (needsIdentityHash) {

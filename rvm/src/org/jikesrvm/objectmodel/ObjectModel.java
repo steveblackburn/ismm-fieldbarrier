@@ -298,7 +298,7 @@ public class ObjectModel {
     if (isScalar) {
       if (VM.VerifyAssertions) VM._assert(USE_FIELD_BARRIER_FOR_PUTFIELD);
       if (USE_PREFIX_FIELD_MARKS_FOR_SCALARS) {
-        end = ref.plus(SCALAR_FIELD_MARK_BASE_OFFSET.plus(1));
+        end = ref.plus(GC_HEADER_OFFSET);
         cursor = end.minus(((RVMClass) tib.getType()).getAlignedFieldMarkBytes());
       } else {
         cursor = ref.plus(((RVMClass) tib.getType()).getFieldMarkStateBaseOffset());
@@ -308,8 +308,13 @@ public class ObjectModel {
       if (VM.VerifyAssertions) VM._assert(USE_FIELD_BARRIER_FOR_AASTORE);
       if (!(((RVMArray) tib.getType()).getElementType().isReferenceType()))
         return;
-      end = ref.minus(GC_HEADER_OFFSET).plus(size);
-      cursor = ref.plus(numElements << LOG_BYTES_IN_ADDRESS);
+      if (USE_PREFIX_FIELD_MARKS_FOR_ARRAYS) {
+        end = ref.plus(GC_HEADER_OFFSET);
+        cursor = end.minus(((RVMArray) tib.getType()).getAlignedFieldMarkBytes(numElements));
+      } else {
+        end = ref.minus(GC_HEADER_OFFSET).plus(size);
+        cursor = ref.plus(numElements << LOG_BYTES_IN_ADDRESS);
+      }
     }
     while (cursor.LT(end)) {
       bootImage.setByte(cursor, (byte) 0xff);
@@ -335,7 +340,7 @@ public class ObjectModel {
       if (type.isClassType() && type != RVMType.TIBType) {
         if (USE_PREFIX_FIELD_MARKS_FOR_SCALARS) {
           // FIXME THIS MUST BE CHECKED
-          end = obj.toAddress().plus(SCALAR_FIELD_MARK_BASE_OFFSET.plus(1));
+          end = obj.toAddress().plus(GC_HEADER_OFFSET);
           cursor = end.minus(((RVMClass) type).getAlignedFieldMarkBytes());
         //  Log.write("M: ", obj); Log.write(" "); Log.write(Space.getSpaceForObject(obj).getName()); Log.write(" ", cursor); Log.writeln("-", end);
          // return;
@@ -1244,7 +1249,7 @@ public class ObjectModel {
     int offset = getOffsetForAlignment(klass, needsIdentityHash);
     int prefix = USE_PREFIX_FIELD_MARKS_FOR_SCALARS ? klass.getAlignedFieldMarkBytes() : 0;
     Address ptr = bootImage.allocateDataStorage(size+prefix, align, offset);
-    Address ref = JavaHeader.initializeScalarHeader(bootImage, ptr.plus(prefix), tib, size, needsIdentityHash, identityHashValue);
+    Address ref = JavaHeader.initializeScalarHeader(bootImage, ptr.plus(prefix), tib, needsIdentityHash, identityHashValue);
     MemoryManager.initializeHeader(bootImage, ref, tib, size);
     MiscHeader.initializeHeader(bootImage, ref, tib, size, true);
     return ref;
@@ -1335,11 +1340,11 @@ public class ObjectModel {
     }
     int offset = getOffsetForAlignment(array, needsIdentityHash);
     int padding = AlignmentEncoding.padding(alignCode);
-    Address ptr = bootImage.allocateDataStorage(size + padding, align, offset);
-    ptr = AlignmentEncoding.adjustRegion(alignCode, ptr);
     int prefix = USE_PREFIX_FIELD_MARKS_FOR_ARRAYS ? array.getAlignedFieldMarkBytes(numElements) : 0;
-    Address ref = JavaHeader.initializeArrayHeader(bootImage, ptr, tib, size+prefix, numElements, needsIdentityHash, identityHashValue);
-    bootImage.setFullWord(ref.plus(prefix).plus(getArrayLengthOffset()), numElements);
+    Address ptr = bootImage.allocateDataStorage(size + padding + prefix, align, offset);
+    ptr = AlignmentEncoding.adjustRegion(alignCode, ptr.plus(prefix));
+    Address ref = JavaHeader.initializeArrayHeader(bootImage, ptr, tib, numElements, needsIdentityHash, identityHashValue);
+    bootImage.setFullWord(ref.plus(getArrayLengthOffset()), numElements);
     MemoryManager.initializeHeader(bootImage, ref, tib, size, numElements, false);
     MiscHeader.initializeHeader(bootImage, ref, tib, size, false);
     return ref;
@@ -1362,7 +1367,7 @@ public class ObjectModel {
     int align = getAlignment(array);
     int offset = getOffsetForAlignment(array, false);
     Address ptr = bootImage.allocateCodeStorage(size, align, offset);
-    Address ref = JavaHeader.initializeArrayHeader(bootImage, ptr, tib, size, numElements, false, 0);
+    Address ref = JavaHeader.initializeArrayHeader(bootImage, ptr, tib, numElements, false, 0);
     bootImage.setFullWord(ref.plus(getArrayLengthOffset()), numElements);
     MemoryManager.initializeHeader(bootImage, ref, tib, size, numElements, false);
     MiscHeader.initializeHeader(bootImage, ref, tib, size, false);
