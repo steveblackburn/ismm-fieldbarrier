@@ -670,7 +670,6 @@ public abstract class SegregatedFreeListSpace extends Space {
       for (int offset = 0; offset < headerFlex; offset += BYTES_IN_ADDRESS) {
         if (VM.VERIFY_ASSERTIONS) VM.assertions._assert(offset < bound);
         if (isLiveBitSet(cell.plus(offset))) {
-          Log.writeln("CL: ", offset);
           return true;
         }
       }
@@ -895,7 +894,6 @@ public abstract class SegregatedFreeListSpace extends Space {
 
     Address cursor = blkEnd.minus(cellSize[sc]);
     while (cursor.GE(blkStart)) {
-      Log.writeln("VCA: ",cursor);
       if (cursor.EQ(cell)) return true;
       cursor = cursor.minus(cellSize[sc]);
     }
@@ -938,9 +936,7 @@ public abstract class SegregatedFreeListSpace extends Space {
    */
   @Inline
   public static boolean testAndSetLiveBit(ObjectReference object) {
-    Address addr = normalizeAddress(object);
-    Log.write("TS: ",object);  Log.writeln(" ",addr);
-    return updateLiveBit(addr, true, true);
+    return updateLiveBit(normalizeAddress(object), true, true);
   }
 
   /**
@@ -1004,12 +1000,7 @@ public abstract class SegregatedFreeListSpace extends Space {
 
   @Inline
   protected static boolean isLiveBitSet(ObjectReference object) {
-    boolean rtn = isLiveBitSet(normalizeAddress(object));
-    if (!rtn) {
-      Log.write("LS: ", object);
-      Log.writeln(" ", normalizeAddress(object));
-    }
-    return rtn; /// <---- returning true here makes it work
+    return isLiveBitSet(normalizeAddress(object));
   }
 
   @Inline
@@ -1017,11 +1008,7 @@ public abstract class SegregatedFreeListSpace extends Space {
     Address liveWord = getLiveWordAddress(address);
     Word mask = getMask(address, true);
     Word value = liveWord.loadWord();
- /*   if (!value.and(mask).EQ(mask)) {
-      Log.write("No: ", address);
-      Log.writeln(" ", value);
-    }
-  */  return value.and(mask).EQ(mask);
+    return value.and(mask).EQ(mask);
   }
 
   /**

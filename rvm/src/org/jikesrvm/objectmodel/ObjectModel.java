@@ -420,7 +420,7 @@ public class ObjectModel {
    * @return The address of the word/byte containing the mark bit/byte that was logged
    */
   @Inline
-  public static Address markScalarFieldAsLogged(ObjectReference object, Word metaData) {
+  public static Address nonAtomicMarkScalarFieldAsLogged(ObjectReference object, Word metaData) {
     if (VM.VerifyAssertions) {
       VM._assert(USE_FIELD_BARRIER_FOR_PUTFIELD);
       VM._assert(USE_PREFIX_FIELD_MARKS_FOR_SCALARS);
@@ -444,7 +444,7 @@ public class ObjectModel {
   }
 
   @Inline
-  public static Address markRefArrayElementAsLogged(ObjectReference object, int index) {
+  public static Address nonAtomicMarkRefArrayElementAsLogged(ObjectReference object, int index) {
     if (VM.VerifyAssertions) {
       VM._assert(USE_FIELD_BARRIER_FOR_AASTORE);
       VM._assert(ObjectModel.getTIB(object).getType().isArrayType());

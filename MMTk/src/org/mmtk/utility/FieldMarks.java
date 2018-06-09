@@ -27,12 +27,12 @@ public class FieldMarks {
   }
 
   private static void logRefArrayElement(ObjectReference src, Address slot, int index, AddressPairDeque fieldbuf) {
-    Address markAddr = VM.objectModel.markRefArrayElementAsLogged(src, index);
+    Address markAddr = VM.objectModel.nonAtomicMarkRefArrayElementAsLogged(src, index);
     fieldbuf.insert(slot, markAddr);
   }
 
   private static void logScalarField(ObjectReference src, Address slot, Word metaData, AddressPairDeque fieldbuf) {
-    Address markAddr = VM.objectModel.markScalarFieldAsLogged(src, metaData);
+    Address markAddr = VM.objectModel.nonAtomicMarkScalarFieldAsLogged(src, metaData);
     fieldbuf.insert(slot, markAddr);
   }
 }

@@ -321,16 +321,16 @@ import org.vmmagic.unboxed.Word;
    * @return The address of the word/byte containing the mark bit/byte that was logged
    */
   @Inline
-  public Address markScalarFieldAsLogged(ObjectReference object, Word metaData) {
-    return org.jikesrvm.objectmodel.ObjectModel.markScalarFieldAsLogged(object, metaData);
+  public Address nonAtomicMarkScalarFieldAsLogged(ObjectReference object, Word metaData) {
+    return org.jikesrvm.objectmodel.ObjectModel.nonAtomicMarkScalarFieldAsLogged(object, metaData);
   }
 
   /**
    * @return The address of the word/byte containing the mark bit/byte that was logged
    */
   @Inline
-  public Address markRefArrayElementAsLogged(ObjectReference object, int index) {
-    return org.jikesrvm.objectmodel.ObjectModel.markRefArrayElementAsLogged(object, index);
+  public Address nonAtomicMarkRefArrayElementAsLogged(ObjectReference object, int index) {
+    return org.jikesrvm.objectmodel.ObjectModel.nonAtomicMarkRefArrayElementAsLogged(object, index);
   }
 
 

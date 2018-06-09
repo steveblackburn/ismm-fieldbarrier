@@ -303,7 +303,7 @@ public class RCBaseMutator extends StopTheWorldMutator {
         ObjectReference tgt = slot.loadObjectReference();
         if (!tgt.isNull())
           decBuffer.push(tgt);
-        Address markAddr = isArray ? VM.objectModel.markRefArrayElementAsLogged(src, metaData.toInt()) : VM.objectModel.markScalarFieldAsLogged(src, metaData);
+        Address markAddr = isArray ? VM.objectModel.nonAtomicMarkRefArrayElementAsLogged(src, metaData.toInt()) : VM.objectModel.nonAtomicMarkScalarFieldAsLogged(src, metaData);
         modFieldBuffer.insert(slot, markAddr);
       }
       RCHeader.finishLogging(src);
@@ -330,7 +330,7 @@ public class RCBaseMutator extends StopTheWorldMutator {
       while (cursor.LT(end)) {
         if (VM.objectModel.isFieldUnlogged(dst, index)) {
           decBuffer.push(cursor.loadObjectReference());
-          Word mark = VM.objectModel.markRefArrayElementAsLogged(dst, index);
+          Word mark = VM.objectModel.nonAtomicMarkRefArrayElementAsLogged(dst, index);
           modFieldBuffer.insert(cursor, mark.toAddress());
         }
         cursor = cursor.plus(BYTES_IN_ADDRESS);
