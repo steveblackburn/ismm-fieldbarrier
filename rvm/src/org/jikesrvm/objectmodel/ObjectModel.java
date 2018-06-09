@@ -385,7 +385,7 @@ public class ObjectModel {
     int fieldIndex = offset >> LOG_BYTES_IN_ADDRESS;
     if (USE_PREFIX_FIELD_MARKS_FOR_SCALARS)
       if (FIELD_BARRIER_USE_BYTE)
-        return SCALAR_FIELD_MARK_BASE_OFFSET.minus(fieldIndex).toWord();  // return offset relative to object pointer
+        return FIELD_BYTE_MARK_BASE_OFFSET.minus(fieldIndex).toWord();  // return offset relative to object pointer
       else {
         Word rtn = metaDataFromFieldIndex(fieldIndex);
         return rtn;
@@ -446,18 +446,22 @@ public class ObjectModel {
       VM._assert(ObjectModel.getTIB(object).getType().isArrayType());
       VM._assert(!isFieldBarrierExcludedType(object));
     }
-
-    if (FIELD_BARRIER_USE_BYTE) {
+    if (USE_PREFIX_FIELD_MARKS_FOR_ARRAYS) {
+      if (FIELD_BARRIER_USE_BYTE) {
+        Address markAddr = object.toAddress().plus(FIELD_BYTE_MARK_BASE_OFFSET).minus(index);
+        return markAddr.loadByte() != 0;
+      } else {
+        Address wordadd = object.toAddress().plus(wordOffsetFromMetadata(Word.fromIntSignExtend(index)));
+        VM.sysWrite("AUL: ",object);
+        VM.sysWrite(" ", wordadd);
+        VM.sysWrite(" ", wordOffsetFromMetadata(Word.fromIntSignExtend(index)));
+        VM.sysWriteln(" ", bitMaskFromIndex(index));
+        if (VM.VerifyAssertions && USE_PREFIX_FIELD_MARKS_FOR_ARRAYS) VM._assert(wordadd.GE(objectStartRef(object)) && wordadd.LT(object.toAddress()));
+        return !wordadd.loadWord().and(bitMaskFromIndex(index)).isZero();
+      }
+    } else {
       int markBase = getFieldMarkStateBaseOffset(object);
       return object.toAddress().plus(markBase + index).loadByte() != 0;
-    } else {
-      Address wordadd = object.toAddress().plus(wordOffsetFromMetadata(Word.fromIntSignExtend(index)));
-      VM.sysWrite("AUL: ",object);
-      VM.sysWrite(" ", wordadd);
-      VM.sysWrite(" ", wordOffsetFromMetadata(Word.fromIntSignExtend(index)));
-      VM.sysWriteln(" ", bitMaskFromIndex(index));
-      if (VM.VerifyAssertions && USE_PREFIX_FIELD_MARKS_FOR_ARRAYS) VM._assert(wordadd.GE(objectStartRef(object)) && wordadd.LT(object.toAddress()));
-      return !wordadd.loadWord().and(bitMaskFromIndex(index)).isZero();
     }
   }
 
@@ -500,24 +504,31 @@ public class ObjectModel {
       VM._assert(ObjectModel.getTIB(object).getType().isArrayType());
       VM._assert(!isFieldBarrierExcludedType(object));
     }
-    if (FIELD_BARRIER_USE_BYTE) {
+    if (USE_PREFIX_FIELD_MARKS_FOR_ARRAYS) {
+      if (FIELD_BARRIER_USE_BYTE) {
+        Address markAddr = object.toAddress().plus(FIELD_BYTE_MARK_BASE_OFFSET).minus(index);
+        if (VM.VerifyAssertions) VM._assert(markAddr.LT(getObjectEndAddress(object.toObject())));
+        markAddr.store((byte) 0);
+        return markAddr;
+      } else {
+        Address wordAddr = object.toAddress().plus(wordOffsetFromMetadata(Word.fromIntSignExtend(index)));
+        // FIXME the following line needs to be atomic (does it?), but is not:
+        VM.sysWrite("AL: ",object);
+        VM.sysWrite(" ", wordAddr);
+        VM.sysWrite(" ", wordOffsetFromMetadata(Word.fromIntSignExtend(index)));
+        VM.sysWriteln(" ", bitMaskFromIndex(index));
+        if (VM.VerifyAssertions && USE_PREFIX_FIELD_MARKS_FOR_ARRAYS) VM._assert(wordAddr.GE(objectStartRef(object)) && wordAddr.LT(object.toAddress()));
+        if (VM.VerifyAssertions) VM._assert(!wordAddr.loadWord().and(bitMaskFromIndex(index)).isZero());
+        wordAddr.store(wordAddr.loadWord().xor(bitMaskFromIndex(index)));
+        if (VM.VerifyAssertions) VM._assert(wordAddr.loadWord().and(bitMaskFromIndex(index)).isZero());
+        return wordAddr;
+      }
+    } else {
       int markBase = getFieldMarkStateBaseOffset(object);
       Address markAddr = object.toAddress().plus(markBase + index);
       if (VM.VerifyAssertions) VM._assert(markAddr.LT(getObjectEndAddress(object.toObject())));
       markAddr.store((byte) 0);
       return markAddr;
-    } else {
-      Address wordAddr = object.toAddress().plus(wordOffsetFromMetadata(Word.fromIntSignExtend(index)));
-      // FIXME the following line needs to be atomic (does it?), but is not:
-      VM.sysWrite("AL: ",object);
-      VM.sysWrite(" ", wordAddr);
-      VM.sysWrite(" ", wordOffsetFromMetadata(Word.fromIntSignExtend(index)));
-      VM.sysWriteln(" ", bitMaskFromIndex(index));
-      if (VM.VerifyAssertions && USE_PREFIX_FIELD_MARKS_FOR_ARRAYS) VM._assert(wordAddr.GE(objectStartRef(object)) && wordAddr.LT(object.toAddress()));
-      if (VM.VerifyAssertions) VM._assert(!wordAddr.loadWord().and(bitMaskFromIndex(index)).isZero());
-      wordAddr.store(wordAddr.loadWord().xor(bitMaskFromIndex(index)));
-      if (VM.VerifyAssertions) VM._assert(wordAddr.loadWord().and(bitMaskFromIndex(index)).isZero());
-      return wordAddr;
     }
   }
 
