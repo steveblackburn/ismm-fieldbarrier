@@ -423,22 +423,20 @@ public class ObjectModel {
       VM._assert(USE_FIELD_BARRIER_FOR_PUTFIELD);
       VM._assert(ObjectModel.getTIB(object).getType().isClassType());
       VM._assert(!isFieldBarrierExcludedType(object));
+      VM._assert(USE_PREFIX_FIELD_MARKS_FOR_SCALARS);
     }
-    if (USE_PREFIX_FIELD_MARKS_FOR_SCALARS) {
-      if (FIELD_BARRIER_USE_BYTE)
-        return object.toAddress().plus(metaData.toInt()).loadByte() != 0;
-      else {
-        Address wordaddr = object.toAddress().plus(wordOffsetFromMetadata(metaData));
-        Word mask = bitMaskFromMetadata(metaData);
-        VM.sysWrite("SUL: ",object);
-        VM.sysWrite(" ", wordaddr);
-        VM.sysWrite(" ", wordOffsetFromMetadata(metaData));
-        VM.sysWriteln(" ", mask);
-        if (VM.VerifyAssertions && USE_PREFIX_FIELD_MARKS_FOR_SCALARS) VM._assert(wordaddr.GE(objectStartRef(object)) && wordaddr.LT(object.toAddress()));
-        return !wordaddr.loadWord().and(mask).isZero();
-      }
-    } else
-      return object.toAddress().plus(getFieldMarkStateBaseOffset(object)+metaData.toInt()).loadByte() == 1;
+    if (FIELD_BARRIER_USE_BYTE)
+      return object.toAddress().plus(metaData.toInt()).loadByte() != 0;
+    else {
+      Address wordaddr = object.toAddress().plus(wordOffsetFromMetadata(metaData));
+      Word mask = bitMaskFromMetadata(metaData);
+      VM.sysWrite("SUL: ",object);
+      VM.sysWrite(" ", wordaddr);
+      VM.sysWrite(" ", wordOffsetFromMetadata(metaData));
+      VM.sysWriteln(" ", mask);
+      if (VM.VerifyAssertions && USE_PREFIX_FIELD_MARKS_FOR_SCALARS) VM._assert(wordaddr.GE(objectStartRef(object)) && wordaddr.LT(object.toAddress()));
+      return !wordaddr.loadWord().and(mask).isZero();
+    }
   }
 
   @Inline
@@ -448,6 +446,7 @@ public class ObjectModel {
       VM._assert(ObjectModel.getTIB(object).getType().isArrayType());
       VM._assert(!isFieldBarrierExcludedType(object));
     }
+
     if (FIELD_BARRIER_USE_BYTE) {
       int markBase = getFieldMarkStateBaseOffset(object);
       return object.toAddress().plus(markBase + index).loadByte() != 0;
