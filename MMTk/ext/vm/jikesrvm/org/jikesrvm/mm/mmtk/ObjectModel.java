@@ -317,7 +317,7 @@ import org.vmmagic.unboxed.Word;
    */
   @Inline
   public Word markFieldAsLogged(ObjectReference object, Word metaData, boolean isArray) {
-    return org.jikesrvm.objectmodel.ObjectModel.markFieldAsLogged(object, metaData, isArray);
+    return org.jikesrvm.objectmodel.ObjectModel.markRefArrayElementAsLogged(object, metaData, isArray);
   }
 
   @Inline

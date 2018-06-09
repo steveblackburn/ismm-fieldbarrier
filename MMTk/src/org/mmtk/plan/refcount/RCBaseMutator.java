@@ -329,7 +329,7 @@ public class RCBaseMutator extends StopTheWorldMutator {
       while (cursor.LT(end)) {
         if (VM.objectModel.isFieldUnlogged(dst, index)) {
           decBuffer.push(cursor.loadObjectReference());
-          Word mark = VM.objectModel.markFieldAsLogged(dst, index);
+          Word mark = VM.objectModel.markRefArrayElementAsLogged(dst, index);
           modFieldBuffer.insert(cursor, mark.toAddress());
         }
         cursor = cursor.plus(BYTES_IN_ADDRESS);
