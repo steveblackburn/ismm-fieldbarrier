@@ -18,6 +18,7 @@ import org.mmtk.policy.ExplicitFreeListLocal;
 import org.mmtk.policy.ExplicitFreeListSpace;
 import org.mmtk.policy.LargeObjectLocal;
 import org.mmtk.policy.Space;
+import org.mmtk.utility.FieldMarks;
 import org.mmtk.utility.alloc.Allocator;
 import org.mmtk.utility.deque.AddressPairDeque;
 import org.mmtk.utility.deque.ObjectReferenceDeque;
@@ -222,7 +223,7 @@ public class RCBaseMutator extends StopTheWorldMutator {
                            ObjectReference tgt, Word metaDataA,
                            Word metaDataB, Word metaDataC, int mode) {
     if (USE_FIELD_BARRIER) {
-      if (VM.objectModel.isFieldUnlogged(src, metaDataC, mode == ARRAY_ELEMENT))
+      if (FieldMarks.isFieldUnlogged(src, metaDataC, mode == ARRAY_ELEMENT))
         coalescingFieldWriteBarrierSlow(src, slot, metaDataC, mode == ARRAY_ELEMENT);
     } else if (RCHeader.logRequired(src)) {
       coalescingObjectWriteBarrierSlow(src);
@@ -236,7 +237,7 @@ public class RCBaseMutator extends StopTheWorldMutator {
                                                ObjectReference old, ObjectReference tgt, Word metaDataA,
                                                Word metaDataB, Word metaDataC, int mode) {
     if (USE_FIELD_BARRIER) {
-      if (VM.objectModel.isFieldUnlogged(src, metaDataC, mode == ARRAY_ELEMENT)) {
+      if (FieldMarks.isFieldUnlogged(src, metaDataC, mode == ARRAY_ELEMENT)) {
         coalescingFieldWriteBarrierSlow(src, slot, metaDataC, mode == ARRAY_ELEMENT);
       }
     } else if (RCHeader.logRequired(src)) {
@@ -298,12 +299,12 @@ public class RCBaseMutator extends StopTheWorldMutator {
   private void coalescingFieldWriteBarrierSlow(ObjectReference src, Address slot, Word metaData, boolean isArray) {
     if (VM.VERIFY_ASSERTIONS) VM.assertions._assert(USE_FIELD_BARRIER);
     if (RCHeader.prepareToLogFieldInObject(src)) {
-      if (VM.objectModel.isFieldUnlogged(src, metaData, isArray)) {
+      if (FieldMarks.isFieldUnlogged(src, metaData, isArray)) {
         ObjectReference tgt = slot.loadObjectReference();
         if (!tgt.isNull())
           decBuffer.push(tgt);
-        Word mark = VM.objectModel.markFieldAsLogged(src, metaData, isArray);
-        modFieldBuffer.insert(slot, mark.toAddress());
+        Address markAddr = isArray ? VM.objectModel.markRefArrayElementAsLogged(src, metaData.toInt()) : VM.objectModel.markScalarFieldAsLogged(src, metaData);
+        modFieldBuffer.insert(slot, markAddr);
       }
       RCHeader.finishLogging(src);
     }

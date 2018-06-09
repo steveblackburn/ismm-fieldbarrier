@@ -308,17 +308,31 @@ import org.vmmagic.unboxed.Word;
   }
 
   @Inline
-  public boolean isFieldUnlogged(ObjectReference object, Word metaData, boolean isArray) {
-    return org.jikesrvm.objectmodel.ObjectModel.isFieldUnlogged(object, metaData, isArray);
+  public boolean isScalarFieldUnlogged(ObjectReference object, Word metaData) {
+    return org.jikesrvm.objectmodel.ObjectModel.isScalarFieldUnlogged(object, metaData);
+  }
+
+  @Inline
+  public boolean isRefArrayElementUnlogged(ObjectReference object, int index) {
+    return org.jikesrvm.objectmodel.ObjectModel.isRefArrayElementUnlogged(object, index);
   }
 
   /**
    * @return The address of the word/byte containing the mark bit/byte that was logged
    */
   @Inline
-  public Word markFieldAsLogged(ObjectReference object, Word metaData, boolean isArray) {
-    return org.jikesrvm.objectmodel.ObjectModel.markRefArrayElementAsLogged(object, metaData, isArray);
+  public Address markScalarFieldAsLogged(ObjectReference object, Word metaData) {
+    return org.jikesrvm.objectmodel.ObjectModel.markScalarFieldAsLogged(object, metaData);
   }
+
+  /**
+   * @return The address of the word/byte containing the mark bit/byte that was logged
+   */
+  @Inline
+  public Address markRefArrayElementAsLogged(ObjectReference object, int index) {
+    return org.jikesrvm.objectmodel.ObjectModel.markRefArrayElementAsLogged(object, index);
+  }
+
 
   @Inline
   public void clearFieldMarks(Word fieldMarkReference) {

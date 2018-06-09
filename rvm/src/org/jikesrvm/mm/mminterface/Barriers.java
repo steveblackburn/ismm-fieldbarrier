@@ -16,7 +16,6 @@ import static org.jikesrvm.classloader.MemberReference.getFieldRef;
 import static org.jikesrvm.mm.mminterface.MemoryManagerConstants.USE_FIELD_BARRIER_FOR_AASTORE;
 import static org.jikesrvm.mm.mminterface.MemoryManagerConstants.USE_FIELD_BARRIER_FOR_PUTFIELD;
 import static org.jikesrvm.objectmodel.ObjectModel.getFieldMarkMetadata;
-import static org.jikesrvm.objectmodel.ObjectModel.getFieldBarrierMetadata;
 import static org.jikesrvm.runtime.JavaSizeConstants.LOG_BYTES_IN_BOOLEAN;
 import static org.jikesrvm.runtime.JavaSizeConstants.LOG_BYTES_IN_DOUBLE;
 import static org.jikesrvm.runtime.JavaSizeConstants.LOG_BYTES_IN_FLOAT;
@@ -1292,7 +1291,7 @@ public class Barriers {
     if (NEEDS_OBJECT_GC_WRITE_BARRIER) {
       ObjectReference array = ObjectReference.fromObject(ref);
       Offset offset = Offset.fromIntZeroExtend(index << LOG_BYTES_IN_ADDRESS);
-      Word fieldMarkMetadata = USE_FIELD_BARRIER_FOR_AASTORE ? getFieldBarrierMetadata(index) : Word.zero();
+      Word fieldMarkMetadata = USE_FIELD_BARRIER_FOR_AASTORE ? Word.fromIntSignExtend(index) : Word.zero();
       Selected.Mutator.get().objectReferenceWrite(array, array.toAddress().plus(offset), ObjectReference.fromObject(value), offset.toWord(), Word.zero(), fieldMarkMetadata, ARRAY_ELEMENT);
     } else if (VM.VerifyAssertions)
       VM._assert(VM.NOT_REACHED);

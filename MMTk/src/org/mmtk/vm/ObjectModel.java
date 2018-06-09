@@ -240,8 +240,10 @@ public abstract class ObjectModel {
   public abstract void dumpObject(ObjectReference object);
 
 
-  public abstract boolean isFieldUnlogged(ObjectReference object, Word metaData, boolean isArray);
-  public abstract Word markFieldAsLogged(ObjectReference object, Word metaData, boolean isArray);
+  public abstract boolean isScalarFieldUnlogged(ObjectReference object, Word metaData);
+  public abstract boolean isRefArrayElementUnlogged(ObjectReference object, int index);
+  public abstract Address markScalarFieldAsLogged(ObjectReference object, Word metaData);
+  public abstract Address markRefArrayElementAsLogged(ObjectReference object, int index);
   public abstract void clearFieldMarks(Word fieldMarkReference);
   public abstract void markAllFieldsAsUnlogged(ObjectReference obj);
   public abstract void markAllFieldsAsUnlogged(ObjectReference obj, ObjectReference tib);

@@ -370,7 +370,7 @@ public class ObjectModel {
   @Inline
   public static int fieldMarkBytes(int numReferences) {
     int bytes = numReferences; // one mark byte per reference in type
-    return Memory.alignUp(bytes, MIN_ALIGNMENT);
+    return Memory.alignUp(bytes, MIN_ALIGNMENT);  // FIXME fix for BIT marks
   }
 
   @Inline
@@ -397,25 +397,13 @@ public class ObjectModel {
   @Inline
   public static Word getFieldMarkMetadata(ObjectReference object, Offset fieldOffset) {
     if (VM.VerifyAssertions) VM._assert(!isFieldBarrierExcludedType(object));
-    if (ObjectModel.getTIB(object).getType().isClassType()) {
-      Word fieldMarkMetadata = getFieldMarkMetadata(fieldOffset);
-      if (USE_PREFIX_FIELD_MARKS_FOR_SCALARS)
-        return fieldMarkMetadata;
-      else
-        return fieldMarkMetadata.toOffset().plus(getFieldMarkStateBaseOffset(object)).toWord();
-    } else {
-      int index = fieldOffset.toInt() >> LOG_BYTES_IN_ADDRESS;
-      return getFieldBarrierMetadata(index);
-    }
-  }
+    if (VM.VerifyAssertions) VM._assert(ObjectModel.getTIB(object).getType().isClassType());
 
-  @Inline
-  public static Word getFieldBarrierMetadata(int index) {
-    if (VM.VerifyAssertions) VM._assert(USE_FIELD_BARRIER_FOR_AASTORE);
-    if (FIELD_BARRIER_USE_BYTE)
-      return Word.fromIntSignExtend(index);
+    Word fieldMarkMetadata = getFieldMarkMetadata(fieldOffset);
+    if (USE_PREFIX_FIELD_MARKS_FOR_SCALARS)
+      return fieldMarkMetadata;
     else
-      return metaDataFromFieldIndex(index); // FIXME is this right???
+      return fieldMarkMetadata.toOffset().plus(getFieldMarkStateBaseOffset(object)).toWord();
   }
 
   @Inline
@@ -430,17 +418,7 @@ public class ObjectModel {
   }
 
   @Inline
-  public static boolean isFieldUnlogged(ObjectReference object, Word metaData, boolean isArray) {
-    if (VM.VerifyAssertions) VM._assert(!isFieldBarrierExcludedType(object));
-    if (isArray)
-      return isArrayFieldUnlogged(object, metaData.toInt());
-    else
-      return isScalarFieldUnlogged(object, metaData);
-  }
-
-
-  @Inline
-  private static boolean isScalarFieldUnlogged(ObjectReference object, Word metaData) {
+  public static boolean isScalarFieldUnlogged(ObjectReference object, Word metaData) {
     if (VM.VerifyAssertions) {
       VM._assert(USE_FIELD_BARRIER_FOR_PUTFIELD);
       VM._assert(ObjectModel.getTIB(object).getType().isClassType());
@@ -464,28 +442,23 @@ public class ObjectModel {
   }
 
   @Inline
-  private static boolean isArrayFieldUnlogged(ObjectReference object, int index) {
+  public static boolean isRefArrayElementUnlogged(ObjectReference object, int index) {
     if (VM.VerifyAssertions) {
       VM._assert(USE_FIELD_BARRIER_FOR_AASTORE);
       VM._assert(ObjectModel.getTIB(object).getType().isArrayType());
       VM._assert(!isFieldBarrierExcludedType(object));
     }
-    return internalIsFieldUnlogged(object, index);
-  }
-
-  @Inline
-  private static boolean internalIsFieldUnlogged(ObjectReference object, int fieldmarkMetadata) {
     if (FIELD_BARRIER_USE_BYTE) {
       int markBase = getFieldMarkStateBaseOffset(object);
-      return object.toAddress().plus(markBase + fieldmarkMetadata).loadByte() != 0;
+      return object.toAddress().plus(markBase + index).loadByte() != 0;
     } else {
-      Address wordadd = object.toAddress().plus(wordOffsetFromMetadata(Word.fromIntSignExtend(fieldmarkMetadata)));
+      Address wordadd = object.toAddress().plus(wordOffsetFromMetadata(Word.fromIntSignExtend(index)));
       VM.sysWrite("AUL: ",object);
       VM.sysWrite(" ", wordadd);
-      VM.sysWrite(" ", wordOffsetFromMetadata(Word.fromIntSignExtend(fieldmarkMetadata)));
-      VM.sysWriteln(" ", bitMaskFromIndex(fieldmarkMetadata));
+      VM.sysWrite(" ", wordOffsetFromMetadata(Word.fromIntSignExtend(index)));
+      VM.sysWriteln(" ", bitMaskFromIndex(index));
       if (VM.VerifyAssertions && USE_PREFIX_FIELD_MARKS_FOR_ARRAYS) VM._assert(wordadd.GE(objectStartRef(object)) && wordadd.LT(object.toAddress()));
-      return !wordadd.loadWord().and(bitMaskFromIndex(fieldmarkMetadata)).isZero();
+      return !wordadd.loadWord().and(bitMaskFromIndex(index)).isZero();
     }
   }
 
@@ -494,15 +467,7 @@ public class ObjectModel {
    * @return The address of the word/byte containing the mark bit/byte that was logged
    */
   @Inline
-  public static Word markRefArrayElementAsLogged(ObjectReference object, Word metaData, boolean isArray) {
-     if (isArray)
-       return markRefArrayElementAsLogged(object, metaData.toInt());
-     else
-       return markScalarFieldAsLogged(object, metaData);
-  }
-
-  @Inline
-  private static Word markScalarFieldAsLogged(ObjectReference object, Word metaData) {
+  public static Address markScalarFieldAsLogged(ObjectReference object, Word metaData) {
     if (VM.VerifyAssertions) {
       VM._assert(USE_FIELD_BARRIER_FOR_PUTFIELD);
       VM._assert(USE_PREFIX_FIELD_MARKS_FOR_SCALARS);
@@ -511,26 +476,26 @@ public class ObjectModel {
     }
 
     if (FIELD_BARRIER_USE_BYTE) {
-      Address mark = object.toAddress().plus(metaData.toInt());
-      mark.store((byte) 0);
-      return mark.toWord();
+      Address markAddr = object.toAddress().plus(metaData.toInt());
+      markAddr.store((byte) 0);
+      return markAddr;
     } else {
-      Address wordaddr = object.toAddress().plus(wordOffsetFromMetadata(metaData));
+      Address markAddr = object.toAddress().plus(wordOffsetFromMetadata(metaData));
       // FIXME the following line needs to be atomic (does it?), but is not:
       VM.sysWrite("SL: ",object);
       VM.sysWrite(" ", objectStartRef(object));
       VM.sysWrite(" ", object.toAddress().minus(OBJECT_REF_OFFSET));
       VM.sysWriteln(" ", bitMaskFromMetadata(metaData));
-      if (VM.VerifyAssertions && USE_PREFIX_FIELD_MARKS_FOR_SCALARS) VM._assert(wordaddr.GE(objectStartRef(object)) && wordaddr.LT(object.toAddress()));
-      if (VM.VerifyAssertions) VM._assert(!wordaddr.loadWord().and(bitMaskFromMetadata(metaData)).isZero());
-      wordaddr.store(wordaddr.loadWord().xor(bitMaskFromMetadata(metaData)));
-      if (VM.VerifyAssertions) VM._assert(wordaddr.loadWord().and(bitMaskFromMetadata(metaData)).isZero());
-      return wordaddr.toWord();
+      if (VM.VerifyAssertions && USE_PREFIX_FIELD_MARKS_FOR_SCALARS) VM._assert(markAddr.GE(objectStartRef(object)) && markAddr.LT(object.toAddress()));
+      if (VM.VerifyAssertions) VM._assert(!markAddr.loadWord().and(bitMaskFromMetadata(metaData)).isZero());
+      markAddr.store(markAddr.loadWord().xor(bitMaskFromMetadata(metaData)));
+      if (VM.VerifyAssertions) VM._assert(markAddr.loadWord().and(bitMaskFromMetadata(metaData)).isZero());
+      return markAddr;
     }
   }
 
   @Inline
-  private static Word markRefArrayElementAsLogged(ObjectReference object, int index) {
+  public static Address markRefArrayElementAsLogged(ObjectReference object, int index) {
     if (VM.VerifyAssertions) {
       VM._assert(USE_FIELD_BARRIER_FOR_AASTORE);
       VM._assert(ObjectModel.getTIB(object).getType().isArrayType());
@@ -538,22 +503,22 @@ public class ObjectModel {
     }
     if (FIELD_BARRIER_USE_BYTE) {
       int markBase = getFieldMarkStateBaseOffset(object);
-      Address mark = object.toAddress().plus(markBase + index);
-      if (VM.VerifyAssertions) VM._assert(mark.LT(getObjectEndAddress(object.toObject())));
-      mark.store((byte) 0);
-      return mark.toWord();
+      Address markAddr = object.toAddress().plus(markBase + index);
+      if (VM.VerifyAssertions) VM._assert(markAddr.LT(getObjectEndAddress(object.toObject())));
+      markAddr.store((byte) 0);
+      return markAddr;
     } else {
-      Address wordaddr = object.toAddress().plus(wordOffsetFromMetadata(Word.fromIntSignExtend(index)));
+      Address wordAddr = object.toAddress().plus(wordOffsetFromMetadata(Word.fromIntSignExtend(index)));
       // FIXME the following line needs to be atomic (does it?), but is not:
       VM.sysWrite("AL: ",object);
-      VM.sysWrite(" ", wordaddr);
+      VM.sysWrite(" ", wordAddr);
       VM.sysWrite(" ", wordOffsetFromMetadata(Word.fromIntSignExtend(index)));
       VM.sysWriteln(" ", bitMaskFromIndex(index));
-      if (VM.VerifyAssertions && USE_PREFIX_FIELD_MARKS_FOR_ARRAYS) VM._assert(wordaddr.GE(objectStartRef(object)) && wordaddr.LT(object.toAddress()));
-      if (VM.VerifyAssertions) VM._assert(!wordaddr.loadWord().and(bitMaskFromIndex(index)).isZero());
-      wordaddr.store(wordaddr.loadWord().xor(bitMaskFromIndex(index)));
-      if (VM.VerifyAssertions) VM._assert(wordaddr.loadWord().and(bitMaskFromIndex(index)).isZero());
-      return wordaddr.toWord();
+      if (VM.VerifyAssertions && USE_PREFIX_FIELD_MARKS_FOR_ARRAYS) VM._assert(wordAddr.GE(objectStartRef(object)) && wordAddr.LT(object.toAddress()));
+      if (VM.VerifyAssertions) VM._assert(!wordAddr.loadWord().and(bitMaskFromIndex(index)).isZero());
+      wordAddr.store(wordAddr.loadWord().xor(bitMaskFromIndex(index)));
+      if (VM.VerifyAssertions) VM._assert(wordAddr.loadWord().and(bitMaskFromIndex(index)).isZero());
+      return wordAddr;
     }
   }
 

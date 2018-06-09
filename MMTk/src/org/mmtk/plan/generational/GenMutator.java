@@ -15,14 +15,13 @@ package org.mmtk.plan.generational;
 import org.mmtk.plan.*;
 import org.mmtk.policy.CopyLocal;
 import org.mmtk.policy.Space;
+import org.mmtk.utility.FieldMarks;
 import org.mmtk.utility.HeaderByte;
-import org.mmtk.utility.Log;
 import org.mmtk.utility.deque.*;
 import org.mmtk.utility.alloc.Allocator;
 import org.mmtk.utility.statistics.Stats;
 import org.mmtk.vm.VM;
 
-import static org.mmtk.plan.Plan.VM_SPACE;
 import static org.mmtk.plan.generational.Gen.*;
 import static org.mmtk.utility.Constants.*;
 
@@ -140,10 +139,9 @@ import org.vmmagic.unboxed.*;
     if (Gen.GATHER_WRITE_BARRIER_STATS) Gen.wbFast.inc();
     if ((Gen.USE_FIELD_BARRIER_FOR_PUTFIELD && mode == INSTANCE_FIELD) ||
             (Gen.USE_FIELD_BARRIER_FOR_AASTORE && mode == ARRAY_ELEMENT)) {
-      if (VM.objectModel.isFieldUnlogged(src, metaData, mode == ARRAY_ELEMENT)) {
+      if (FieldMarks.isFieldUnlogged(src, metaData, mode == ARRAY_ELEMENT)) {
         if (Gen.GATHER_WRITE_BARRIER_STATS) Gen.wbFRSlow.inc();
-        Word mark = VM.objectModel.markFieldAsLogged(src, metaData, mode == ARRAY_ELEMENT);
-        fieldbuf.insert(slot, mark.toAddress());
+        FieldMarks.logField(src, slot, metaData,mode == ARRAY_ELEMENT, fieldbuf);
       }
     } else if ((mode == ARRAY_ELEMENT && USE_OBJECT_BARRIER_FOR_AASTORE) ||
         (mode == INSTANCE_FIELD && USE_OBJECT_BARRIER_FOR_PUTFIELD)) {
