@@ -504,11 +504,6 @@ public final class MemoryManager {
     Address region = allocateSpace(mutator, size+prefix, align, offset, allocator, site);
     Object result = ObjectModel.initializeScalar(region.plus(prefix), tib, size);
     mutator.postAlloc(ObjectReference.fromObject(result), ObjectReference.fromObject(tib), size, allocator);
-    if (tib.getType() == RVMType.TIBType) {
-      Log.write("AS: ", ObjectReference.fromObject(result));
-      Log.write(" ", region);
-      Log.writeln("-", region.plus(size + prefix));
-    }
     return result;
   }
 
@@ -586,7 +581,6 @@ public final class MemoryManager {
     Address region = allocateSpace(mutator, size, align, offset, allocator, site);
     Object result = ObjectModel.initializeArray(region.plus(prefix), tib, numElements, size);
     mutator.postAlloc(ObjectReference.fromObject(result), ObjectReference.fromObject(tib), size, allocator);
-    Log.write("AA: ", ObjectReference.fromObject(result)); Log.write(" ", region); Log.write("-", region.plus(prefix)); Log.write("-", region.plus(size)); Log.writeln(" ", prefix);
     return result;
   }
 
