@@ -294,27 +294,15 @@ public class ObjectModel {
   public static void markAllFieldsAsUnlogged(BootImageInterface bootImage, Address ref, TIB tib, int size,
                                              int numElements, boolean isScalar) {
     Address cursor;
-    Address end;
+    Address end = ref.plus(GC_HEADER_OFFSET);
     if (isScalar) {
       if (VM.VerifyAssertions) VM._assert(USE_FIELD_BARRIER_FOR_PUTFIELD);
-      if (USE_PREFIX_FIELD_MARKS_FOR_SCALARS) {
-        end = ref.plus(GC_HEADER_OFFSET);
-        cursor = end.minus(((RVMClass) tib.getType()).getAlignedFieldMarkBytes());
-      } else {
-        cursor = ref.plus(((RVMClass) tib.getType()).getFieldMarkStateBaseOffset());
-        end = ref.minus(GC_HEADER_OFFSET).plus(size);
-      }
+      cursor = end.minus(((RVMClass) tib.getType()).getAlignedFieldMarkBytes());
     } else {
       if (VM.VerifyAssertions) VM._assert(USE_FIELD_BARRIER_FOR_AASTORE);
       if (!(((RVMArray) tib.getType()).getElementType().isReferenceType()))
         return;
-      if (USE_PREFIX_FIELD_MARKS_FOR_ARRAYS) {
-        end = ref.plus(GC_HEADER_OFFSET);
-        cursor = end.minus(((RVMArray) tib.getType()).getAlignedFieldMarkBytes(numElements));
-      } else {
-        end = ref.minus(GC_HEADER_OFFSET).plus(size);
-        cursor = ref.plus(numElements << LOG_BYTES_IN_ADDRESS);
-      }
+      cursor = end.minus(((RVMArray) tib.getType()).getAlignedFieldMarkBytes(numElements));
     }
     while (cursor.LT(end)) {
       bootImage.setByte(cursor, (byte) 0xff);
@@ -336,34 +324,17 @@ public class ObjectModel {
     if ((USE_FIELD_BARRIER_FOR_AASTORE && type.isArrayType() && ((RVMArray) type).getElementType().isReferenceType()) ||
             USE_FIELD_BARRIER_FOR_PUTFIELD && !type.isArrayType()) {
       Address cursor;
-      Address end;
+      Address end = obj.toAddress().plus(GC_HEADER_OFFSET);
       if (type.isClassType() && type != RVMType.TIBType) {
-        if (USE_PREFIX_FIELD_MARKS_FOR_SCALARS) {
-          // FIXME THIS MUST BE CHECKED
-          end = obj.toAddress().plus(GC_HEADER_OFFSET);
-          cursor = end.minus(((RVMClass) type).getAlignedFieldMarkBytes());
-        //  Log.write("M: ", obj); Log.write(" "); Log.write(Space.getSpaceForObject(obj).getName()); Log.write(" ", cursor); Log.writeln("-", end);
-         // return;
-        } else {
-          end = getObjectEndAddress(obj.toObject(), type.asClass());
-          cursor = Magic.objectAsAddress(obj).plus(getFieldMarkStateBaseOffset(obj));
-        }
+        cursor = end.minus(((RVMClass) type).getAlignedFieldMarkBytes());
       } else {
         if (VM.VerifyAssertions) VM._assert(type == RVMType.TIBType || ((RVMArray) type).getElementType().isReferenceType());
-        int numElements = Magic.getArrayLength(obj);
-        if (USE_PREFIX_FIELD_MARKS_FOR_ARRAYS) {
-          end = obj.toAddress().plus(GC_HEADER_OFFSET);
-          cursor = end.minus(((RVMArray) type).getAlignedFieldMarkBytes(numElements));
-        } else {
-          cursor = Magic.objectAsAddress(obj).plus(numElements << LOG_BYTES_IN_ADDRESS);
-          end = cursor.plus(numElements);
-        }
+        cursor = end.minus(((RVMArray) type).getAlignedFieldMarkBytes(Magic.getArrayLength(obj)));
       }
-        while (cursor.LT(end)) {
-          //  if (cursor.GT(Address.fromIntSignExtend(0x680300a4)))
-          cursor.store((byte) 0xff); // <---
-          cursor = cursor.plus(1);
-        }
+      while (cursor.LT(end)) {
+        cursor.store((byte) 0xff);
+        cursor = cursor.plus(1);
+      }
     }
   }
 
@@ -383,15 +354,11 @@ public class ObjectModel {
   private static Word getFieldMarkMetadata(Offset fieldOffset) {
     int offset = fieldOffset.minus(FIELD_ZERO_OFFSET).toInt();
     int fieldIndex = offset >> LOG_BYTES_IN_ADDRESS;
-    if (USE_PREFIX_FIELD_MARKS_FOR_SCALARS)
-      if (FIELD_BARRIER_USE_BYTE)
-        return FIELD_BYTE_MARK_BASE_OFFSET.minus(fieldIndex).toWord();  // return offset relative to object pointer
-      else {
-        Word rtn = metaDataFromFieldIndex(fieldIndex);
-        return rtn;
-      }
-    else
-      return Word.fromIntSignExtend(fieldIndex);  // return offset relative to base of mark fields
+    if (FIELD_BARRIER_USE_BYTE)
+      return FIELD_BYTE_MARK_BASE_OFFSET.minus(fieldIndex).toWord();  // return offset relative to object pointer
+    else {
+      return metaDataFromFieldIndex(fieldIndex);
+    }
   }
 
   @Inline
@@ -399,11 +366,7 @@ public class ObjectModel {
     if (VM.VerifyAssertions) VM._assert(!isFieldBarrierExcludedType(object));
     if (VM.VerifyAssertions) VM._assert(ObjectModel.getTIB(object).getType().isClassType());
 
-    Word fieldMarkMetadata = getFieldMarkMetadata(fieldOffset);
-    if (USE_PREFIX_FIELD_MARKS_FOR_SCALARS)
-      return fieldMarkMetadata;
-    else
-      return fieldMarkMetadata.toOffset().plus(getFieldMarkStateBaseOffset(object)).toWord();
+    return getFieldMarkMetadata(fieldOffset);
   }
 
   @Inline
@@ -430,10 +393,6 @@ public class ObjectModel {
     else {
       Address wordaddr = object.toAddress().plus(wordOffsetFromMetadata(metaData));
       Word mask = bitMaskFromMetadata(metaData);
-      VM.sysWrite("SUL: ",object);
-      VM.sysWrite(" ", wordaddr);
-      VM.sysWrite(" ", wordOffsetFromMetadata(metaData));
-      VM.sysWriteln(" ", mask);
       if (VM.VerifyAssertions && USE_PREFIX_FIELD_MARKS_FOR_SCALARS) VM._assert(wordaddr.GE(objectStartRef(object)) && wordaddr.LT(object.toAddress()));
       return !wordaddr.loadWord().and(mask).isZero();
     }
@@ -446,22 +405,13 @@ public class ObjectModel {
       VM._assert(ObjectModel.getTIB(object).getType().isArrayType());
       VM._assert(!isFieldBarrierExcludedType(object));
     }
-    if (USE_PREFIX_FIELD_MARKS_FOR_ARRAYS) {
-      if (FIELD_BARRIER_USE_BYTE) {
-        Address markAddr = object.toAddress().plus(FIELD_BYTE_MARK_BASE_OFFSET).minus(index);
-        return markAddr.loadByte() != 0;
-      } else {
-        Address wordAddr = object.toAddress().plus(wordOffsetFromFieldIndex(index));
-        VM.sysWrite("AUL: ",object);
-        VM.sysWrite(" ", wordAddr);
-        VM.sysWrite(" ", wordOffsetFromFieldIndex(index));
-        VM.sysWriteln(" ", bitMaskFromIndex(index));
-        if (VM.VerifyAssertions && USE_PREFIX_FIELD_MARKS_FOR_ARRAYS) VM._assert(wordAddr.GE(objectStartRef(object)) && wordAddr.LT(object.toAddress()));
-        return !wordAddr.loadWord().and(bitMaskFromIndex(index)).isZero();
-      }
+    if (FIELD_BARRIER_USE_BYTE) {
+      Address markAddr = object.toAddress().plus(FIELD_BYTE_MARK_BASE_OFFSET).minus(index);
+      return markAddr.loadByte() != 0;
     } else {
-      int markBase = getFieldMarkStateBaseOffset(object);
-      return object.toAddress().plus(markBase + index).loadByte() != 0;
+      Address wordAddr = object.toAddress().plus(wordOffsetFromFieldIndex(index));
+      if (VM.VerifyAssertions && USE_PREFIX_FIELD_MARKS_FOR_ARRAYS) VM._assert(wordAddr.GE(objectStartRef(object)) && wordAddr.LT(object.toAddress()));
+      return !wordAddr.loadWord().and(bitMaskFromIndex(index)).isZero();
     }
   }
 
@@ -485,10 +435,6 @@ public class ObjectModel {
     } else {
       Address wordAddr = object.toAddress().plus(wordOffsetFromMetadata(metaData));
       // FIXME the following line needs to be atomic (does it?), but is not:
-      VM.sysWrite("SL: ",object);
-      VM.sysWrite(" ", objectStartRef(object));
-      VM.sysWrite(" ", object.toAddress().minus(OBJECT_REF_OFFSET));
-      VM.sysWriteln(" ", bitMaskFromMetadata(metaData));
       if (VM.VerifyAssertions && USE_PREFIX_FIELD_MARKS_FOR_SCALARS) VM._assert(wordAddr.GE(objectStartRef(object)) && wordAddr.LT(object.toAddress()));
       if (VM.VerifyAssertions) VM._assert(!wordAddr.loadWord().and(bitMaskFromMetadata(metaData)).isZero());
       wordAddr.store(wordAddr.loadWord().xor(bitMaskFromMetadata(metaData)));
@@ -504,31 +450,20 @@ public class ObjectModel {
       VM._assert(ObjectModel.getTIB(object).getType().isArrayType());
       VM._assert(!isFieldBarrierExcludedType(object));
     }
-    if (USE_PREFIX_FIELD_MARKS_FOR_ARRAYS) {
-      if (FIELD_BARRIER_USE_BYTE) {
-        Address markAddr = object.toAddress().plus(FIELD_BYTE_MARK_BASE_OFFSET).minus(index);
-        if (VM.VerifyAssertions) VM._assert(markAddr.LT(getObjectEndAddress(object.toObject())));
-        markAddr.store((byte) 0);
-        return markAddr;
-      } else {
-        Address wordAddr = object.toAddress().plus(wordOffsetFromFieldIndex(index));
-        // FIXME the following line needs to be atomic (does it?), but is not:
-        VM.sysWrite("AL: ",object);
-        VM.sysWrite(" ", wordAddr);
-        VM.sysWrite(" ", wordOffsetFromFieldIndex(index));
-        VM.sysWriteln(" ", bitMaskFromIndex(index));
-        if (VM.VerifyAssertions && USE_PREFIX_FIELD_MARKS_FOR_ARRAYS) VM._assert(wordAddr.GE(objectStartRef(object)) && wordAddr.LT(object.toAddress()));
-        if (VM.VerifyAssertions) VM._assert(!wordAddr.loadWord().and(bitMaskFromIndex(index)).isZero());
-        wordAddr.store(wordAddr.loadWord().xor(bitMaskFromIndex(index)));
-        if (VM.VerifyAssertions) VM._assert(wordAddr.loadWord().and(bitMaskFromIndex(index)).isZero());
-        return wordAddr;
-      }
-    } else {
-      int markBase = getFieldMarkStateBaseOffset(object);
-      Address markAddr = object.toAddress().plus(markBase + index);
+
+    if (FIELD_BARRIER_USE_BYTE) {
+      Address markAddr = object.toAddress().plus(FIELD_BYTE_MARK_BASE_OFFSET).minus(index);
       if (VM.VerifyAssertions) VM._assert(markAddr.LT(getObjectEndAddress(object.toObject())));
       markAddr.store((byte) 0);
       return markAddr;
+    } else {
+      Address wordAddr = object.toAddress().plus(wordOffsetFromFieldIndex(index));
+      // FIXME the following line needs to be atomic (does it?), but is not:
+      if (VM.VerifyAssertions && USE_PREFIX_FIELD_MARKS_FOR_ARRAYS) VM._assert(wordAddr.GE(objectStartRef(object)) && wordAddr.LT(object.toAddress()));
+      if (VM.VerifyAssertions) VM._assert(!wordAddr.loadWord().and(bitMaskFromIndex(index)).isZero());
+      wordAddr.store(wordAddr.loadWord().xor(bitMaskFromIndex(index)));
+      if (VM.VerifyAssertions) VM._assert(wordAddr.loadWord().and(bitMaskFromIndex(index)).isZero());
+      return wordAddr;
     }
   }
 
@@ -1220,7 +1155,7 @@ public class ObjectModel {
     }
     int align = getAlignment(klass);
     int offset = getOffsetForAlignment(klass, needsIdentityHash);
-    int prefix = USE_PREFIX_FIELD_MARKS_FOR_SCALARS ? klass.getAlignedFieldMarkBytes() : 0;
+    int prefix = klass.getAlignedFieldMarkBytes();
     Address ptr = bootImage.allocateDataStorage(size+prefix, align, offset);
     Address ref = JavaHeader.initializeScalarHeader(bootImage, ptr.plus(prefix), tib, needsIdentityHash, identityHashValue);
     MemoryManager.initializeHeader(bootImage, ref, tib, size);
@@ -1313,7 +1248,7 @@ public class ObjectModel {
     }
     int offset = getOffsetForAlignment(array, needsIdentityHash);
     int padding = AlignmentEncoding.padding(alignCode);
-    int prefix = USE_PREFIX_FIELD_MARKS_FOR_ARRAYS ? array.getAlignedFieldMarkBytes(numElements) : 0;
+    int prefix = array.getAlignedFieldMarkBytes(numElements);
     Address ptr = bootImage.allocateDataStorage(size + padding + prefix, align, offset);
     ptr = AlignmentEncoding.adjustRegion(alignCode, ptr.plus(prefix));
     Address ref = JavaHeader.initializeArrayHeader(bootImage, ptr, tib, numElements, needsIdentityHash, identityHashValue);
