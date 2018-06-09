@@ -351,8 +351,13 @@ public class ObjectModel {
       } else {
         if (VM.VerifyAssertions) VM._assert(type == RVMType.TIBType || ((RVMArray) type).getElementType().isReferenceType());
         int numElements = Magic.getArrayLength(obj);
-        cursor = Magic.objectAsAddress(obj).plus(numElements << LOG_BYTES_IN_ADDRESS);
-        end = cursor.plus(numElements);
+        if (USE_PREFIX_FIELD_MARKS_FOR_ARRAYS) {
+          end = obj.toAddress().plus(GC_HEADER_OFFSET);
+          cursor = end.minus(((RVMArray) type).getAlignedFieldMarkBytes(numElements));
+        } else {
+          cursor = Magic.objectAsAddress(obj).plus(numElements << LOG_BYTES_IN_ADDRESS);
+          end = cursor.plus(numElements);
+        }
       }
         while (cursor.LT(end)) {
           //  if (cursor.GT(Address.fromIntSignExtend(0x680300a4)))
@@ -542,7 +547,7 @@ public class ObjectModel {
       int markBase = getFieldMarkStateBaseOffset(object);
       Address mark = object.toAddress().plus(markBase + fieldMarkMetadata);
       if (VM.VerifyAssertions) VM._assert(mark.LT(getObjectEndAddress(object.toObject())));
-      mark.store((byte) 0);
+     // mark.store((byte) 0);
       return mark.toWord();
     } else {
       Address wordaddr = object.toAddress().plus(wordOffsetFromMetadata(Word.fromIntSignExtend(fieldMarkMetadata)));
