@@ -13,13 +13,8 @@
 package org.jikesrvm.objectmodel;
 
 import static org.jikesrvm.mm.mminterface.MemoryManagerConstants.USE_FIELD_BARRIER_FOR_PUTFIELD;
-import static org.jikesrvm.mm.mminterface.MemoryManagerConstants.USE_PREFIX_FIELD_MARKS_FOR_SCALARS;
-import static org.jikesrvm.objectmodel.JavaHeader.OBJECT_REF_OFFSET;
-import static org.jikesrvm.objectmodel.JavaHeader.SCALAR_HEADER_SIZE;
-import static org.jikesrvm.objectmodel.JavaHeaderConstants.LOG_MIN_ALIGNMENT;
 import static org.jikesrvm.runtime.JavaSizeConstants.BYTES_IN_LONG;
 import static org.jikesrvm.runtime.UnboxedSizeConstants.BYTES_IN_ADDRESS;
-import static org.mmtk.utility.Constants.MIN_ALIGNMENT;
 
 import org.jikesrvm.VM;
 import org.jikesrvm.classloader.RVMClass;
@@ -157,10 +152,6 @@ public abstract class FieldLayout {
       int numReferences = (size + 3) >> 2; // conservative estimate
       int fieldMarkBytes = ObjectModel.fieldMarkBytes(numReferences);
       klass.setAlignedFieldMarkBytes(fieldMarkBytes);
-      if (!USE_PREFIX_FIELD_MARKS_FOR_SCALARS) {
-        klass.setInstanceMarkStateOffsetInternal(size - (OBJECT_REF_OFFSET - SCALAR_HEADER_SIZE));
-        size += fieldMarkBytes;
-      }
     }
 
     klass.setInstanceSizeInternal(ObjectModel.computeScalarHeaderSize(klass) + size);

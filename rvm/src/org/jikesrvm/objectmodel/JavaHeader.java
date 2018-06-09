@@ -16,7 +16,6 @@ import static org.jikesrvm.mm.mminterface.MemoryManagerConstants.*;
 import static org.jikesrvm.objectmodel.JavaHeaderConstants.*;
 import static org.jikesrvm.objectmodel.MiscHeader.REQUESTED_BITS;
 import static org.jikesrvm.runtime.JavaSizeConstants.BYTES_IN_INT;
-import static org.jikesrvm.runtime.UnboxedSizeConstants.BYTES_IN_WORD;
 import static org.jikesrvm.runtime.UnboxedSizeConstants.LOG_BYTES_IN_ADDRESS;
 
 import org.jikesrvm.VM;
@@ -29,7 +28,6 @@ import org.jikesrvm.scheduler.Lock;
 import org.jikesrvm.scheduler.RVMThread;
 import org.jikesrvm.scheduler.ThinLock;
 import org.mmtk.policy.Space;
-import org.mmtk.utility.Log;
 import org.vmmagic.pragma.Inline;
 import org.vmmagic.pragma.Interruptible;
 import org.vmmagic.pragma.NoInline;
@@ -324,25 +322,16 @@ public class JavaHeader {
     }
 
     // FIXME: everything below could exploit TIB-encoding of this info
-    TIB tib = getTIB(obj);
-    RVMType type = tib.getType();
+    RVMType type = Magic.getTIBAtOffset(obj, TIB_OFFSET).getType();
 
-    if (USE_PREFIX_FIELD_MARKS_FOR_SCALARS) {
-      if (type.isClassType() && !(type == RVMType.TIBType)) {
-        start = start.minus(((RVMClass) type).getAlignedFieldMarkBytes());
-      }
+    if (type.isClassType() && !(type == RVMType.TIBType)) {
+      start = start.minus(((RVMClass) type).getAlignedFieldMarkBytes());
+    } else if (type.isArrayType()) {
+      start = start.minus(((RVMArray) type).getAlignedFieldMarkBytes(Magic.getArrayLength(obj)));
+    } else if (type == RVMType.TIBType) {
+      // FIXME: TIBS should never have field marks, right?
+      // start = start.minus(ObjectModel.fieldMarkBytes(Magic.getArrayLength(obj)));
     }
-
-    if (USE_PREFIX_FIELD_MARKS_FOR_ARRAYS) {
-      if (type.isArrayType()) {
-        start = start.minus(((RVMArray) type).getAlignedFieldMarkBytes(Magic.getArrayLength(obj)));
-      } else if (type == RVMType.TIBType) {
-        // FIXME: TIBS should never have field marks, right?
-        // start = start.minus(ObjectModel.fieldMarkBytes(Magic.getArrayLength(obj)));
-      }
-    }
-
-
     while (start.minus(BYTES_IN_INT).loadInt() == ALIGNMENT_VALUE)
       start = start.minus(BYTES_IN_INT);
 

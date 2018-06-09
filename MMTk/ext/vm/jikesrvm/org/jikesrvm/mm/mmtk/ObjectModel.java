@@ -12,8 +12,6 @@
  */
 package org.jikesrvm.mm.mmtk;
 
-import static org.jikesrvm.mm.mminterface.MemoryManagerConstants.USE_PREFIX_FIELD_MARKS_FOR_ARRAYS;
-import static org.jikesrvm.mm.mminterface.MemoryManagerConstants.USE_PREFIX_FIELD_MARKS_FOR_SCALARS;
 import static org.jikesrvm.objectmodel.JavaHeaderConstants.ARRAY_BASE_OFFSET;
 import static org.jikesrvm.objectmodel.JavaHeaderConstants.GC_HEADER_OFFSET;
 
@@ -59,7 +57,7 @@ import org.vmmagic.unboxed.Word;
     int bytes = org.jikesrvm.objectmodel.ObjectModel.bytesRequiredWhenCopied(from.toObject(), type);
     int align = org.jikesrvm.objectmodel.ObjectModel.getAlignment(type, from.toObject());
     int offset = org.jikesrvm.objectmodel.ObjectModel.getOffsetForAlignment(type, from);
-    int prefix = USE_PREFIX_FIELD_MARKS_FOR_SCALARS ?  type.getAlignedFieldMarkBytes() : 0;
+    int prefix = type.getAlignedFieldMarkBytes();
     CollectorContext context = VM.activePlan.collector();
     allocator = context.copyCheckAllocator(from, bytes+prefix, align, allocator);
     Address region = MemoryManager.allocateSpace(context, bytes+prefix, align, offset,
@@ -76,7 +74,7 @@ import org.vmmagic.unboxed.Word;
     int bytes = org.jikesrvm.objectmodel.ObjectModel.bytesRequiredWhenCopied(from.toObject(), type, elements);
     int align = org.jikesrvm.objectmodel.ObjectModel.getAlignment(type, from.toObject());
     int offset = org.jikesrvm.objectmodel.ObjectModel.getOffsetForAlignment(type, from);
-    int prefix = USE_PREFIX_FIELD_MARKS_FOR_ARRAYS?  type.getAlignedFieldMarkBytes(elements) : 0;
+    int prefix = type.getAlignedFieldMarkBytes(elements);
     CollectorContext context = VM.activePlan.collector();
     allocator = context.copyCheckAllocator(from, bytes+prefix, align, allocator);
     Address region = MemoryManager.allocateSpace(context, bytes+prefix, align, offset,

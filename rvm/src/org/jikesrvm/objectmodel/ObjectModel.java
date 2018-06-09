@@ -13,7 +13,6 @@
 package org.jikesrvm.objectmodel;
 
 import static org.jikesrvm.mm.mminterface.MemoryManagerConstants.*;
-import static org.jikesrvm.objectmodel.JavaHeader.OBJECT_REF_OFFSET;
 import static org.jikesrvm.objectmodel.JavaHeaderConstants.*;
 import static org.jikesrvm.runtime.JavaSizeConstants.BYTES_IN_INT;
 import static org.mmtk.utility.Constants.*;
@@ -275,21 +274,6 @@ public class ObjectModel {
     return Word.fromIntSignExtend(1<<(index % BITS_IN_WORD));
   }
 
-  public static int getFieldMarkStateBaseOffset(ObjectReference object) {
-    // FIXME need to move all this crap off fast path ---> move state to front of scalars
-    RVMType type = ObjectModel.getTIB(object).getType();
-    if (type.isClassType()) {
-      if (VM.VerifyAssertions) VM._assert(!USE_PREFIX_FIELD_MARKS_FOR_SCALARS);
-      if (VM.VerifyAssertions) VM._assert(USE_FIELD_BARRIER_FOR_PUTFIELD);
-      return ((RVMClass) type).getFieldMarkStateBaseOffset();
-    } else {
-      if (VM.VerifyAssertions) VM._assert(USE_FIELD_BARRIER_FOR_AASTORE);
-      if (VM.VerifyAssertions) VM._assert(((RVMArray) type).getElementType().isReferenceType());
-      int numElements = Magic.getArrayLength(object);
-      return numElements << LOG_BYTES_IN_ADDRESS;  // FIXME address width constant
-    }
-  }
-
   @Interruptible
   public static void markAllFieldsAsUnlogged(BootImageInterface bootImage, Address ref, TIB tib, int size,
                                              int numElements, boolean isScalar) {
@@ -386,14 +370,13 @@ public class ObjectModel {
       VM._assert(USE_FIELD_BARRIER_FOR_PUTFIELD);
       VM._assert(ObjectModel.getTIB(object).getType().isClassType());
       VM._assert(!isFieldBarrierExcludedType(object));
-      VM._assert(USE_PREFIX_FIELD_MARKS_FOR_SCALARS);
     }
     if (FIELD_BARRIER_USE_BYTE)
       return object.toAddress().plus(metaData.toInt()).loadByte() != 0;
     else {
       Address wordaddr = object.toAddress().plus(wordOffsetFromMetadata(metaData));
       Word mask = bitMaskFromMetadata(metaData);
-      if (VM.VerifyAssertions && USE_PREFIX_FIELD_MARKS_FOR_SCALARS) VM._assert(wordaddr.GE(objectStartRef(object)) && wordaddr.LT(object.toAddress()));
+      if (VM.VerifyAssertions) VM._assert(wordaddr.GE(objectStartRef(object)) && wordaddr.LT(object.toAddress()));
       return !wordaddr.loadWord().and(mask).isZero();
     }
   }
@@ -410,7 +393,7 @@ public class ObjectModel {
       return markAddr.loadByte() != 0;
     } else {
       Address wordAddr = object.toAddress().plus(wordOffsetFromFieldIndex(index));
-      if (VM.VerifyAssertions && USE_PREFIX_FIELD_MARKS_FOR_ARRAYS) VM._assert(wordAddr.GE(objectStartRef(object)) && wordAddr.LT(object.toAddress()));
+      if (VM.VerifyAssertions) VM._assert(wordAddr.GE(objectStartRef(object)) && wordAddr.LT(object.toAddress()));
       return !wordAddr.loadWord().and(bitMaskFromIndex(index)).isZero();
     }
   }
@@ -423,7 +406,6 @@ public class ObjectModel {
   public static Address nonAtomicMarkScalarFieldAsLogged(ObjectReference object, Word metaData) {
     if (VM.VerifyAssertions) {
       VM._assert(USE_FIELD_BARRIER_FOR_PUTFIELD);
-      VM._assert(USE_PREFIX_FIELD_MARKS_FOR_SCALARS);
       VM._assert(ObjectModel.getTIB(object).getType().isClassType());
       VM._assert(!isFieldBarrierExcludedType(object));
     }
@@ -435,7 +417,7 @@ public class ObjectModel {
     } else {
       Address wordAddr = object.toAddress().plus(wordOffsetFromMetadata(metaData));
       // FIXME the following line needs to be atomic (does it?), but is not:
-      if (VM.VerifyAssertions && USE_PREFIX_FIELD_MARKS_FOR_SCALARS) VM._assert(wordAddr.GE(objectStartRef(object)) && wordAddr.LT(object.toAddress()));
+      if (VM.VerifyAssertions) VM._assert(wordAddr.GE(objectStartRef(object)) && wordAddr.LT(object.toAddress()));
       if (VM.VerifyAssertions) VM._assert(!wordAddr.loadWord().and(bitMaskFromMetadata(metaData)).isZero());
       wordAddr.store(wordAddr.loadWord().xor(bitMaskFromMetadata(metaData)));
       if (VM.VerifyAssertions) VM._assert(wordAddr.loadWord().and(bitMaskFromMetadata(metaData)).isZero());
@@ -459,7 +441,7 @@ public class ObjectModel {
     } else {
       Address wordAddr = object.toAddress().plus(wordOffsetFromFieldIndex(index));
       // FIXME the following line needs to be atomic (does it?), but is not:
-      if (VM.VerifyAssertions && USE_PREFIX_FIELD_MARKS_FOR_ARRAYS) VM._assert(wordAddr.GE(objectStartRef(object)) && wordAddr.LT(object.toAddress()));
+      if (VM.VerifyAssertions) VM._assert(wordAddr.GE(objectStartRef(object)) && wordAddr.LT(object.toAddress()));
       if (VM.VerifyAssertions) VM._assert(!wordAddr.loadWord().and(bitMaskFromIndex(index)).isZero());
       wordAddr.store(wordAddr.loadWord().xor(bitMaskFromIndex(index)));
       if (VM.VerifyAssertions) VM._assert(wordAddr.loadWord().and(bitMaskFromIndex(index)).isZero());

@@ -498,7 +498,6 @@ public final class MemoryManager {
    */
   @Inline
   public static Object allocateScalar(int prefix, int size, TIB tib, int allocator, int align, int offset, int site) {
-    prefix = USE_PREFIX_FIELD_MARKS_FOR_SCALARS ? prefix : 0;
     Selected.Mutator mutator = Selected.Mutator.get();
     allocator = mutator.checkAllocator(org.jikesrvm.runtime.Memory.alignUp(size+prefix, MIN_ALIGNMENT), align, allocator);
     Address region = allocateSpace(mutator, size+prefix, align, offset, allocator, site);
@@ -535,13 +534,10 @@ public final class MemoryManager {
     int size = elemBytes + headerSize;
     int prefix = 0;
     if (USE_FIELD_BARRIER_FOR_AASTORE && ((RVMArray) tib.getType()).getElementType().isReferenceType() && numElements > 0) {
-
       int fieldmarkBytes = org.jikesrvm.runtime.Memory.alignUp(ObjectModel.fieldMarkBytes(numElements), align);
       size += fieldmarkBytes;
-      if (USE_PREFIX_FIELD_MARKS_FOR_ARRAYS) {
-        prefix = fieldmarkBytes;
-        if (VM.VerifyAssertions) VM._assert(prefix != 0);
-      }
+      prefix = fieldmarkBytes;
+      if (VM.VerifyAssertions) VM._assert(prefix != 0);
       if (VM.VerifyAssertions) VM._assert(org.jikesrvm.runtime.Memory.alignUp(size, MIN_ALIGNMENT) == size);
     }
     return allocateArrayInternal(numElements, size, prefix, tib, allocator, align, offset, site);
