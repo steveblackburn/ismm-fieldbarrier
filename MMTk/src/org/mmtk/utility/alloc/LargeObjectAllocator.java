@@ -101,7 +101,6 @@ public abstract class LargeObjectAllocator extends Allocator {
     Address sp = space.acquire(pages);
     if (sp.isZero()) return sp;
     Address cell = sp.plus(header);
-    Log.write("AS: ", cell); Log.writeln(" ", sp);
     return cell;
   }
 

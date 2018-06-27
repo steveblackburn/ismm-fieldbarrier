@@ -205,6 +205,7 @@ import org.vmmagic.unboxed.Word;
 
   @Override
   public boolean isPrimitiveArray(ObjectReference object) {
+    // FIXME use TIB enncoding to remove this overhead
     RVMType type = org.jikesrvm.objectmodel.ObjectModel.getObjectType(object.toObject());
     return type.isArrayType() && type.getReferenceOffsets() != null;
   }

@@ -131,24 +131,19 @@ import org.vmmagic.unboxed.*;
 
   @Inline
   public void add(Address node) {
-    Log.write("DLA: ", node); Log.write(" p: ", node.loadAddress(PREV_OFFSET)); Log.writeln(" n: ", node.loadAddress(NEXT_OFFSET));
     if (VM.VERIFY_ASSERTIONS) VM.assertions._assert(isNode(node));
     if (lock != null) lock.acquire();
     node.store(Address.zero(), PREV_OFFSET);
     node.store(head, NEXT_OFFSET);
-    Log.write("DLA: ", node); Log.write(" p: ", node.loadAddress(PREV_OFFSET)); Log.writeln(" n: ", node.loadAddress(NEXT_OFFSET));
     if (!head.isZero()) {
-      checkHead("DLA~ ");
       head.store(node, PREV_OFFSET);
     }
     head = node;
-    checkHead("DLA- ");
     if (lock != null) lock.release();
   }
 
   @Inline
   public void remove(Address node) {
-    Log.write("DLR: ", node); Log.write(" p: ", node.loadAddress(PREV_OFFSET)); Log.writeln(" n: ", node.loadAddress(NEXT_OFFSET));
     if (VM.VERIFY_ASSERTIONS) VM.assertions._assert(isNode(node));
     if (lock != null) lock.acquire();
     Address prev = node.loadAddress(PREV_OFFSET);
@@ -163,7 +158,6 @@ import org.vmmagic.unboxed.*;
     // Null out node's reference to the list
     node.store(Address.zero(), PREV_OFFSET);
     node.store(Address.zero(), NEXT_OFFSET);
-    Log.write("DLR- ", node); Log.write(" h: ", head); Log.write(" p: ", head.loadAddress(PREV_OFFSET));Log.writeln(" n: ", head.loadAddress(NEXT_OFFSET));
     if (lock != null) lock.release();
   }
 

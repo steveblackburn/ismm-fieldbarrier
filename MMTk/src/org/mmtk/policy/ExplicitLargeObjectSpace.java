@@ -12,14 +12,13 @@
  */
 package org.mmtk.policy;
 
-import static org.mmtk.plan.refcount.RCBase.USE_FIELD_BARRIER;
+import static org.mmtk.plan.Plan.USE_FIELD_BARRIER;
 import static org.mmtk.utility.Constants.BYTES_IN_ADDRESS;
 import static org.mmtk.utility.Constants.LOG_BYTES_IN_PAGE;
 
 
 import org.mmtk.plan.Plan;
 import org.mmtk.plan.TransitiveClosure;
-import org.mmtk.utility.Log;
 import org.mmtk.utility.heap.FreeListPageResource;
 import org.mmtk.utility.heap.VMRequest;
 import org.mmtk.utility.DoublyLinkedList;
@@ -115,11 +114,9 @@ public final class ExplicitLargeObjectSpace extends BaseLargeObjectSpace {
   private static final Address getCell(ObjectReference object) {
     if (VM.VERIFY_ASSERTIONS && USE_FIELD_BARRIER) VM.assertions._assert(VM.objectModel.isArray(object));
     if (VM.VERIFY_ASSERTIONS) VM.assertions._assert(Plan.FIELD_BARRIER_USE_BYTE);
-    if (VM.objectModel.isPrimitiveArray(object)) {
-      Log.write(" P: "); Log.writeln(object);
+    if (VM.objectModel.isPrimitiveArray(object)) {  //  FIXME this needs to use TIB encoding
       return getCell(object.toAddress());
     } else {
-      Log.write(" R: "); Log.writeln(object);
       return getCell(object.toAddress().minus(VM.objectModel.getArrayLength(object)));  // FIXME NEED TO ADJUST FOR BIT MARKS
     }
   }
@@ -144,12 +141,8 @@ public final class ExplicitLargeObjectSpace extends BaseLargeObjectSpace {
    */
   @Inline
   public void initializeHeader(ObjectReference object, boolean alloc) {
-    Log.write("IH: ", object);  Log.write(" l: ", VM.objectModel.getArrayLength(object));
-    Log.writeln(" c: ", getCell(object));
-    cells.checkHead("IH ");
     cells.add(DoublyLinkedList.midPayloadToNode(getCell(object)));
     setObject(getCell(object), object);
-    cells.checkHead("IH~ ");
   }
 
   /****************************************************************************
@@ -224,7 +217,6 @@ public final class ExplicitLargeObjectSpace extends BaseLargeObjectSpace {
    */
   @Inline
   public void free(ObjectReference object) {
-    Log.writeln("F: ", object);
     Address cell = getCell(object);
     cells.remove(cell);
     release(cell);
