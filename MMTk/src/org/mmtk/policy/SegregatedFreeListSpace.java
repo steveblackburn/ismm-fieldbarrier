@@ -842,16 +842,16 @@ public abstract class SegregatedFreeListSpace extends Space {
     Extent cellExtent = Extent.fromIntSignExtend(cellSize[sizeClass]);
     boolean containsLive = false;
     while (cursor.LT(end)) {
-      VM.assertions._assert(false);   // FIXME this won't work with field barrier
+      VM.assertions._assert(MARK_BIT_AT_CELL_BASE);   // FIXME this won't work unless marks are in the cell base
       boolean free = true;
-      ObjectReference current = VM.objectModel.getObjectFromStartAddress(cursor);
-      if (!current.isNull()) {
-        free = !isLiveBitSet(current);
-        if (!free) {
-          free = sweeper.sweepCell(current);
-          if (free) unsyncClearLiveBit(current);
+      //ObjectReference current = VM.objectModel.getObjectFromStartAddress(cursor);
+     // if (!current.isNull()) {
+        free = !isLiveBitSet(cursor);
+       if (!free && !MARK_BIT_AT_CELL_BASE) { // FIXME cycle collection will not work unless we can map from cell to object
+          free = sweeper.sweepCell(cursor.toObjectReference());
+          if (free) unsyncClearLiveBit(cursor.toObjectReference());
         }
-      }
+      //}
       if (!free) {
         containsLive = true;
       }

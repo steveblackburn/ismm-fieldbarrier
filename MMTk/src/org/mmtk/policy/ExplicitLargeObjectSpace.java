@@ -12,9 +12,14 @@
  */
 package org.mmtk.policy;
 
+import static org.mmtk.plan.refcount.RCBase.USE_FIELD_BARRIER;
+import static org.mmtk.utility.Constants.BYTES_IN_ADDRESS;
 import static org.mmtk.utility.Constants.LOG_BYTES_IN_PAGE;
 
+
+import org.mmtk.plan.Plan;
 import org.mmtk.plan.TransitiveClosure;
+import org.mmtk.utility.Log;
 import org.mmtk.utility.heap.FreeListPageResource;
 import org.mmtk.utility.heap.VMRequest;
 import org.mmtk.utility.DoublyLinkedList;
@@ -30,6 +35,12 @@ import org.vmmagic.unboxed.*;
  */
 @Uninterruptible
 public final class ExplicitLargeObjectSpace extends BaseLargeObjectSpace {
+
+  private static final int LOG_CELL_GRANULARITY = LOG_BYTES_IN_PAGE;
+  private static final Word CELL_MASK = Word.fromIntSignExtend((1<<LOG_CELL_GRANULARITY)-1).not();
+  private static final Offset OBJECT_PTR_OFFSET = DoublyLinkedList.HEADER_SIZE;
+  private static final int CELL_HEADER_SIZE = BYTES_IN_ADDRESS;
+
 
   /****************************************************************************
    *
@@ -69,7 +80,7 @@ public final class ExplicitLargeObjectSpace extends BaseLargeObjectSpace {
    */
   public ExplicitLargeObjectSpace(String name, boolean zeroed, VMRequest vmRequest) {
     super(name, zeroed, vmRequest);
-    cells = new DoublyLinkedList(LOG_BYTES_IN_PAGE, true);
+    cells = new DoublyLinkedList(LOG_CELL_GRANULARITY, true);
   }
 
   /****************************************************************************
@@ -101,6 +112,29 @@ public final class ExplicitLargeObjectSpace extends BaseLargeObjectSpace {
     ((FreeListPageResource) pr).releasePages(first);
   }
 
+  private static final Address getCell(ObjectReference object) {
+    if (VM.VERIFY_ASSERTIONS && USE_FIELD_BARRIER) VM.assertions._assert(VM.objectModel.isArray(object));
+    if (VM.VERIFY_ASSERTIONS) VM.assertions._assert(Plan.FIELD_BARRIER_USE_BYTE);
+    if (VM.objectModel.isPrimitiveArray(object)) {
+      Log.write(" P: "); Log.writeln(object);
+      return getCell(object.toAddress());
+    } else {
+      Log.write(" R: "); Log.writeln(object);
+      return getCell(object.toAddress().minus(VM.objectModel.getArrayLength(object)));  // FIXME NEED TO ADJUST FOR BIT MARKS
+    }
+  }
+
+  private static final Address getCell(Address address) {
+    return address.toWord().and(CELL_MASK).toAddress();
+  }
+
+  private static final ObjectReference getObject(Address cell) {
+    return cell.plus(OBJECT_PTR_OFFSET).loadObjectReference();
+  }
+
+  private static final void setObject(Address cell, ObjectReference obj) {
+    cell.plus(OBJECT_PTR_OFFSET).store(obj);
+  }
   /**
    * Perform any required initialization of the GC portion of the header.
    *
@@ -110,8 +144,12 @@ public final class ExplicitLargeObjectSpace extends BaseLargeObjectSpace {
    */
   @Inline
   public void initializeHeader(ObjectReference object, boolean alloc) {
-    Address cell = VM.objectModel.objectStartRef(object);
-    cells.add(DoublyLinkedList.midPayloadToNode(cell));
+    Log.write("IH: ", object);  Log.write(" l: ", VM.objectModel.getArrayLength(object));
+    Log.writeln(" c: ", getCell(object));
+    cells.checkHead("IH ");
+    cells.add(DoublyLinkedList.midPayloadToNode(getCell(object)));
+    setObject(getCell(object), object);
+    cells.checkHead("IH~ ");
   }
 
   /****************************************************************************
@@ -158,7 +196,7 @@ public final class ExplicitLargeObjectSpace extends BaseLargeObjectSpace {
   @Override
   @Inline
   protected int cellHeaderSize() {
-    return 0;
+    return CELL_HEADER_SIZE;
   }
 
   /**
@@ -171,7 +209,7 @@ public final class ExplicitLargeObjectSpace extends BaseLargeObjectSpace {
     Address cell = cells.getHead();
     while (!cell.isZero()) {
       Address next = cells.getNext(cell);
-      ObjectReference obj = VM.objectModel.getObjectFromStartAddress(cell.plus(DoublyLinkedList.headerSize()));
+      ObjectReference obj = getObject(cell);
       if (sweeper.sweepLargeObject(obj)) {
         free(obj);
       }
@@ -186,7 +224,8 @@ public final class ExplicitLargeObjectSpace extends BaseLargeObjectSpace {
    */
   @Inline
   public void free(ObjectReference object) {
-    Address cell = getSuperPage(VM.objectModel.refToAddress(object));
+    Log.writeln("F: ", object);
+    Address cell = getCell(object);
     cells.remove(cell);
     release(cell);
   }

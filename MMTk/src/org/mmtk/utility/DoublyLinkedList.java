@@ -81,7 +81,7 @@ import org.vmmagic.unboxed.*;
   //
   private static final Offset PREV_OFFSET = Offset.fromIntSignExtend(0 * BYTES_IN_ADDRESS);
   private static Offset NEXT_OFFSET = Offset.fromIntSignExtend(1 * BYTES_IN_ADDRESS);
-  private static Offset HEADER_SIZE = Offset.fromIntSignExtend(2 * BYTES_IN_ADDRESS);
+  public static Offset HEADER_SIZE = Offset.fromIntSignExtend(2 * BYTES_IN_ADDRESS);
 
   private static final Word nodeMask;
   static {
@@ -90,13 +90,32 @@ import org.vmmagic.unboxed.*;
     nodeMask = mask.minus(Word.one()).not();
   }
 
+
+  public void checkHead(String prefix) {
+    Log.write(prefix);
+    Log.write(" h: ", head);
+    if (head.isZero()) {
+      Log.writeln();
+    } else {
+      Log.write(" n: ", head.loadAddress(NEXT_OFFSET));Log.flush();
+      if (!head.loadAddress(NEXT_OFFSET).isZero()) {
+        Log.write(" np: ", head.loadAddress(NEXT_OFFSET).loadAddress(PREV_OFFSET));
+        Log.writeln(" nn: ", head.loadAddress(NEXT_OFFSET).loadAddress(NEXT_OFFSET));
+      }
+    }
+  }
+
   @Inline
   public static int headerSize() {
     return HEADER_SIZE.toInt();
   }
 
-  public boolean isNode(Address node) {
+
+  private boolean isAligned(Address node) {
     return node.toWord().rshl(logGranularity).lsh(logGranularity).EQ(node.toWord());
+  }
+  public boolean isNode(Address node) {
+    return isAligned(node) && isAligned(node.loadAddress(PREV_OFFSET)) && isAligned(node.loadAddress(NEXT_OFFSET));
   }
 
   @Inline
@@ -112,18 +131,24 @@ import org.vmmagic.unboxed.*;
 
   @Inline
   public void add(Address node) {
+    Log.write("DLA: ", node); Log.write(" p: ", node.loadAddress(PREV_OFFSET)); Log.writeln(" n: ", node.loadAddress(NEXT_OFFSET));
     if (VM.VERIFY_ASSERTIONS) VM.assertions._assert(isNode(node));
     if (lock != null) lock.acquire();
     node.store(Address.zero(), PREV_OFFSET);
     node.store(head, NEXT_OFFSET);
-    if (!head.isZero())
+    Log.write("DLA: ", node); Log.write(" p: ", node.loadAddress(PREV_OFFSET)); Log.writeln(" n: ", node.loadAddress(NEXT_OFFSET));
+    if (!head.isZero()) {
+      checkHead("DLA~ ");
       head.store(node, PREV_OFFSET);
+    }
     head = node;
+    checkHead("DLA- ");
     if (lock != null) lock.release();
   }
 
   @Inline
   public void remove(Address node) {
+    Log.write("DLR: ", node); Log.write(" p: ", node.loadAddress(PREV_OFFSET)); Log.writeln(" n: ", node.loadAddress(NEXT_OFFSET));
     if (VM.VERIFY_ASSERTIONS) VM.assertions._assert(isNode(node));
     if (lock != null) lock.acquire();
     Address prev = node.loadAddress(PREV_OFFSET);
@@ -138,6 +163,7 @@ import org.vmmagic.unboxed.*;
     // Null out node's reference to the list
     node.store(Address.zero(), PREV_OFFSET);
     node.store(Address.zero(), NEXT_OFFSET);
+    Log.write("DLR- ", node); Log.write(" h: ", head); Log.write(" p: ", head.loadAddress(PREV_OFFSET));Log.writeln(" n: ", head.loadAddress(NEXT_OFFSET));
     if (lock != null) lock.release();
   }
 

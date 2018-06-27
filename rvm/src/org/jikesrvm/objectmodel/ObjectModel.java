@@ -28,6 +28,7 @@ import org.jikesrvm.runtime.Magic;
 import org.jikesrvm.runtime.Memory;
 import org.jikesrvm.scheduler.Lock;
 import org.jikesrvm.scheduler.RVMThread;
+import org.mmtk.utility.Log;
 import org.vmmagic.pragma.Entrypoint;
 import org.vmmagic.pragma.Inline;
 import org.vmmagic.pragma.Interruptible;
@@ -436,6 +437,7 @@ public class ObjectModel {
     if (FIELD_BARRIER_USE_BYTE) {
       Address markAddr = object.toAddress().plus(FIELD_BYTE_MARK_BASE_OFFSET).minus(index);
       if (VM.VerifyAssertions) VM._assert(markAddr.LT(getObjectEndAddress(object.toObject())));
+      Log.write("MRA: ", object); Log.write(" i: ", index); Log.write(" l: ", Magic.getArrayLength(object)); Log.writeln(" a: ", markAddr);
       markAddr.store((byte) 0);
       return markAddr;
     } else {
@@ -443,6 +445,7 @@ public class ObjectModel {
       // FIXME the following line needs to be atomic (does it?), but is not:
       if (VM.VerifyAssertions) VM._assert(wordAddr.GE(objectStartRef(object)) && wordAddr.LT(object.toAddress()));
       if (VM.VerifyAssertions) VM._assert(!wordAddr.loadWord().and(bitMaskFromIndex(index)).isZero());
+      Log.write("MRA: ", object); Log.write(" ", wordAddr); Log.writeln(" ", wordAddr.loadWord().xor(bitMaskFromIndex(index)));
       wordAddr.store(wordAddr.loadWord().xor(bitMaskFromIndex(index)));
       if (VM.VerifyAssertions) VM._assert(wordAddr.loadWord().and(bitMaskFromIndex(index)).isZero());
       return wordAddr;

@@ -133,6 +133,7 @@ public abstract class BaseLargeObjectSpace extends Space {
    */
   @Inline
   public static Address getSuperPage(Address cell) {
+    // FIXME this implementation does not appear to match the spec above (seems to assume small cell)
     return cell.toWord().and(PAGE_MASK).toAddress();
   }
 

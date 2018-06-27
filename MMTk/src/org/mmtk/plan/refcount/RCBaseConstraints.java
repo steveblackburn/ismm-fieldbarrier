@@ -13,6 +13,8 @@
 package org.mmtk.plan.refcount;
 
 import static org.mmtk.policy.SegregatedFreeListSpace.MAX_FREELIST_OBJECT_BYTES;
+
+import org.mmtk.plan.Plan;
 import org.mmtk.plan.StopTheWorldConstraints;
 
 import org.vmmagic.pragma.*;
@@ -51,8 +53,11 @@ public class RCBaseConstraints extends StopTheWorldConstraints {
   }
 
   @Override
-  public boolean useFieldBarrierForPutfield() { return RCBase.USE_FIELD_BARRIER; }
+  public boolean fieldBarrierUseByte() { return Plan.FIELD_BARRIER_USE_BYTE; }
 
   @Override
-  public boolean useFieldBarrierForAAStore() { return RCBase.USE_FIELD_BARRIER; }
+  public boolean useFieldBarrierForPutfield() { return Plan.USE_FIELD_BARRIER; }
+
+  @Override
+  public boolean useFieldBarrierForAAStore() { return Plan.USE_FIELD_BARRIER; }
 }

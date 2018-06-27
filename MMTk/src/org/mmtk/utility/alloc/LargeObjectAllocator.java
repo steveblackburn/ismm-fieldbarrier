@@ -14,6 +14,7 @@ package org.mmtk.utility.alloc;
 
 import org.mmtk.policy.BaseLargeObjectSpace;
 import org.mmtk.utility.Conversions;
+import org.mmtk.utility.Log;
 import org.vmmagic.unboxed.*;
 import org.vmmagic.pragma.*;
 
@@ -100,6 +101,7 @@ public abstract class LargeObjectAllocator extends Allocator {
     Address sp = space.acquire(pages);
     if (sp.isZero()) return sp;
     Address cell = sp.plus(header);
+    Log.write("AS: ", cell); Log.writeln(" ", sp);
     return cell;
   }
 

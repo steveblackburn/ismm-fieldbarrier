@@ -540,7 +540,10 @@ public final class MemoryManager {
       if (VM.VerifyAssertions) VM._assert(prefix != 0);
       if (VM.VerifyAssertions) VM._assert(org.jikesrvm.runtime.Memory.alignUp(size, MIN_ALIGNMENT) == size);
     }
-    return allocateArrayInternal(numElements, size, prefix, tib, allocator, align, offset, site);
+    VM.sysWrite("AA: "); VM.sysWrite(" ",numElements); VM.sysWrite(" "); VM.sysWriteln(((RVMArray) tib.getType()).getElementType().getDescriptor());
+    Object rtn = allocateArrayInternal(numElements, size, prefix, tib, allocator, align, offset, site);
+    VM.sysWrite("AA: ", ObjectReference.fromObject(rtn));  VM.sysWrite(" ",numElements); VM.sysWrite(" "); VM.sysWriteln(((RVMArray) tib.getType()).getElementType().getDescriptor());
+    return rtn;
   }
 
 
