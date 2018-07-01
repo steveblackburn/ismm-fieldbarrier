@@ -105,7 +105,7 @@ public abstract class Plan {
   public static final boolean NEEDS_LOG_BIT_IN_HEADER = VM.activePlan.constraints().needsLogBitInHeader();
 
   public static final boolean USE_FIELD_BARRIER = true;
-  public static final boolean FIELD_BARRIER_USE_BYTE = true;
+  public static final boolean FIELD_BARRIER_USE_BYTE = false;
 
   /** The space that holds any VM specific objects (e.g. a boot image) */
   public static final Space vmSpace = VM.memory.getVMSpace();
