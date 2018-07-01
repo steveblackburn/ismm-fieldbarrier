@@ -68,8 +68,8 @@ public class RCBaseMutator extends StopTheWorldMutator {
   public RCBaseMutator() {
     rc = new ExplicitFreeListLocal(RCBase.rcSpace);
     rclos = new LargeObjectLocal(RCBase.rcloSpace);
-    modObjectBuffer = new ObjectReferenceDeque("mod obj", global().modObjectPool);
-    modFieldBuffer = new AddressPairDeque("mod field", global().modFieldPool);
+    modObjectBuffer = USE_FIELD_BARRIER ? null : new ObjectReferenceDeque("mod obj", global().modObjectPool);
+    modFieldBuffer = USE_FIELD_BARRIER ? new AddressPairDeque("mod field", global().modFieldPool) : null;
     decBuffer = new RCDecBuffer(global().decPool);
     btSweepImmortal = new BTSweepImmortalScanner();
   }
@@ -160,8 +160,8 @@ public class RCBaseMutator extends StopTheWorldMutator {
     }
 
     if (phaseId == RCBase.PROCESS_MODBUFFER) {
-      modObjectBuffer.flushLocal();
-      modFieldBuffer.flushLocal();
+      if (!USE_FIELD_BARRIER) modObjectBuffer.flushLocal();
+      if (USE_FIELD_BARRIER) modFieldBuffer.flushLocal();
       return;
     }
 
@@ -175,8 +175,8 @@ public class RCBaseMutator extends StopTheWorldMutator {
         immortal.linearScan(btSweepImmortal);
       }
       rc.release();
-      if (VM.VERIFY_ASSERTIONS) VM.assertions._assert(modObjectBuffer.isEmpty());
-      if (VM.VERIFY_ASSERTIONS) VM.assertions._assert(modFieldBuffer.isEmpty());
+      if (VM.VERIFY_ASSERTIONS && !USE_FIELD_BARRIER) VM.assertions._assert(modObjectBuffer.isEmpty());
+      if (VM.VERIFY_ASSERTIONS && USE_FIELD_BARRIER) VM.assertions._assert(modFieldBuffer.isEmpty());
       if (!BUILD_FOR_GENRC) {
         if (VM.VERIFY_ASSERTIONS) VM.assertions._assert(decBuffer.isEmpty());
       }
@@ -189,8 +189,8 @@ public class RCBaseMutator extends StopTheWorldMutator {
   @Override
   public final void flushRememberedSets() {
     decBuffer.flushLocal();
-    modObjectBuffer.flushLocal();
-    modFieldBuffer.flushLocal();
+    if (!USE_FIELD_BARRIER) modObjectBuffer.flushLocal();
+    if (USE_FIELD_BARRIER) modFieldBuffer.flushLocal();
     assertRemsetsFlushed();
   }
 
@@ -198,8 +198,8 @@ public class RCBaseMutator extends StopTheWorldMutator {
   public final void assertRemsetsFlushed() {
     if (VM.VERIFY_ASSERTIONS) {
       VM.assertions._assert(decBuffer.isFlushed());
-      VM.assertions._assert(modObjectBuffer.isFlushed());
-      VM.assertions._assert(modFieldBuffer.isFlushed());
+      if (!USE_FIELD_BARRIER) VM.assertions._assert(modObjectBuffer.isFlushed());
+      if (USE_FIELD_BARRIER) VM.assertions._assert(modFieldBuffer.isFlushed());
     }
   }
 

@@ -107,14 +107,12 @@ public final class ExplicitLargeObjectSpace extends BaseLargeObjectSpace {
    */
   @Override
   @Inline
-  public void release(Address first) {
-    ((FreeListPageResource) pr).releasePages(first);
-  }
+  public void release(Address first) { ((FreeListPageResource) pr).releasePages(first); }
 
   private static final Address getCell(ObjectReference object) {
     if (VM.VERIFY_ASSERTIONS && USE_FIELD_BARRIER) VM.assertions._assert(VM.objectModel.isArray(object));
     if (VM.VERIFY_ASSERTIONS) VM.assertions._assert(Plan.FIELD_BARRIER_USE_BYTE);
-    if (VM.objectModel.isPrimitiveArray(object)) {  //  FIXME this needs to use TIB encoding
+    if (!USE_FIELD_BARRIER || VM.objectModel.isPrimitiveArray(object)) {  //  FIXME this needs to use TIB encoding
       return getCell(object.toAddress());
     } else {
       return getCell(object.toAddress().minus(VM.objectModel.getArrayLength(object)));  // FIXME NEED TO ADJUST FOR BIT MARKS
@@ -217,9 +215,9 @@ public final class ExplicitLargeObjectSpace extends BaseLargeObjectSpace {
    */
   @Inline
   public void free(ObjectReference object) {
-    Address cell = getCell(object);
-    cells.remove(cell);
-    release(cell);
+   Address cell = getCell(object);
+   cells.remove(cell);
+   release(cell);
   }
 
   /**

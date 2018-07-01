@@ -100,8 +100,7 @@ public abstract class LargeObjectAllocator extends Allocator {
     int pages = Conversions.bytesToPagesUp(Extent.fromIntZeroExtend(maxbytes));
     Address sp = space.acquire(pages);
     if (sp.isZero()) return sp;
-    Address cell = sp.plus(header);
-    return cell;
+    return sp.plus(header);
   }
 
   /****************************************************************************

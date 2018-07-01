@@ -62,8 +62,8 @@ public abstract class RCBaseCollector extends StopTheWorldCollector {
   public RCBaseCollector() {
     newRootBuffer = new ObjectReferenceDeque("new-root", global().newRootPool);
     oldRootBuffer = new ObjectReferenceDeque("old-root", global().oldRootPool);
-    modObjectBuffer = new ObjectReferenceDeque("mod obj buf", global().modObjectPool);
-    modFieldBuffer = new AddressPairDeque("mod field buf", global().modFieldPool);
+    modObjectBuffer = new ObjectReferenceDeque("mod obj buf", global().modObjectPool); // FIXME this is used for both modified objects and new objects (should refactor to separate concerns)
+    modFieldBuffer = USE_FIELD_BARRIER ? new AddressPairDeque("mod field buf", global().modFieldPool) : null;
     decBuffer = new RCDecBuffer(global().decPool);
     backupTrace = new BTTraceLocal(global().backupTrace);
     zero = new RCZero();
@@ -175,28 +175,23 @@ public abstract class RCBaseCollector extends StopTheWorldCollector {
 
     if (phaseId == RCBase.PROCESS_MODBUFFER) {
       ObjectReference current;
-      while (!(modObjectBuffer.isEmpty() && modFieldBuffer.isEmpty())) {
+      while (!(modObjectBuffer.isEmpty() && (!USE_FIELD_BARRIER || modFieldBuffer.isEmpty()))) {
         while (!(current = modObjectBuffer.pop()).isNull()) {
-          RCHeader.makeUnlogged(current);
-          if (USE_FIELD_BARRIER)
+          if (!USE_FIELD_BARRIER)
+            RCHeader.makeUnlogged(current);
+          else
              VM.objectModel.markAllFieldsAsUnlogged(current);
           if (!RCBase.BUILD_FOR_GENRC) {
             if (Space.isInSpace(RCBase.REF_COUNT, current)) {
-              ExplicitFreeListSpace.testAndSetLiveBit(current);
+              ExplicitFreeListSpace.testAndSetLiveBit(current);  // ? this is for newly allocated objects
             }
           }
           VM.scanning.scanObject(getModifiedProcessor(), current);
         }
         Address slot;
-        while (!(slot = modFieldBuffer.pop1()).isZero()) {
+        while (USE_FIELD_BARRIER && !(slot = modFieldBuffer.pop1()).isZero()) {
           Word markAddressReference =  modFieldBuffer.pop2().toWord();
           VM.objectModel.clearFieldMarks(markAddressReference);
-        //  FIXME: how does this apply in the field-remembering context?? ---> as a hack, create another buffer and apply this to each remembered slot's parent
-     /*   if (!RCBase.BUILD_FOR_GENRC) {
-          if (Space.isInSpace(RCBase.REF_COUNT, current)) {
-            ExplicitFreeListSpace.testAndSetLiveBit(current);
-          }
-        } */
           getModifiedProcessor().processEdge(ObjectReference.nullReference(), slot);
         }
       }
@@ -270,7 +265,7 @@ public abstract class RCBaseCollector extends StopTheWorldCollector {
       if (VM.VERIFY_ASSERTIONS) {
         VM.assertions._assert(newRootBuffer.isEmpty());
         VM.assertions._assert(modObjectBuffer.isEmpty());
-        VM.assertions._assert(modFieldBuffer.isEmpty());
+        VM.assertions._assert(!USE_FIELD_BARRIER || modFieldBuffer.isEmpty());
         VM.assertions._assert(decBuffer.isEmpty());
       }
       return;

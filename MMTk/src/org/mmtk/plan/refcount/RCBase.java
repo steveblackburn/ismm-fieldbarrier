@@ -32,6 +32,8 @@ import org.vmmagic.pragma.*;
 import org.vmmagic.unboxed.Address;
 import org.vmmagic.unboxed.ObjectReference;
 
+import static org.mmtk.policy.SegregatedFreeListSpace.MARK_BIT_AT_CELL_BASE;
+
 /**
  * This class implements the global state of a reference counting collector.
  * See Shahriyar et al for details of and rationale for the optimizations used
@@ -47,7 +49,7 @@ public class RCBase extends StopTheWorld {
   public static final short PROCESS_DECBUFFER      = Phase.createSimple("decs");
 
   /** Is cycle collection enabled? */
-  public static final boolean CC_ENABLED           = true;
+  public static final boolean CC_ENABLED           = !MARK_BIT_AT_CELL_BASE;  // the mark bit at cell base optimization is incompatible with the segregated free list sweep
   /** Force full cycle collection at each GC? */
   public static boolean ccForceFull        = false;
   /** Use backup tracing for cycle collection (currently the only option) */
@@ -294,7 +296,7 @@ public class RCBase extends StopTheWorld {
       } else {
         rcSpace.release();
       }
-      if (!BUILD_FOR_GENRC) performCycleCollection = getPagesAvail() < Options.cycleTriggerThreshold.getPages();
+      if (CC_ENABLED && !BUILD_FOR_GENRC) performCycleCollection = getPagesAvail() < Options.cycleTriggerThreshold.getPages();
       return;
     }
 

@@ -12,6 +12,7 @@
  */
 package org.mmtk.policy;
 
+import static org.mmtk.plan.Plan.USE_FIELD_BARRIER;
 import static org.mmtk.utility.Constants.*;
 
 import org.mmtk.utility.Log;
@@ -842,11 +843,15 @@ public abstract class SegregatedFreeListSpace extends Space {
     Extent cellExtent = Extent.fromIntSignExtend(cellSize[sizeClass]);
     boolean containsLive = false;
     while (cursor.LT(end)) {
-      if (VM.VERIFY_ASSERTIONS) VM.assertions._assert(MARK_BIT_AT_CELL_BASE);   // FIXME this won't work unless marks are in the cell base
-      boolean free = !isLiveBitSet(cursor);
-      if (!free && !MARK_BIT_AT_CELL_BASE) { // FIXME cycle collection will not work unless we can map from cell to object
-        free = sweeper.sweepCell(cursor.toObjectReference());
-        if (free) unsyncClearLiveBit(cursor.toObjectReference());
+      if (VM.VERIFY_ASSERTIONS) VM.assertions._assert(!MARK_BIT_AT_CELL_BASE);  // FIXME: this code depends on being able to map from mark bit to object address, which does not work with marks at cell base, consequently cell base mark bits are incompatable with full traces (eg cycle collection)
+      boolean free = true;
+      ObjectReference current = VM.objectModel.getObjectFromStartAddress(cursor);
+      if (!current.isNull()) {
+        free = !isLiveBitSet(current);
+        if (!free) {
+          free = sweeper.sweepCell(current);
+          if (free) unsyncClearLiveBit(current);
+        }
       }
       if (!free) {
         containsLive = true;
@@ -870,7 +875,7 @@ public abstract class SegregatedFreeListSpace extends Space {
    */
 
   /* Is mark bit located relative to base of cell or object header? */
-  private static final boolean MARK_BIT_AT_CELL_BASE = true;
+  public static final boolean MARK_BIT_AT_CELL_BASE = true;
 
   public final boolean verifyCellAddress(Address cell) {
     return verifyCellAddress(cell, false);
@@ -965,7 +970,6 @@ public abstract class SegregatedFreeListSpace extends Space {
    */
   @Inline
   public static boolean unsyncSetLiveBit(ObjectReference object) {
-    Log.writeln("US: ",object);
     return updateLiveBit(normalizeAddress(object), true, false);
   }
 
