@@ -332,6 +332,11 @@ import org.vmmagic.unboxed.Word;
   public void clearFieldMarks(Word fieldMarkReference) {
     org.jikesrvm.objectmodel.ObjectModel.clearFieldMarks(fieldMarkReference);
   }
+  
+  @Inline
+  public int getFieldByteMarksForRefArray(ObjectReference array) {
+    return org.jikesrvm.objectmodel.ObjectModel.getFieldByteMarksForRefArray(array);
+  }
 
   @Override
   public void dumpObject(ObjectReference object) {

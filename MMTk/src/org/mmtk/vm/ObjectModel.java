@@ -247,6 +247,7 @@ public abstract class ObjectModel {
   public abstract void clearFieldMarks(Word fieldMarkReference);
   public abstract void markAllFieldsAsUnlogged(ObjectReference obj);
   public abstract void markAllFieldsAsUnlogged(ObjectReference obj, ObjectReference tib);
+  public abstract int getFieldByteMarksForRefArray(ObjectReference array);
 
   /*
    * NOTE: The following methods must be implemented by subclasses of this

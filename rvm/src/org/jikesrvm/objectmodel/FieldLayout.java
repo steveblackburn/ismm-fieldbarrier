@@ -149,7 +149,7 @@ public abstract class FieldLayout {
 
     int size = fieldLayout.getObjectSize();
     if (USE_FIELD_BARRIER_FOR_PUTFIELD && !klass.isRuntimeTable() && !klass.isBootRecordType()) {
-      int numReferences = (size + 3) >> 2; // conservative estimate
+      int numReferences = (size + 3) >> 2; // FIXME very conservative estimate
       int fieldMarkBytes = ObjectModel.fieldMarkBytes(numReferences);
       klass.setAlignedFieldMarkBytes(fieldMarkBytes);
     }

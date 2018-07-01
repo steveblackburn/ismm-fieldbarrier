@@ -254,12 +254,13 @@ public class ObjectModel {
     return metadata.rsha(WORD_OFFSET_SHIFT).toInt();
   }
 
+  private static final int FIELD_MARK_SHIFT = FIELD_BARRIER_USE_BYTE ? LOG_BYTES_IN_WORD : LOG_BITS_IN_WORD;
   @Inline
   private static int wordOffsetFromFieldIndex(int fieldIndex) {
-    int wordnum = fieldIndex >> LOG_BYTES_IN_WORD;
+    int wordnum = fieldIndex >> FIELD_MARK_SHIFT;
     int rtn = GC_HEADER_OFFSET.toInt() - ((1 + wordnum) << LOG_BYTES_IN_WORD);
     if (VM.VerifyAssertions) VM._assert(rtn < GC_HEADER_OFFSET.toInt());
-    if (VM.VerifyAssertions) VM._assert(rtn >= (GC_HEADER_OFFSET.toInt() - (((fieldIndex>>BITS_IN_WORD)+1)*BYTES_IN_WORD)));
+    if (VM.VerifyAssertions) VM._assert(rtn >= (GC_HEADER_OFFSET.toInt() - (((fieldIndex>>BITS_IN_WORD)+1)<<FIELD_MARK_SHIFT)));
     return rtn;
   }
 
@@ -312,7 +313,8 @@ public class ObjectModel {
       if (type.isClassType() && type != RVMType.TIBType) {
         cursor = end.minus(((RVMClass) type).getAlignedFieldMarkBytes());
       } else {
-        if (VM.VerifyAssertions) VM._assert(type == RVMType.TIBType || ((RVMArray) type).getElementType().isReferenceType());
+        if (VM.VerifyAssertions)
+          VM._assert(type == RVMType.TIBType || ((RVMArray) type).getElementType().isReferenceType());
         cursor = end.minus(((RVMArray) type).getAlignedFieldMarkBytes(Magic.getArrayLength(obj)));
       }
       while (cursor.LT(end)) {
@@ -323,9 +325,16 @@ public class ObjectModel {
   }
 
   @Inline
+  public static int getFieldByteMarksForRefArray(ObjectReference array) {
+    if (VM.VerifyAssertions) VM._assert(Magic.getObjectType(array.toObject()).isArrayType());
+    return fieldMarkBytes(Magic.getArrayLength(array.toObject()));
+  }
+
+  @Inline
   public static int fieldMarkBytes(int numReferences) {
-    int bytes = numReferences; // one mark byte per reference in type
-    return Memory.alignUp(bytes, MIN_ALIGNMENT);  // FIXME fix for BIT marks
+    if (numReferences == 0) return 0;
+    int bytes = FIELD_BARRIER_USE_BYTE ? numReferences : (numReferences+(BITS_IN_BYTE-1))>>LOG_BITS_IN_BYTE; // one byte/bit mark per reference in type
+    return Memory.alignUp(bytes, MIN_ALIGNMENT);
   }
 
   @Inline
