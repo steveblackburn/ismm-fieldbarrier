@@ -65,10 +65,6 @@ public abstract class Gen extends StopTheWorld {
   public static final boolean USE_OBJECT_BARRIER_FOR_AASTORE = false; // choose between slot and object barriers
   public static final boolean USE_OBJECT_BARRIER_FOR_PUTFIELD = false; // choose between slot and object barriers
   public static final boolean USE_OBJECT_BARRIER = USE_OBJECT_BARRIER_FOR_AASTORE || USE_OBJECT_BARRIER_FOR_PUTFIELD;
-  public static final boolean USE_FIELD_BARRIER_FOR_AASTORE = true; // choose between slot and object barriers
-  public static final boolean USE_FIELD_BARRIER_FOR_PUTFIELD = true; // choose between slot and object barriers
-  public static final boolean USE_FIELD_BARRIER = USE_FIELD_BARRIER_FOR_AASTORE || USE_FIELD_BARRIER_FOR_PUTFIELD;
-  public static final boolean FIELD_BARRIER_USE_BYTE = false; // chose between byte and bit
 
   /** Fraction of available virtual memory to give to the nursery (if contiguous) */
   protected static final float NURSERY_VM_FRACTION = 0.15f;

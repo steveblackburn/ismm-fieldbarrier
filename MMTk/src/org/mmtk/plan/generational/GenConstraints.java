@@ -12,6 +12,7 @@
  */
 package org.mmtk.plan.generational;
 
+import org.mmtk.plan.Plan;
 import org.mmtk.plan.StopTheWorldConstraints;
 
 import org.mmtk.policy.CopySpace;
@@ -93,15 +94,12 @@ public class GenConstraints extends StopTheWorldConstraints {
   }
 
   @Override
-  public boolean useFieldBarrierForPutfield() { return Gen.USE_FIELD_BARRIER_FOR_PUTFIELD; }
+  public boolean useFieldBarrierForPutfield() { return Plan.USE_FIELD_BARRIER_FOR_PUTFIELD; }
 
   @Override
-  public boolean useFieldBarrierForAAStore() { return Gen.USE_FIELD_BARRIER_FOR_AASTORE; }
+  public boolean useFieldBarrierForAAStore() { return Plan.USE_FIELD_BARRIER_FOR_AASTORE; }
 
   @Override
-  public boolean useFieldBarrier() { return Gen.USE_FIELD_BARRIER; }
-
-  @Override
-  public boolean fieldBarrierUseByte() { return Gen.FIELD_BARRIER_USE_BYTE; }
+  public boolean fieldBarrierUseByte() { return Plan.FIELD_BARRIER_USE_BYTE; }
 
 }

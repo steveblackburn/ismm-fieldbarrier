@@ -310,11 +310,5 @@ import org.vmmagic.pragma.*;
 
   public boolean useFieldBarrierForAAStore() { return false; }
 
-  public boolean useFieldBarrier() { return false; }
-
   public boolean fieldBarrierUseByte() { return true; }
-
-  public boolean usePrefixFieldMarksForScalars() { return true; }
-
-  public boolean usePrefixFieldMarksForArrays() { return true; }
 }
