@@ -101,7 +101,7 @@ public class GenMSCollector extends GenCollector {
     if (allocator == Plan.ALLOC_LOS)
       Plan.loSpace.initializeHeader(object, false);
     else
-      GenMS.msSpace.postCopy(object,allocator == GenMS.ALLOC_MATURE_MAJORGC);
+      GenMS.msSpace.postCopy(object, allocator == GenMS.ALLOC_MATURE_MAJORGC);
     if (Gen.USE_OBJECT_BARRIER)
       HeaderByte.markAsUnlogged(object);
     if (USE_FIELD_BARRIER)  // FIXME: applying to arrays and scalars indiscriminately

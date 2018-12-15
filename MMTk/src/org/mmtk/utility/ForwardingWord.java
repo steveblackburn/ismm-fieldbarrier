@@ -72,7 +72,6 @@ public class ForwardingWord {
         return oldValue;
     } while (!VM.objectModel.attemptAvailableBits(object, oldValue,
                                                   oldValue.or(Word.fromIntZeroExtend(BEING_FORWARDED))));
-   // Log.writeln("af: ",object);
     return oldValue;
   }
 

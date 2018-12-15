@@ -92,13 +92,9 @@ import org.vmmagic.unboxed.*;
 
     if (allocator == Gen.ALLOC_NURSERY) {
       if (Stats.GATHER_MARK_CONS_STATS) Gen.nurseryCons.inc(bytes);
-      Address rtn = nursery.alloc(bytes, align, offset);//.plus(padbytes);
-   //    Log.write("r: "); Log.writeln(rtn);
-      return rtn;
+      return nursery.alloc(bytes, align, offset);
     }
-    Address rtn = super.alloc(bytes, align, offset, allocator, site);//.plus(padbytes);
-   //   Log.write("R: "); Log.writeln(rtn);
-    return rtn;
+    return super.alloc(bytes, align, offset, allocator, site);
   }
 
   @Override
@@ -106,7 +102,6 @@ import org.vmmagic.unboxed.*;
   public void postAlloc(ObjectReference ref, ObjectReference typeRef,
       int bytes, int allocator) {
     if (allocator != Gen.ALLOC_NURSERY) {
-     // Log.write("pa: "); Log.writeln(ref);
       super.postAlloc(ref, typeRef, bytes, allocator);
       if (USE_FIELD_BARRIER)  // FIXME: applying to arrays and scalars indiscriminately
         VM.objectModel.markAllFieldsAsUnlogged(ref, typeRef);
