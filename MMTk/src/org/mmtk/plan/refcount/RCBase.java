@@ -63,7 +63,7 @@ public class RCBase extends StopTheWorld {
 
 
   /* Statistics */
-  public static final boolean GATHER_INC_DEC_STATS = true;
+  public static final boolean GATHER_INC_DEC_STATS = false;
 
   protected static final EventCounter inc;
   protected static final EventCounter dec;
