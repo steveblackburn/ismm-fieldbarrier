@@ -17,6 +17,7 @@ import static org.jikesrvm.objectmodel.JavaHeaderConstants.*;
 import static org.jikesrvm.objectmodel.MiscHeader.REQUESTED_BITS;
 import static org.jikesrvm.runtime.JavaSizeConstants.BYTES_IN_INT;
 import static org.jikesrvm.runtime.UnboxedSizeConstants.LOG_BYTES_IN_ADDRESS;
+import static org.mmtk.plan.Plan.USE_FIELD_BARRIER;
 
 import org.jikesrvm.VM;
 import org.jikesrvm.classloader.RVMArray;
@@ -321,21 +322,29 @@ public class JavaHeader {
       }
     }
 
-    // FIXME: everything below could exploit TIB-encoding of this info
-    RVMType type = Magic.getTIBAtOffset(obj, TIB_OFFSET).getType();
+    if (USE_FIELD_BARRIER)
+      start = start.minus(getFieldMarkBytes(obj));
 
-    if (type.isClassType() && !(type == RVMType.TIBType)) {
-      start = start.minus(((RVMClass) type).getAlignedFieldMarkBytes());
-    } else if (type.isArrayType()) {
-      start = start.minus(((RVMArray) type).getAlignedFieldMarkBytes(Magic.getArrayLength(obj)));
-    } else if (type == RVMType.TIBType) {
-      // FIXME: TIBS should never have field marks, right?
-      // start = start.minus(ObjectModel.fieldMarkBytes(Magic.getArrayLength(obj)));
-    }
     while (start.minus(BYTES_IN_INT).loadInt() == ALIGNMENT_VALUE)
       start = start.minus(BYTES_IN_INT);
 
     return start;
+  }
+
+  @Inline
+  private static int getFieldMarkBytes(ObjectReference obj) {
+    // FIXME: everything in this method could exploit TIB-encoding of this info
+    RVMType type = Magic.getTIBAtOffset(obj, TIB_OFFSET).getType();
+
+    if (type == RVMType.TIBType)
+      return 0;  // TIBS never have field marks
+
+    if (type.isClassType() && !(type == RVMType.TIBType)) {
+      return ((RVMClass) type).getAlignedFieldMarkBytes();
+    } else if (type.isArrayType()) {
+      return ((RVMArray) type).getAlignedFieldMarkBytes(Magic.getArrayLength(obj));
+    }
+    return 0;
   }
 
   /**
