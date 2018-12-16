@@ -229,28 +229,60 @@ public class ObjectModel {
     }
   }
 
+  public static boolean isFieldBarrierExcludedType(TIB tib) {
+    return tib.getType().isRuntimeTable() || tib.getType().isBootRecordType();
+  }
+
+  public static boolean isFieldBarrierExcludedType(ObjectReference object) {
+    return isFieldBarrierExcludedType(ObjectModel.getTIB(object));
+  }
+
   @Inline
-  public static boolean isArrayTIB(ObjectReference tib) {
+  public static boolean hasNoReferences(TIB tib) {
     // FIXME use TIB enncoding to remove this overhead
-    RVMType type = Magic.addressAsTIB(tib.toAddress()).getType();
-    return type.isArrayType();
+    RVMType type = tib.getType();
+    return isPrimitiveArray(tib) || (!type.isArrayType() && ((RVMClass) type).getNumberOfReferenceFields() == 0);
+  }
+
+  @Inline
+  public static boolean hasNoReferences(ObjectReference object) {
+    return hasNoReferences(Magic.getTIBAtOffset(object, TIB_OFFSET));
+  }
+
+  @Inline
+  public static boolean isRefArray(TIB tib) {
+    // FIXME use TIB enncoding to remove this overhead
+    boolean rtn = tib.getType().isArrayType() && ((RVMArray) tib.getType()).getElementType().isReferenceType();
+    if (VM.VerifyAssertions && rtn)
+      VM._assert(tib.getType() == RVMType.TIBType || ((RVMArray) tib.getType()).getElementType().isReferenceType());
+    return rtn;
+  }
+
+  @Inline
+  public static boolean isRefArray(ObjectReference object) {
+    return isRefArray(Magic.getTIBAtOffset(object, TIB_OFFSET));
+  }
+
+  @Inline
+  public static boolean isArray(TIB tib) {
+    // FIXME use TIB enncoding to remove this overhead
+    return tib.getType().isArrayType() || !tib.getType().isClassType() || tib.getType() == RVMType.TIBType;
   }
 
   @Inline
   public static boolean isArray(ObjectReference object) {
-    return isArrayTIB(Magic.getAddressAtOffset(object, TIB_OFFSET).toObjectReference());
+    return isArray(Magic.getTIBAtOffset(object, TIB_OFFSET));
   }
 
   @Inline
-  public static boolean isPrimitiveArrayTIB(ObjectReference tib) {
+  public static boolean isPrimitiveArray(TIB tib) {
     // FIXME use TIB enncoding to remove this overhead
-    RVMType type = Magic.addressAsTIB(tib.toAddress()).getType();
-    return type.isArrayType() && type.getReferenceOffsets() != null;
+    return tib.getType().isArrayType() && tib.getType().getReferenceOffsets() != null;
   }
 
   @Inline
   public static boolean isPrimitiveArray(ObjectReference object) {
-    return isPrimitiveArrayTIB(Magic.getAddressAtOffset(object, TIB_OFFSET).toObjectReference());
+    return isPrimitiveArray(Magic.getTIBAtOffset(object, TIB_OFFSET));
   }
 
   private static final int BITNUM_WIDTH = LOG_BITS_IN_WORD;
@@ -304,6 +336,7 @@ public class ObjectModel {
                                              int numElements, boolean isScalar) {
     Address cursor;
     Address end = ref.plus(GC_HEADER_OFFSET);
+
     if (isScalar) {
       if (VM.VerifyAssertions) VM._assert(USE_FIELD_BARRIER_FOR_PUTFIELD);
       cursor = end.minus(((RVMClass) tib.getType()).getAlignedFieldMarkBytes());
@@ -319,34 +352,26 @@ public class ObjectModel {
     }
   }
 
-  public static boolean isFieldBarrierExcludedType(ObjectReference object) {
-    return isFieldBarrierExcludedType(ObjectModel.getTIB(object).getType());
-  }
 
-  public static boolean isFieldBarrierExcludedType(RVMType type) {
-    return type.isRuntimeTable() || type.isBootRecordType();
-  }
+  public static void markAllFieldsAsUnlogged(ObjectReference obj, ObjectReference t) {
+    TIB tib = Magic.addressAsTIB(t.toAddress());
+    if (isFieldBarrierExcludedType(tib)) return;
 
-  public static void markAllFieldsAsUnlogged(ObjectReference obj, ObjectReference tib) {
-    RVMType type = ((TIB) Magic.addressAsObject(tib.toAddress())).getType();
-    if (isFieldBarrierExcludedType(type)) return;
-    if ((USE_FIELD_BARRIER_FOR_AASTORE && type.isArrayType() && ((RVMArray) type).getElementType().isReferenceType()) ||
-            USE_FIELD_BARRIER_FOR_PUTFIELD && !type.isArrayType()) {
-      Address cursor;
-      Address end = obj.toAddress().plus(GC_HEADER_OFFSET);
-      if (type.isClassType() && type != RVMType.TIBType) {
-        cursor = end.minus(((RVMClass) type).getAlignedFieldMarkBytes());
-      } else {
-        if (VM.VerifyAssertions)
-          VM._assert(type == RVMType.TIBType || ((RVMArray) type).getElementType().isReferenceType());
-        cursor = end.minus(((RVMArray) type).getAlignedFieldMarkBytes(Magic.getArrayLength(obj)));
-      }
-      while (cursor.LT(end)) {
-        cursor.store((byte) 0xff);
-        cursor = cursor.plus(1);
-      }
+    Address end = obj.toAddress().plus(GC_HEADER_OFFSET);
+    Address cursor = end;
+
+    if (USE_FIELD_BARRIER_FOR_AASTORE && isRefArray(tib)) {
+        cursor = end.minus(RVMArray.getAlignedFieldMarkBytesUnchecked(Magic.getArrayLength(obj)));
+    }
+    if (USE_FIELD_BARRIER_FOR_PUTFIELD && !isArray(tib)) {
+        cursor = end.minus(((RVMClass) tib.getType()).getAlignedFieldMarkBytes());
+    }
+    while (cursor.LT(end)) {
+      cursor.store((byte) 0xff);
+      cursor = cursor.plus(1);
     }
   }
+
 
   @Inline
   public static int getFieldByteMarksForRefArray(ObjectReference array) {
