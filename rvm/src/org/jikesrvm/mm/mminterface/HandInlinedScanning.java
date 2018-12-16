@@ -50,12 +50,14 @@ public class HandInlinedScanning {
   /** Master switch */
   public static final boolean ENABLED = true;
 
+  @Uninterruptible
   public static int referenceArray() {
     if (!ENABLED)
       return AlignmentEncoding.ALIGN_CODE_NONE;
     return AE_REFARRAY;
   }
 
+  @Uninterruptible
   public static int primitiveArray() {
     if (!ENABLED)
       return AlignmentEncoding.ALIGN_CODE_NONE;

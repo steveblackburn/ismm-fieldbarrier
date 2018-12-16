@@ -12,6 +12,7 @@
  */
 package org.jikesrvm.objectmodel;
 
+import static org.jikesrvm.mm.mminterface.AlignmentEncoding.extractTibCode;
 import static org.jikesrvm.mm.mminterface.MemoryManagerConstants.*;
 import static org.jikesrvm.objectmodel.JavaHeader.TIB_OFFSET;
 import static org.jikesrvm.objectmodel.JavaHeaderConstants.*;
@@ -24,6 +25,7 @@ import org.jikesrvm.classloader.RVMClass;
 import org.jikesrvm.classloader.RVMField;
 import org.jikesrvm.classloader.RVMType;
 import org.jikesrvm.mm.mminterface.AlignmentEncoding;
+import org.jikesrvm.mm.mminterface.HandInlinedScanning;
 import org.jikesrvm.mm.mminterface.MemoryManager;
 import org.jikesrvm.runtime.Magic;
 import org.jikesrvm.runtime.Memory;
@@ -251,8 +253,7 @@ public class ObjectModel {
 
   @Inline
   public static boolean isRefArray(TIB tib) {
-    // FIXME use TIB enncoding to remove this overhead
-    boolean rtn = tib.getType().isArrayType() && ((RVMArray) tib.getType()).getElementType().isReferenceType();
+    boolean rtn = extractTibCode(tib) == HandInlinedScanning.referenceArray();
     if (VM.VerifyAssertions && rtn)
       VM._assert(tib.getType() == RVMType.TIBType || ((RVMArray) tib.getType()).getElementType().isReferenceType());
     return rtn;
@@ -287,10 +288,13 @@ public class ObjectModel {
 
   @Inline
   public static boolean hasFieldMarks(TIB tib) {
-    if (isFieldBarrierExcludedType(tib)) return false;
-    if (USE_FIELD_BARRIER_FOR_AASTORE && isRefArray(tib)) return true;
-    if (USE_FIELD_BARRIER_FOR_PUTFIELD && !isArray(tib) && ((RVMClass) tib.getType()).getNumberOfReferenceFields() > 0) return true;
-    return false;
+    boolean rtn = extractTibCode(tib) != HandInlinedScanning.primitiveArray();
+    if (VM.VerifyAssertions) {
+      if (isFieldBarrierExcludedType(tib)) VM._assert(!rtn);
+      if (USE_FIELD_BARRIER_FOR_AASTORE && isRefArray(tib)) VM._assert(rtn);
+      if (USE_FIELD_BARRIER_FOR_PUTFIELD && !isArray(tib) && ((RVMClass) tib.getType()).getNumberOfReferenceFields() > 0) VM._assert(rtn);
+    }
+    return rtn;
   }
 
   @Inline static int getScalarFieldMarkBytes(TIB tib) {

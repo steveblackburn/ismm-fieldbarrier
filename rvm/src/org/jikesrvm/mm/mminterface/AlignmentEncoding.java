@@ -19,6 +19,7 @@ import static org.jikesrvm.runtime.JavaSizeConstants.BYTES_IN_INT;
 import org.jikesrvm.VM;
 import org.jikesrvm.objectmodel.JavaHeader;
 import org.jikesrvm.objectmodel.ObjectModel;
+import org.jikesrvm.objectmodel.TIB;
 import org.jikesrvm.runtime.Magic;
 import org.vmmagic.pragma.Inline;
 import org.vmmagic.pragma.Uninterruptible;
@@ -142,7 +143,11 @@ public class AlignmentEncoding {
   public static int extractTibCode(Address address) {
     return (address.toInt() & TIB_ALIGN_MASK) >> FIELD_SHIFT;
   }
-
+  @Uninterruptible
+  @Inline
+  public static int extractTibCode(TIB tib) {
+    return (Magic.objectAsAddress(tib).toInt() & TIB_ALIGN_MASK) >> FIELD_SHIFT;
+  }
   /**
    * Extract the encoded value from an object's TIB pointer
    * @param object the object
