@@ -1316,6 +1316,13 @@ public final class RVMClass extends RVMType {
       }
     }
 
+    // calculate field mark bytes
+    if (USE_FIELD_BARRIER_FOR_PUTFIELD && !isRuntimeTable() && !isBootRecordType() && getNumberOfReferenceFields() > 0) {
+      int numReferences = (instanceSize + 3) >> 2; // FIXME very conservative estimate
+      int fieldMarkBytes = ObjectModel.fieldMarkBytes(numReferences);
+      setAlignedFieldMarkBytes(fieldMarkBytes);
+    }
+
     // Allocate space for <init> method pointers
     //
     for (RVMMethod method : constructorMethods) {

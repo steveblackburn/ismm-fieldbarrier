@@ -146,15 +146,7 @@ public abstract class FieldLayout {
      * Save the new field layout.
      */
     klass.setFieldLayoutContext(fieldLayout);
-
-    int size = fieldLayout.getObjectSize();
-    if (USE_FIELD_BARRIER_FOR_PUTFIELD && !klass.isRuntimeTable() && !klass.isBootRecordType()) {
-      int numReferences = (size + 3) >> 2; // FIXME very conservative estimate
-      int fieldMarkBytes = ObjectModel.fieldMarkBytes(numReferences);
-      klass.setAlignedFieldMarkBytes(fieldMarkBytes);
-    }
-
-    klass.setInstanceSizeInternal(ObjectModel.computeScalarHeaderSize(klass) + size);
+    klass.setInstanceSizeInternal(ObjectModel.computeScalarHeaderSize(klass) + fieldLayout.getObjectSize());
     klass.setAlignment(fieldLayout.getAlignment());
   }
 

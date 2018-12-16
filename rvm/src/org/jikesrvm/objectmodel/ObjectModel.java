@@ -404,6 +404,7 @@ public class ObjectModel {
       VM._assert(ObjectModel.getTIB(object).getType().isClassType());
       VM._assert(!isFieldBarrierExcludedType(object));
       VM._assert(ObjectModel.getTIB(object).getType().asClass().getNumberOfReferenceFields() > 0);
+      VM._assert(ObjectModel.getTIB(object).getType().asClass().getAlignedFieldMarkBytes() > 0);
     }
     if (FIELD_BARRIER_USE_BYTE)
       return object.toAddress().plus(metaData.toInt()).loadByte() != 0;
