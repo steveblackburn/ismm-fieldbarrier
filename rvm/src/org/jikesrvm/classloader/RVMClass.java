@@ -825,6 +825,11 @@ public final class RVMClass extends RVMType {
     return ans;
   }
 
+  @Uninterruptible
+  public int getNumberOfReferenceFields() {
+    return referenceOffsets == null ? 0 : referenceOffsets.length;
+  }
+
   /**
    * @return total size, in bytes, of an instance of this class
    * (including object header, and mark bits if any). Note that the class must be resolved
@@ -1358,6 +1363,8 @@ public final class RVMClass extends RVMType {
       allocatedTib = MemoryManager.newTIB(virtualMethods.length, HandInlinedScanning.fallback());
     } else {
       allocatedTib = MemoryManager.newTIB(virtualMethods.length, HandInlinedScanning.scalar(referenceOffsets));
+      if (VM.VerifyAssertions && HandInlinedScanning.scalar(referenceOffsets) == HandInlinedScanning.primitiveArray())
+        VM._assert(getNumberOfReferenceFields() == 0);
     }
 
     superclassIds = DynamicTypeCheck.buildSuperclassIds(this);

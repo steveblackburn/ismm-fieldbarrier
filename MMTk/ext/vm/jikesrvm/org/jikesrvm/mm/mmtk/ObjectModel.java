@@ -202,14 +202,12 @@ import org.vmmagic.unboxed.Word;
 
   @Override
   public boolean isArray(ObjectReference object) {
-    return org.jikesrvm.objectmodel.ObjectModel.getObjectType(object.toObject()).isArrayType();
+    return org.jikesrvm.objectmodel.ObjectModel.isArray(object);
   }
 
   @Override
   public boolean isPrimitiveArray(ObjectReference object) {
-    // FIXME use TIB enncoding to remove this overhead
-    RVMType type = org.jikesrvm.objectmodel.ObjectModel.getObjectType(object.toObject());
-    return type.isArrayType() && type.getReferenceOffsets() != null;
+    return org.jikesrvm.objectmodel.ObjectModel.isPrimitiveArray(object);
   }
 
   /**

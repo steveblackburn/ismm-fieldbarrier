@@ -13,6 +13,7 @@
 package org.jikesrvm.objectmodel;
 
 import static org.jikesrvm.mm.mminterface.MemoryManagerConstants.*;
+import static org.jikesrvm.objectmodel.JavaHeader.TIB_OFFSET;
 import static org.jikesrvm.objectmodel.JavaHeaderConstants.*;
 import static org.jikesrvm.runtime.JavaSizeConstants.BYTES_IN_INT;
 import static org.mmtk.utility.Constants.*;
@@ -228,6 +229,29 @@ public class ObjectModel {
     }
   }
 
+  @Inline
+  public static boolean isArrayTIB(ObjectReference tib) {
+    // FIXME use TIB enncoding to remove this overhead
+    RVMType type = Magic.addressAsTIB(tib.toAddress()).getType();
+    return type.isArrayType();
+  }
+
+  @Inline
+  public static boolean isArray(ObjectReference object) {
+    return isArrayTIB(Magic.getAddressAtOffset(object, TIB_OFFSET).toObjectReference());
+  }
+
+  @Inline
+  public static boolean isPrimitiveArrayTIB(ObjectReference tib) {
+    // FIXME use TIB enncoding to remove this overhead
+    RVMType type = Magic.addressAsTIB(tib.toAddress()).getType();
+    return type.isArrayType() && type.getReferenceOffsets() != null;
+  }
+
+  @Inline
+  public static boolean isPrimitiveArray(ObjectReference object) {
+    return isPrimitiveArrayTIB(Magic.getAddressAtOffset(object, TIB_OFFSET).toObjectReference());
+  }
 
   private static final int BITNUM_WIDTH = LOG_BITS_IN_WORD;
   private static final Word BITNUM_MASK = Word.fromIntZeroExtend((1<<BITNUM_WIDTH)-1);
@@ -379,6 +403,7 @@ public class ObjectModel {
       VM._assert(USE_FIELD_BARRIER_FOR_PUTFIELD);
       VM._assert(ObjectModel.getTIB(object).getType().isClassType());
       VM._assert(!isFieldBarrierExcludedType(object));
+      VM._assert(ObjectModel.getTIB(object).getType().asClass().getNumberOfReferenceFields() > 0);
     }
     if (FIELD_BARRIER_USE_BYTE)
       return object.toAddress().plus(metaData.toInt()).loadByte() != 0;
