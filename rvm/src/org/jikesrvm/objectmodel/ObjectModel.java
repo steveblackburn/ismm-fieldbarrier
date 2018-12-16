@@ -285,6 +285,23 @@ public class ObjectModel {
     return isPrimitiveArray(Magic.getTIBAtOffset(object, TIB_OFFSET));
   }
 
+  @Inline
+  public static boolean hasFieldMarks(TIB tib) {
+    if (isFieldBarrierExcludedType(tib)) return false;
+    if (USE_FIELD_BARRIER_FOR_AASTORE && isRefArray(tib)) return true;
+    if (USE_FIELD_BARRIER_FOR_PUTFIELD && !isArray(tib) && ((RVMClass) tib.getType()).getNumberOfReferenceFields() > 0) return true;
+    return false;
+  }
+
+  @Inline static int getScalarFieldMarkBytes(TIB tib) {
+    if (USE_FIELD_BARRIER_FOR_PUTFIELD) {
+      if (VM.VerifyAssertions) VM._assert(hasFieldMarks(tib));
+      return ((RVMClass) tib.getType()).getAlignedFieldMarkBytes();
+    } else
+      return 0;
+  }
+
+
   private static final int BITNUM_WIDTH = LOG_BITS_IN_WORD;
   private static final Word BITNUM_MASK = Word.fromIntZeroExtend((1<<BITNUM_WIDTH)-1);
   private static final int WORD_OFFSET_SHIFT = BITNUM_WIDTH;
@@ -352,23 +369,23 @@ public class ObjectModel {
     }
   }
 
-
   public static void markAllFieldsAsUnlogged(ObjectReference obj, ObjectReference t) {
     TIB tib = Magic.addressAsTIB(t.toAddress());
-    if (isFieldBarrierExcludedType(tib)) return;
+    if (hasFieldMarks(tib)) {
+      Address end = obj.toAddress().plus(GC_HEADER_OFFSET);
+      Address cursor = end;
 
-    Address end = obj.toAddress().plus(GC_HEADER_OFFSET);
-    Address cursor = end;
-
-    if (USE_FIELD_BARRIER_FOR_AASTORE && isRefArray(tib)) {
+      if (isArray(tib)) {
+        if (VM.VerifyAssertions) VM._assert(USE_FIELD_BARRIER_FOR_AASTORE && isRefArray(tib));
         cursor = end.minus(RVMArray.getAlignedFieldMarkBytesUnchecked(Magic.getArrayLength(obj)));
-    }
-    if (USE_FIELD_BARRIER_FOR_PUTFIELD && !isArray(tib)) {
-        cursor = end.minus(((RVMClass) tib.getType()).getAlignedFieldMarkBytes());
-    }
-    while (cursor.LT(end)) {
-      cursor.store((byte) 0xff);
-      cursor = cursor.plus(1);
+      } else {
+        if (VM.VerifyAssertions) VM._assert(USE_FIELD_BARRIER_FOR_PUTFIELD);
+        cursor = end.minus(getScalarFieldMarkBytes(tib));
+      }
+      while (cursor.LT(end)) {
+        cursor.store((byte) 0xff);
+        cursor = cursor.plus(1);
+      }
     }
   }
 
