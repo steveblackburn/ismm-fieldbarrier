@@ -3,6 +3,7 @@ package org.mmtk.utility;
 import org.mmtk.utility.deque.AddressPairDeque;
 import org.mmtk.vm.VM;
 import org.vmmagic.pragma.Inline;
+import org.vmmagic.pragma.NoInline;
 import org.vmmagic.pragma.Uninterruptible;
 import org.vmmagic.unboxed.Address;
 import org.vmmagic.unboxed.ObjectReference;
@@ -18,7 +19,7 @@ public class FieldMarks {
       return VM.objectModel.isScalarFieldUnlogged(src, metaData);
   }
 
-  @Inline
+  @NoInline
   public static void logField(ObjectReference src, Address slot, Word metaData, boolean isArray, AddressPairDeque fieldbuf) {
     if (isArray)
       logRefArrayElement(src, slot, metaData.toInt(), fieldbuf);
