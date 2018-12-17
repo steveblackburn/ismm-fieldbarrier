@@ -136,7 +136,10 @@ import org.vmmagic.unboxed.*;
             (Gen.USE_FIELD_BARRIER_FOR_AASTORE && mode == ARRAY_ELEMENT)) {
       if (FieldMarks.isFieldUnlogged(src, metaData, mode == ARRAY_ELEMENT)) {
         if (Gen.GATHER_WRITE_BARRIER_STATS) Gen.wbFRSlow.inc();
-        FieldMarks.logField(src, slot, metaData,mode == ARRAY_ELEMENT, fieldbuf);
+        if (mode == ARRAY_ELEMENT)
+          FieldMarks.logRefArrayElement(src, slot, metaData, fieldbuf);
+        else
+          FieldMarks.logScalarField(src, slot, metaData, fieldbuf);
       }
     } else if ((mode == ARRAY_ELEMENT && USE_OBJECT_BARRIER_FOR_AASTORE) ||
         (mode == INSTANCE_FIELD && USE_OBJECT_BARRIER_FOR_PUTFIELD)) {

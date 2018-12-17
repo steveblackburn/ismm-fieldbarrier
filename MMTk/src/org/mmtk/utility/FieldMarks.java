@@ -20,19 +20,14 @@ public class FieldMarks {
   }
 
   @NoInline
-  public static void logField(ObjectReference src, Address slot, Word metaData, boolean isArray, AddressPairDeque fieldbuf) {
-    if (isArray)
-      logRefArrayElement(src, slot, metaData.toInt(), fieldbuf);
-    else
-      logScalarField(src, slot, metaData, fieldbuf);
-  }
-
-  private static void logRefArrayElement(ObjectReference src, Address slot, int index, AddressPairDeque fieldbuf) {
+  public static void logRefArrayElement(ObjectReference src, Address slot, Word metaData, AddressPairDeque fieldbuf) {
+    int index = metaData.toInt();
     Address markAddr = VM.objectModel.nonAtomicMarkRefArrayElementAsLogged(src, index);
     fieldbuf.insert(slot, markAddr);
   }
 
-  private static void logScalarField(ObjectReference src, Address slot, Word metaData, AddressPairDeque fieldbuf) {
+  @NoInline
+  public static void logScalarField(ObjectReference src, Address slot, Word metaData, AddressPairDeque fieldbuf) {
     Address markAddr = VM.objectModel.nonAtomicMarkScalarFieldAsLogged(src, metaData);
     fieldbuf.insert(slot, markAddr);
   }
