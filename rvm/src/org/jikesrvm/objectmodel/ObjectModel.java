@@ -381,10 +381,10 @@ public class ObjectModel {
 
       if (isArray(tib)) {
         if (VM.VerifyAssertions) VM._assert(USE_FIELD_BARRIER_FOR_AASTORE && isRefArray(tib));
-        cursor = end.minus(RVMArray.getAlignedFieldMarkBytesUnchecked(Magic.getArrayLength(obj)));
+        if (USE_FIELD_BARRIER_FOR_AASTORE) cursor = end.minus(RVMArray.getAlignedFieldMarkBytesUnchecked(Magic.getArrayLength(obj)));
       } else {
         if (VM.VerifyAssertions) VM._assert(USE_FIELD_BARRIER_FOR_PUTFIELD);
-        cursor = end.minus(getScalarFieldMarkBytes(tib));
+        if (USE_FIELD_BARRIER_FOR_PUTFIELD) cursor = end.minus(getScalarFieldMarkBytes(tib));
       }
       while (cursor.LT(end)) {
         cursor.store((byte) 0xff);
