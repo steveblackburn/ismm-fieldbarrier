@@ -403,6 +403,7 @@ public class ObjectModel {
   @Inline
   public static int fieldMarkBytes(int numReferences) {
     if (numReferences == 0) return 0;
+    if (FIELD_BARRIER_SPACE_EVAL) numReferences -= numReferences > FIELD_BARRIER_AASTORE_THRESHOLD ? FIELD_BARRIER_AASTORE_THRESHOLD : 0;
     int bytes = FIELD_BARRIER_USE_BYTE ? numReferences : (numReferences+(BITS_IN_BYTE-1))>>LOG_BITS_IN_BYTE; // one byte/bit mark per reference in type
     return Memory.alignUp(bytes, MIN_ALIGNMENT);
   }
