@@ -533,7 +533,7 @@ public final class MemoryManager {
     }
     int size = elemBytes + headerSize;
     int prefix = 0;
-    if (USE_FIELD_BARRIER_FOR_AASTORE && ((RVMArray) tib.getType()).getElementType().isReferenceType() && numElements > 0) {
+    if ((USE_FIELD_BARRIER_FOR_AASTORE || FIELD_BARRIER_SPACE_EVAL) && ((RVMArray) tib.getType()).getElementType().isReferenceType() && numElements > 0) {
       int fieldmarkBytes = org.jikesrvm.runtime.Memory.alignUp(ObjectModel.fieldMarkBytes(numElements), align);
       size += fieldmarkBytes;
       prefix = fieldmarkBytes;

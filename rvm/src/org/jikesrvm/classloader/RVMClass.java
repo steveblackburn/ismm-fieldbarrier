@@ -30,6 +30,7 @@ import static org.jikesrvm.classloader.ClassLoaderConstants.CLASS_LOADED;
 import static org.jikesrvm.classloader.ClassLoaderConstants.CLASS_RESOLVED;
 import static org.jikesrvm.classloader.ClassLoaderConstants.CP_MEMBER;
 import static org.jikesrvm.classloader.ClassLoaderConstants.CP_UTF;
+import static org.jikesrvm.mm.mminterface.MemoryManagerConstants.FIELD_BARRIER_SPACE_EVAL;
 import static org.jikesrvm.mm.mminterface.MemoryManagerConstants.USE_FIELD_BARRIER_FOR_PUTFIELD;
 import static org.jikesrvm.objectmodel.ObjectModel.getFieldMarkMetadata;
 import static org.jikesrvm.runtime.JavaSizeConstants.BYTES_IN_DOUBLE;
@@ -1317,7 +1318,7 @@ public final class RVMClass extends RVMType {
     }
 
     // calculate field mark bytes
-    if (USE_FIELD_BARRIER_FOR_PUTFIELD && !isRuntimeTable() && !isBootRecordType() && getNumberOfReferenceFields() > 0) {
+    if ((USE_FIELD_BARRIER_FOR_PUTFIELD || FIELD_BARRIER_SPACE_EVAL) && !isRuntimeTable() && !isBootRecordType() && getNumberOfReferenceFields() > 0) {
       int numReferences = (instanceSize + 3) >> 2; // FIXME very conservative estimate
       int fieldMarkBytes = ObjectModel.fieldMarkBytes(numReferences);
       setAlignedFieldMarkBytes(fieldMarkBytes);

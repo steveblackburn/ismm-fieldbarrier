@@ -374,16 +374,16 @@ public class ObjectModel {
   }
 
   public static void markAllFieldsAsUnlogged(ObjectReference obj, ObjectReference t) {
+    if (VM.VerifyAssertions) VM._assert(USE_FIELD_BARRIER_FOR_AASTORE || USE_FIELD_BARRIER_FOR_PUTFIELD || FIELD_BARRIER_SPACE_EVAL);
     TIB tib = Magic.addressAsTIB(t.toAddress());
     if (hasFieldMarks(tib)) {
       Address end = obj.toAddress().plus(GC_HEADER_OFFSET);
       Address cursor = end;
 
       if (isArray(tib)) {
-        if (VM.VerifyAssertions) VM._assert(USE_FIELD_BARRIER_FOR_AASTORE && isRefArray(tib));
+        if (VM.VerifyAssertions) VM._assert(isRefArray(tib));
         if (USE_FIELD_BARRIER_FOR_AASTORE) cursor = end.minus(RVMArray.getAlignedFieldMarkBytesUnchecked(Magic.getArrayLength(obj)));
       } else {
-        if (VM.VerifyAssertions) VM._assert(USE_FIELD_BARRIER_FOR_PUTFIELD);
         if (USE_FIELD_BARRIER_FOR_PUTFIELD) cursor = end.minus(getScalarFieldMarkBytes(tib));
       }
       while (cursor.LT(end)) {

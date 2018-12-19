@@ -322,7 +322,7 @@ public class JavaHeader {
       }
     }
 
-    if (USE_FIELD_BARRIER)
+    if (USE_FIELD_BARRIER || FIELD_BARRIER_SPACE_EVAL)
       start = start.minus(getFieldMarkBytes(obj));
 
     while (start.minus(BYTES_IN_INT).loadInt() == ALIGNMENT_VALUE)

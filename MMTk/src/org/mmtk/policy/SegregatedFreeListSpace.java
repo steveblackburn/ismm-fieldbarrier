@@ -12,7 +12,6 @@
  */
 package org.mmtk.policy;
 
-import static org.mmtk.plan.Plan.USE_FIELD_BARRIER;
 import static org.mmtk.utility.Constants.*;
 
 import org.mmtk.utility.Log;

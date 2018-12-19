@@ -15,6 +15,7 @@ package org.jikesrvm.classloader;
 import static org.jikesrvm.VM.NOT_REACHED;
 import static org.jikesrvm.classloader.ClassLoaderConstants.*;
 import static org.jikesrvm.mm.mminterface.Barriers.*;
+import static org.jikesrvm.mm.mminterface.MemoryManagerConstants.FIELD_BARRIER_SPACE_EVAL;
 import static org.jikesrvm.mm.mminterface.MemoryManagerConstants.USE_FIELD_BARRIER_FOR_AASTORE;
 import static org.jikesrvm.runtime.JavaSizeConstants.BYTES_IN_BOOLEAN;
 import static org.jikesrvm.runtime.JavaSizeConstants.BYTES_IN_CHAR;
@@ -240,7 +241,7 @@ public final class RVMArray extends RVMType {
   @Uninterruptible
   public int getInstanceSize(int numelts) {
     int size = getInstanceSizeNoPad(numelts);
-    if (USE_FIELD_BARRIER_FOR_AASTORE && referenceOffsets == REFARRAY_OFFSET_ARRAY) {
+    if ((USE_FIELD_BARRIER_FOR_AASTORE || FIELD_BARRIER_SPACE_EVAL) && referenceOffsets == REFARRAY_OFFSET_ARRAY) {
       size += ObjectModel.fieldMarkBytes(numelts);
     }
     return size;
@@ -250,7 +251,7 @@ public final class RVMArray extends RVMType {
   @Pure
   @Uninterruptible
   public int getAlignedFieldMarkBytes(int numelts) {
-    if (USE_FIELD_BARRIER_FOR_AASTORE && referenceOffsets == REFARRAY_OFFSET_ARRAY)
+    if ((USE_FIELD_BARRIER_FOR_AASTORE || FIELD_BARRIER_SPACE_EVAL) && referenceOffsets == REFARRAY_OFFSET_ARRAY)
       return getAlignedFieldMarkBytesUnchecked(numelts);
     else
       return 0;
@@ -260,7 +261,7 @@ public final class RVMArray extends RVMType {
   @Pure
   @Uninterruptible
   public static int getAlignedFieldMarkBytesUnchecked(int numelts) {
-    if (VM.VerifyAssertions) VM._assert(USE_FIELD_BARRIER_FOR_AASTORE);
+    if (VM.VerifyAssertions) VM._assert(USE_FIELD_BARRIER_FOR_AASTORE || FIELD_BARRIER_SPACE_EVAL);
     return ObjectModel.fieldMarkBytes(numelts);
   }
 

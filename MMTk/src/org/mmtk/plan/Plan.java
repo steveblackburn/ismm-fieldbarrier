@@ -104,8 +104,9 @@ public abstract class Plan {
   /* Do we support a log bit in the object header?  Some write barriers may use it */
   public static final boolean NEEDS_LOG_BIT_IN_HEADER = VM.activePlan.constraints().needsLogBitInHeader();
 
-  public static final boolean USE_FIELD_BARRIER_FOR_AASTORE = true; // choose between slot and object barriers
-  public static final boolean USE_FIELD_BARRIER_FOR_PUTFIELD = true; // choose between slot and object barriers
+  public static final boolean FIELD_BARRIER_SPACE_EVAL = true; // used to add (only) the space overhead of field barriers independent of whether barriers are used
+  public static final boolean USE_FIELD_BARRIER_FOR_AASTORE = false; // choose between slot and object barriers
+  public static final boolean USE_FIELD_BARRIER_FOR_PUTFIELD = false; // choose between slot and object barriers
   public static final boolean USE_FIELD_BARRIER = USE_FIELD_BARRIER_FOR_AASTORE || USE_FIELD_BARRIER_FOR_PUTFIELD;
   public static final boolean FIELD_BARRIER_USE_BYTE = false;
 

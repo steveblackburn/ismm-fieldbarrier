@@ -26,6 +26,8 @@ import org.mmtk.vm.VM;
 import org.vmmagic.pragma.*;
 import org.vmmagic.unboxed.*;
 
+import static org.mmtk.plan.Plan.FIELD_BARRIER_SPACE_EVAL;
+
 /**
  * This class implements <i>per-collector thread</i> behavior and state for
  * the <code>GenImmix</code> two-generational copying collector.<p>

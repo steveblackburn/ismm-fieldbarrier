@@ -12,8 +12,7 @@
  */
 package org.jikesrvm.mm.mmtk;
 
-import static org.jikesrvm.mm.mminterface.MemoryManagerConstants.USE_FIELD_BARRIER_FOR_AASTORE;
-import static org.jikesrvm.mm.mminterface.MemoryManagerConstants.USE_FIELD_BARRIER_FOR_PUTFIELD;
+import static org.jikesrvm.mm.mminterface.MemoryManagerConstants.*;
 import static org.jikesrvm.objectmodel.JavaHeaderConstants.ARRAY_BASE_OFFSET;
 import static org.jikesrvm.objectmodel.JavaHeaderConstants.GC_HEADER_OFFSET;
 
@@ -59,7 +58,7 @@ import org.vmmagic.unboxed.Word;
     int bytes = org.jikesrvm.objectmodel.ObjectModel.bytesRequiredWhenCopied(from.toObject(), type);
     int align = org.jikesrvm.objectmodel.ObjectModel.getAlignment(type, from.toObject());
     int offset = org.jikesrvm.objectmodel.ObjectModel.getOffsetForAlignment(type, from);
-    int prefix = USE_FIELD_BARRIER_FOR_PUTFIELD ? type.getAlignedFieldMarkBytes() : 0;
+    int prefix = (USE_FIELD_BARRIER_FOR_PUTFIELD || FIELD_BARRIER_SPACE_EVAL) ? type.getAlignedFieldMarkBytes() : 0;
     CollectorContext context = VM.activePlan.collector();
     allocator = context.copyCheckAllocator(from, bytes+prefix, align, allocator);
     Address region = MemoryManager.allocateSpace(context, bytes+prefix, align, offset,
@@ -76,7 +75,7 @@ import org.vmmagic.unboxed.Word;
     int bytes = org.jikesrvm.objectmodel.ObjectModel.bytesRequiredWhenCopied(from.toObject(), type, elements);
     int align = org.jikesrvm.objectmodel.ObjectModel.getAlignment(type, from.toObject());
     int offset = org.jikesrvm.objectmodel.ObjectModel.getOffsetForAlignment(type, from);
-    int prefix = USE_FIELD_BARRIER_FOR_AASTORE ? type.getAlignedFieldMarkBytes(elements) : 0;
+    int prefix = (USE_FIELD_BARRIER_FOR_AASTORE || FIELD_BARRIER_SPACE_EVAL) ? type.getAlignedFieldMarkBytes(elements) : 0;
     CollectorContext context = VM.activePlan.collector();
     allocator = context.copyCheckAllocator(from, bytes+prefix, align, allocator);
     Address region = MemoryManager.allocateSpace(context, bytes+prefix, align, offset,

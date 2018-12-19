@@ -102,4 +102,7 @@ public class GenConstraints extends StopTheWorldConstraints {
   @Override
   public boolean fieldBarrierUseByte() { return Plan.FIELD_BARRIER_USE_BYTE; }
 
+  @Override
+  public boolean fieldBarrierSpaceEval() { return Plan.FIELD_BARRIER_SPACE_EVAL; }
+
 }

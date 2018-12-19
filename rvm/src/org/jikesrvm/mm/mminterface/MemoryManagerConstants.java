@@ -41,5 +41,6 @@ public class MemoryManagerConstants {
   public static final boolean USE_FIELD_BARRIER_FOR_PUTFIELD = Selected.Constraints.get().useFieldBarrierForPutfield();
   public static final boolean USE_FIELD_BARRIER_FOR_AASTORE = Selected.Constraints.get().useFieldBarrierForAAStore();
   public static final boolean FIELD_BARRIER_USE_BYTE = Selected.Constraints.get().fieldBarrierUseByte();
+  public static final boolean FIELD_BARRIER_SPACE_EVAL = Selected.Constraints.get().fieldBarrierSpaceEval();
 }
 
