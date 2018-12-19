@@ -454,12 +454,8 @@ public class ObjectModel {
     }
     if (FIELD_BARRIER_USE_BYTE)
       return object.toAddress().plus(metaData.toInt()).loadByte() != 0;
-    else {
-      Address wordaddr = object.toAddress().plus(wordOffsetFromMetadata(metaData));
-      Word mask = bitMaskFromMetadata(metaData);
-      if (VM.VerifyAssertions) VM._assert(wordaddr.GE(objectStartRef(object)) && wordaddr.LT(object.toAddress()));
-      return !wordaddr.loadWord().and(mask).isZero();
-    }
+    else
+      return isElementUnlogged(object, wordOffsetFromMetadata(metaData), bitMaskFromMetadata(metaData));
   }
 
   @Inline
@@ -469,14 +465,17 @@ public class ObjectModel {
       VM._assert(ObjectModel.getTIB(object).getType().isArrayType());
       VM._assert(!isFieldBarrierExcludedType(object));
     }
-    if (FIELD_BARRIER_USE_BYTE) {
-      Address markAddr = object.toAddress().plus(FIELD_BYTE_MARK_BASE_OFFSET).minus(index);
-      return markAddr.loadByte() != 0;
-    } else {
-      Address wordAddr = object.toAddress().plus(wordOffsetFromFieldIndex(index));
-      if (VM.VerifyAssertions) VM._assert(wordAddr.GE(objectStartRef(object)) && wordAddr.LT(object.toAddress()));
-      return !wordAddr.loadWord().and(bitMaskFromIndex(index)).isZero();
-    }
+    if (FIELD_BARRIER_USE_BYTE)
+      return object.toAddress().plus(FIELD_BYTE_MARK_BASE_OFFSET).minus(index).loadByte() != 0;
+    else
+      return isElementUnlogged(object, wordOffsetFromFieldIndex(index), bitMaskFromIndex(index));
+  }
+
+  @Inline
+  private static boolean isElementUnlogged(ObjectReference object, int wordOffset, Word bitMask) {
+    Address wordAddr = object.toAddress().plus(wordOffset);
+    if (VM.VerifyAssertions) VM._assert(wordAddr.GE(objectStartRef(object)) && wordAddr.LT(object.toAddress()));
+    return !wordAddr.loadWord().and(bitMask).isZero();
   }
 
   /**
@@ -496,13 +495,7 @@ public class ObjectModel {
       markAddr.store((byte) 0);
       return markAddr;
     } else {
-      Address wordAddr = object.toAddress().plus(wordOffsetFromMetadata(metaData));
-      // FIXME the following line needs to be atomic (does it?), but is not:
-      if (VM.VerifyAssertions) VM._assert(wordAddr.GE(objectStartRef(object)) && wordAddr.LT(object.toAddress()));
-      if (VM.VerifyAssertions) VM._assert(!wordAddr.loadWord().and(bitMaskFromMetadata(metaData)).isZero());
-      wordAddr.store(wordAddr.loadWord().xor(bitMaskFromMetadata(metaData)));
-      if (VM.VerifyAssertions) VM._assert(wordAddr.loadWord().and(bitMaskFromMetadata(metaData)).isZero());
-      return wordAddr;
+      return nonAtomicMarkAsLogged(object, wordOffsetFromMetadata(metaData), bitMaskFromMetadata(metaData));
     }
   }
 
@@ -520,14 +513,19 @@ public class ObjectModel {
       markAddr.store((byte) 0);
       return markAddr;
     } else {
-      Address wordAddr = object.toAddress().plus(wordOffsetFromFieldIndex(index));
-      if (VM.VerifyAssertions) VM._assert(wordAddr.GE(objectStartRef(object)) && wordAddr.LT(object.toAddress()));
-      if (VM.VerifyAssertions) VM._assert(!wordAddr.loadWord().and(bitMaskFromIndex(index)).isZero());
-      // FIXME the following line needs to be atomic (does it?), but is not:
-      wordAddr.store(wordAddr.loadWord().xor(bitMaskFromIndex(index)));
-      if (VM.VerifyAssertions) VM._assert(wordAddr.loadWord().and(bitMaskFromIndex(index)).isZero());
-      return wordAddr;
+      return nonAtomicMarkAsLogged(object, wordOffsetFromFieldIndex(index), bitMaskFromIndex(index));
     }
+  }
+
+  @Inline
+  private static Address nonAtomicMarkAsLogged(ObjectReference object, int wordOffset, Word bitMask) {
+    Address wordAddr = object.toAddress().plus(wordOffset);
+    if (VM.VerifyAssertions) VM._assert(wordAddr.GE(objectStartRef(object)) && wordAddr.LT(object.toAddress()));
+    if (VM.VerifyAssertions) VM._assert(!wordAddr.loadWord().and(bitMask).isZero());
+    // FIXME the following line needs to be atomic (does it?), but is not:
+    wordAddr.store(wordAddr.loadWord().xor(bitMask));
+    if (VM.VerifyAssertions) VM._assert(wordAddr.loadWord().and(bitMask).isZero());
+    return wordAddr;
   }
 
   /**
