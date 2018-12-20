@@ -71,7 +71,7 @@ public class Entrypoints {
   public static final NormalMethod resolvedNewArrayMethod =
       getMethod(org.jikesrvm.runtime.RuntimeEntrypoints.class,
                 "resolvedNewArray",
-                "(IIILorg/jikesrvm/objectmodel/TIB;IIII)Ljava/lang/Object;");
+                "(IIILorg/jikesrvm/objectmodel/TIB;IIIZ)Ljava/lang/Object;");
 
   public static final RVMField sysWriteLockField = getField(org.jikesrvm.VM.class, "sysWriteLock", int.class);
   public static final RVMField intBufferLockField =

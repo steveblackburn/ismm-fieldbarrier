@@ -132,7 +132,7 @@ import org.vmmagic.pragma.*;
                               Plan.ALLOC_GCSPY,
                               ObjectModel.getAlignment(array),
                               ObjectModel.getOffsetForAlignment(array, false),
-                              0);
+                              false);
     } else {
       return null;
     }

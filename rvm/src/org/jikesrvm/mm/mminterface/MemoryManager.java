@@ -525,7 +525,7 @@ public final class MemoryManager {
   @Inline
   @Unpreemptible
   public static Object allocateArray(int numElements, int logElementSize, int headerSize, TIB tib, int allocator,
-                                     int align, int offset, int site) {
+                                     int align, int offset, boolean refArray) {
     int elemBytes = numElements << logElementSize;
     if (elemBytes < 0 || (elemBytes >>> logElementSize) != numElements) {
       /* asked to allocate more than Integer.MAX_VALUE bytes */
@@ -533,14 +533,16 @@ public final class MemoryManager {
     }
     int size = elemBytes + headerSize;
     int prefix = 0;
-    if ((USE_FIELD_BARRIER_FOR_AASTORE || FIELD_BARRIER_SPACE_EVAL) && ((RVMArray) tib.getType()).getElementType().isReferenceType() && numElements > 0) {
+
+    if ((USE_FIELD_BARRIER_FOR_AASTORE || FIELD_BARRIER_SPACE_EVAL) && refArray && numElements > 0) {
+      if (VM.VerifyAssertions) VM._assert(((RVMArray) tib.getType()).getElementType().isReferenceType());
       int fieldmarkBytes = org.jikesrvm.runtime.Memory.alignUp(ObjectModel.fieldMarkBytes(numElements), align);
       size += fieldmarkBytes;
       prefix = fieldmarkBytes;
       if (VM.VerifyAssertions) VM._assert(prefix != 0);
       if (VM.VerifyAssertions) VM._assert(org.jikesrvm.runtime.Memory.alignUp(size, MIN_ALIGNMENT) == size);
     }
-    return allocateArrayInternal(numElements, size, prefix, tib, allocator, align, offset, site);
+    return allocateArrayInternal(numElements, size, prefix, tib, allocator, align, offset, 0);
   }
 
 
@@ -674,7 +676,7 @@ public final class MemoryManager {
     TIB tib = type.getTypeInformationBlock();
     int allocator = isHot ? Plan.ALLOC_HOT_CODE : Plan.ALLOC_COLD_CODE;
 
-    return (CodeArray) allocateArray(numInstrs, width, headerSize, tib, allocator, align, offset, Plan.DEFAULT_SITE);
+    return (CodeArray) allocateArray(numInstrs, width, headerSize, tib, allocator, align, offset, false);
   }
 
   /**
@@ -714,7 +716,7 @@ public final class MemoryManager {
                                     Plan.ALLOC_STACK,
                                     align,
                                     offset,
-                                    Plan.DEFAULT_SITE);
+                                    false);
     }
   }
 
@@ -745,7 +747,7 @@ public final class MemoryManager {
                                  Plan.ALLOC_NON_MOVING,
                                  align,
                                  offset,
-                                 Plan.DEFAULT_SITE);
+                                 false);
 
   }
 
@@ -776,7 +778,7 @@ public final class MemoryManager {
                                  Plan.ALLOC_NON_MOVING,
                                  align,
                                  offset,
-                                 Plan.DEFAULT_SITE);
+                                 false);
 
   }
 
@@ -807,7 +809,7 @@ public final class MemoryManager {
                                  Plan.ALLOC_NON_MOVING,
                                  align,
                                  offset,
-                                 Plan.DEFAULT_SITE);
+                                 false);
 
   }
 
@@ -838,7 +840,7 @@ public final class MemoryManager {
                                  Plan.ALLOC_NON_MOVING,
                                  align,
                                  offset,
-                                 Plan.DEFAULT_SITE);
+                                false);
 
   }
 
@@ -967,7 +969,7 @@ public final class MemoryManager {
                                  type.getMMAllocator(),
                                  align,
                                  offset,
-                                 Plan.DEFAULT_SITE);
+                                 false);
 
     /* Now we replace the TIB */
     ObjectModel.setTIB(array, realTib);

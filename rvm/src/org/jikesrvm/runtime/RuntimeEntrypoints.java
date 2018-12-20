@@ -382,7 +382,7 @@ public class RuntimeEntrypoints {
                             MemoryManager.pickAllocator(array),
                             ObjectModel.getAlignment(array),
                             ObjectModel.getOffsetForAlignment(array, false),
-                            site);
+                            array.getElementType().isReferenceType());
   }
 
   /**
@@ -401,7 +401,7 @@ public class RuntimeEntrypoints {
    */
   @Entrypoint
   public static Object resolvedNewArray(int numElements, int logElementSize, int headerSize, TIB tib,
-                                        int allocator, int align, int offset, int site)
+                                        int allocator, int align, int offset, boolean refArray)
       throws OutOfMemoryError, NegativeArraySizeException {
 
     if (numElements < 0) raiseNegativeArraySizeException();
@@ -410,7 +410,7 @@ public class RuntimeEntrypoints {
     if (VM.ForceFrequentGC) checkAllocationCountDownToGC();
 
     // Allocate the array and initialize its header
-    return MemoryManager.allocateArray(numElements, logElementSize, headerSize, tib, allocator, align, offset, site);
+    return MemoryManager.allocateArray(numElements, logElementSize, headerSize, tib, allocator, align, offset, refArray);
   }
 
   /**

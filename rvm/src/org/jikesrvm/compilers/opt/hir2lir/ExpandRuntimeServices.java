@@ -225,7 +225,7 @@ public final class ExpandRuntimeServices extends CompilerPhase {
             inst.insertBefore(Move.create(REF_MOVE, tmp, tib));
             tib = tmp.copyRO();
           }
-          IntConstantOperand site = IRTools.IC(MemoryManager.getAllocationSite(true));
+          IntConstantOperand refArray = IRTools.IC(array.getElementType().isReferenceType() ? 1 : 0);
           RVMMethod target = Entrypoints.resolvedNewArrayMethod;
           Call.mutate8(inst,
                        CALL,
@@ -239,7 +239,7 @@ public final class ExpandRuntimeServices extends CompilerPhase {
                        allocator,
                        align,
                        offset,
-                       site);
+                       refArray);
           next = inst.prevInstructionInCodeOrder();
           if (inline && ir.options.H2L_INLINE_NEW) {
             if (inst.getBasicBlock().getInfrequent()) container.counter1++;

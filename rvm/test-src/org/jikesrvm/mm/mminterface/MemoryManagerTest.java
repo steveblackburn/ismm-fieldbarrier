@@ -48,7 +48,7 @@ public class MemoryManagerTest {
                                  ALLOC_NON_MOVING,
                                  align,
                                  offset,
-                                 DEFAULT_SITE);
+                                 false);
 
     assertEquals(test.length, 20);
   }
@@ -76,7 +76,7 @@ public class MemoryManagerTest {
                                  ALLOC_NON_MOVING,
                                  align,
                                  offset,
-                                 DEFAULT_SITE);
+                                 false);
 
     fail("FAIL! Created array with length " + test.length);
   }
@@ -104,7 +104,7 @@ public class MemoryManagerTest {
                                  ALLOC_NON_MOVING,
                                  align,
                                  offset,
-                                 DEFAULT_SITE);
+                                 false);
 
     fail("FAIL! Created array with length " + test.length);
   }
@@ -132,7 +132,7 @@ public class MemoryManagerTest {
                                  ALLOC_NON_MOVING,
                                  align,
                                  offset,
-                                 DEFAULT_SITE);
+                                 false);
 
     fail("FAIL! Created array with length " + test.length);
   }

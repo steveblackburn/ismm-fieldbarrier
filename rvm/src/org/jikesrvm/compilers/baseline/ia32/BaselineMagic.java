@@ -2178,9 +2178,9 @@ final class BaselineMagic {
       Offset tibOffset = array.getTibOffset();
       int headerSize = ObjectModel.computeHeaderSize(array);
       int whichAllocator = MemoryManager.pickAllocator(array, cm);
-      int site = MemoryManager.getAllocationSite(true);
       int align = ObjectModel.getAlignment(array);
       int offset = ObjectModel.getOffsetForAlignment(array, false);
+      int refArray = array.getElementType().isReferenceType() ? 1 : 0;
       // count is already on stack- nothing required
       asm.emitPUSH_Imm(width);                 // logElementSize
       asm.emitPUSH_Imm(headerSize);            // headerSize
@@ -2188,7 +2188,7 @@ final class BaselineMagic {
       asm.emitPUSH_Imm(whichAllocator);        // allocator
       asm.emitPUSH_Imm(align);
       asm.emitPUSH_Imm(offset);
-      asm.emitPUSH_Imm(site);
+      asm.emitPUSH_Imm(refArray);
       BaselineCompilerImpl.genParameterRegisterLoad(asm, 8);             // pass 8 parameter words
       asm.generateJTOCcall(Entrypoints.resolvedNewArrayMethod.getOffset());
       asm.emitPUSH_Reg(T0);
