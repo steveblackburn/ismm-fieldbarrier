@@ -323,7 +323,7 @@ public class JavaHeader {
     }
 
     if (USE_FIELD_BARRIER || FIELD_BARRIER_SPACE_EVAL)
-      start = start.minus(getFieldMarkBytes(obj));
+      start = start.minus(getFieldMarkBytes(obj));   // <- 2.5% increase in boot image
 
     while (start.minus(BYTES_IN_INT).loadInt() == ALIGNMENT_VALUE)
       start = start.minus(BYTES_IN_INT);
