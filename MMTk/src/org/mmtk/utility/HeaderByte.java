@@ -12,9 +12,13 @@
  */
 package org.mmtk.utility;
 
+import org.mmtk.plan.Plan;
 import org.mmtk.vm.VM;
 import org.vmmagic.pragma.Uninterruptible;
 import org.vmmagic.unboxed.ObjectReference;
+
+import static org.mmtk.plan.Plan.FIELD_BARRIER_USE_GC_BYTE;
+import static org.mmtk.plan.Plan.USE_FIELD_BARRIER;
 
 /**
  * This class provides generic support for operations over the GC byte
@@ -32,8 +36,9 @@ public class HeaderByte {
   public static final boolean NEEDS_UNLOGGED_BIT = VM.activePlan.constraints().needsLogBitInHeader();
   private static final int UNLOGGED_BIT_NUMBER = TOTAL_BITS - (NEEDS_UNLOGGED_BIT ? 1 : 0);
   public static final byte UNLOGGED_BIT = (byte) (1 << UNLOGGED_BIT_NUMBER);
-  public static final int USED_GLOBAL_BITS = TOTAL_BITS - UNLOGGED_BIT_NUMBER;
-
+  public static final int FIELD_BARRIER_LOW_BIT = FIELD_BARRIER_USE_GC_BYTE ? UNLOGGED_BIT_NUMBER + 1 : -1;
+  public static final int FIELD_BARRIER_HIGH_BIT = FIELD_BARRIER_USE_GC_BYTE ? 7 : -1;
+  public static final int USED_GLOBAL_BITS = FIELD_BARRIER_USE_GC_BYTE ? FIELD_BARRIER_HIGH_BIT : UNLOGGED_BIT_NUMBER;
 
   public static void markAsUnlogged(ObjectReference object) {
     byte value = VM.objectModel.readAvailableByte(object);

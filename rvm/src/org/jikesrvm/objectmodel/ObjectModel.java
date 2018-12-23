@@ -332,6 +332,7 @@ public class ObjectModel {
   }
 
   private static final int FIELD_MARK_SHIFT = LOG_BITS_IN_WORD;
+  private static final int HEADER_BYTE_FIELDS = FIELD_BARRIER_USE_GC_BYTE ? (1 + FIELD_BARRIER_HIGHEST_AVAILABLE_BIT - FIELD_BARRIER_LOWEST_AVAILABLE_BIT) : 0;
   @Inline
   private static int wordOffsetFromFieldIndex(int fieldIndex) {
     int wordnum = fieldIndex >> FIELD_MARK_SHIFT;

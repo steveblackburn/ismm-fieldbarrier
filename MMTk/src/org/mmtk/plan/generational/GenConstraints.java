@@ -20,6 +20,10 @@ import org.mmtk.policy.Space;
 
 import org.vmmagic.pragma.*;
 
+import static org.mmtk.plan.Plan.*;
+import static org.mmtk.utility.HeaderByte.FIELD_BARRIER_HIGH_BIT;
+import static org.mmtk.utility.HeaderByte.FIELD_BARRIER_LOW_BIT;
+
 /**
  * This class and its subclasses communicate to the host VM/Runtime
  * any features of the selected plan that it needs to know.  This is
@@ -94,12 +98,16 @@ public class GenConstraints extends StopTheWorldConstraints {
   }
 
   @Override
-  public boolean useFieldBarrierForPutfield() { return Plan.USE_FIELD_BARRIER_FOR_PUTFIELD; }
-
+  public boolean useFieldBarrierForPutfield() { return USE_FIELD_BARRIER_FOR_PUTFIELD; }
   @Override
-  public boolean useFieldBarrierForAAStore() { return Plan.USE_FIELD_BARRIER_FOR_AASTORE; }
-
+  public boolean useFieldBarrierForAAStore() { return USE_FIELD_BARRIER_FOR_AASTORE; }
   @Override
-  public boolean fieldBarrierSpaceEval() { return Plan.FIELD_BARRIER_SPACE_EVAL; }
+  public boolean fieldBarrierUseGCByte() { return FIELD_BARRIER_USE_GC_BYTE; }
+  @Override
+  public int fieldBarrierLowestAvailableBit() { return FIELD_BARRIER_LOW_BIT; }
+  @Override
+  public int fieldBarrierHighestAvailableBit() { return FIELD_BARRIER_HIGH_BIT; }
+  @Override
+  public boolean fieldBarrierSpaceEval() { return FIELD_BARRIER_SPACE_EVAL; }
 
 }
