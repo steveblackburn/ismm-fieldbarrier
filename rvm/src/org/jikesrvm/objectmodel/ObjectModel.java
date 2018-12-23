@@ -335,7 +335,7 @@ public class ObjectModel {
   @Inline
   private static int wordOffsetFromFieldIndex(int fieldIndex) {
     int wordnum = fieldIndex >> FIELD_MARK_SHIFT;
-    int rtn = GC_HEADER_OFFSET.toInt() - ((1 + wordnum) << LOG_BYTES_IN_WORD);
+    int rtn = (GC_HEADER_OFFSET.toInt() - 4) - (wordnum << LOG_BYTES_IN_WORD);
     if (VM.VerifyAssertions) VM._assert(rtn < GC_HEADER_OFFSET.toInt());
     if (VM.VerifyAssertions) VM._assert(rtn >= (GC_HEADER_OFFSET.toInt() - (((fieldIndex>>BITS_IN_WORD)+1)<<FIELD_MARK_SHIFT)));
     return rtn;
@@ -349,7 +349,7 @@ public class ObjectModel {
 
   @Inline
   private static Word bitMaskFromIndex(int index) {
-    return Word.fromIntSignExtend(1<<(index % BITS_IN_WORD));
+    return Word.fromIntSignExtend(1<<(index & (BITS_IN_WORD-1)));
   }
 
   @Interruptible
