@@ -486,6 +486,12 @@ public class ObjectModel {
 
   /**
    *
+   * This is non-atomic, which means that the setting of the bit may be lost.
+   *
+   * This is fine for collectors where setting the logged bit is not a matter of correctness,
+   * but merely an optimization (i.e. where duplicate logging is benign).  Thus this is fine
+   * for a standard generational barrier, but not for some reference counting barriers.
+   *
    * @return The address of the word/byte containing the mark bit/byte that was logged
    */
   @Inline
@@ -505,6 +511,13 @@ public class ObjectModel {
     }
   }
 
+  /*
+   * This is non-atomic, which means that the setting of the bit may be lost.
+   *
+   * This is fine for collectors where setting the logged bit is not a matter of correctness,
+   * but merely an optimization (i.e. where duplicate logging is benign).  Thus this is fine
+   * for a standard generational barrier, but not for some reference counting barriers.
+   */
   @Inline
   public static Address nonAtomicMarkRefArrayElementAsLogged(ObjectReference object, int index) {
     if (VM.VerifyAssertions) {
@@ -523,12 +536,18 @@ public class ObjectModel {
     }
   }
 
+  /**
+   * This is non-atomic, which means that the setting of the bit may be lost.
+   *
+   * This is fine for collectors where setting the logged bit is not a matter of correctness,
+   * but merely an optimization (i.e. where duplicate logging is benign).  Thus this is fine
+   * for a standard generational barrier, but not for some reference counting barriers.
+   */
   @Inline
   private static Address nonAtomicMarkAsLogged(ObjectReference object, int wordOffset, Word bitMask) {
     Address wordAddr = object.toAddress().plus(wordOffset);
     if (VM.VerifyAssertions) VM._assert(wordAddr.GE(objectStartRef(object)) && wordAddr.LT(object.toAddress()));
     if (VM.VerifyAssertions) VM._assert(!wordAddr.loadWord().and(bitMask).isZero());
-    // FIXME the following line needs to be atomic (does it?), but is not:
     wordAddr.store(wordAddr.loadWord().xor(bitMask));
     if (VM.VerifyAssertions) VM._assert(wordAddr.loadWord().and(bitMask).isZero());
     return wordAddr;
