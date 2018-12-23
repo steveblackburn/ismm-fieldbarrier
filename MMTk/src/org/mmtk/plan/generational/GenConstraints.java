@@ -100,9 +100,6 @@ public class GenConstraints extends StopTheWorldConstraints {
   public boolean useFieldBarrierForAAStore() { return Plan.USE_FIELD_BARRIER_FOR_AASTORE; }
 
   @Override
-  public boolean fieldBarrierUseByte() { return Plan.FIELD_BARRIER_USE_BYTE; }
-
-  @Override
   public boolean fieldBarrierSpaceEval() { return Plan.FIELD_BARRIER_SPACE_EVAL; }
 
 }

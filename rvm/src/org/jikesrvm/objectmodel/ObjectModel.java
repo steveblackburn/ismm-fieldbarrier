@@ -331,7 +331,7 @@ public class ObjectModel {
     return metadata.rsha(WORD_OFFSET_SHIFT).toInt();
   }
 
-  private static final int FIELD_MARK_SHIFT = FIELD_BARRIER_USE_BYTE ? LOG_BYTES_IN_WORD : LOG_BITS_IN_WORD;
+  private static final int FIELD_MARK_SHIFT = LOG_BITS_IN_WORD;
   @Inline
   private static int wordOffsetFromFieldIndex(int fieldIndex) {
     int wordnum = fieldIndex >> FIELD_MARK_SHIFT;
@@ -409,7 +409,7 @@ public class ObjectModel {
         numReferences = 0;
     }
     if (numReferences == 0) return 0;
-    int bytes = FIELD_BARRIER_USE_BYTE ? numReferences : (numReferences+(BITS_IN_BYTE-1))>>LOG_BITS_IN_BYTE; // one byte/bit mark per reference in type
+    int bytes = (numReferences+(BITS_IN_BYTE-1))>>LOG_BITS_IN_BYTE; // one byte/bit mark per reference in type
     return Memory.alignUp(bytes, MIN_ALIGNMENT);
   }
 
@@ -423,11 +423,7 @@ public class ObjectModel {
   private static Word getFieldMarkMetadata(Offset fieldOffset) {
     int offset = fieldOffset.minus(FIELD_ZERO_OFFSET).toInt();
     int fieldIndex = offset >> LOG_BYTES_IN_ADDRESS;
-    if (FIELD_BARRIER_USE_BYTE)
-      return FIELD_BYTE_MARK_BASE_OFFSET.minus(fieldIndex).toWord();  // return offset relative to object pointer
-    else {
-      return metaDataFromFieldIndex(fieldIndex);
-    }
+    return metaDataFromFieldIndex(fieldIndex);
   }
 
   @Inline
@@ -440,13 +436,8 @@ public class ObjectModel {
 
   @Inline
   public static void clearFieldMarks(Word fieldMarkReference) {
-    if (FIELD_BARRIER_USE_BYTE)
-      fieldMarkReference.toAddress().store((byte) 1); // single byte
-    else {
       if (VM.VerifyAssertions) VM._assert(Memory.alignUp(fieldMarkReference.toAddress(), BYTES_IN_WORD).EQ(fieldMarkReference.toAddress()));
       fieldMarkReference.toAddress().store(Word.zero().not()); // all bits in word
-     // VM.sysWriteln("CFM: ", fieldMarkReference.toAddress());
-    }
   }
 
   @Inline
@@ -458,10 +449,7 @@ public class ObjectModel {
       VM._assert(ObjectModel.getTIB(object).getType().asClass().getNumberOfReferenceFields() > 0);
       VM._assert(ObjectModel.getTIB(object).getType().asClass().getAlignedFieldMarkBytes() > 0);
     }
-    if (FIELD_BARRIER_USE_BYTE)
-      return object.toAddress().plus(metaData.toInt()).loadByte() != 0;
-    else
-      return isElementUnlogged(object, wordOffsetFromMetadata(metaData), bitMaskFromMetadata(metaData));
+    return isElementUnlogged(object, wordOffsetFromMetadata(metaData), bitMaskFromMetadata(metaData));
   }
 
   @Inline
@@ -471,10 +459,7 @@ public class ObjectModel {
       VM._assert(ObjectModel.getTIB(object).getType().isArrayType());
       VM._assert(!isFieldBarrierExcludedType(object));
     }
-    if (FIELD_BARRIER_USE_BYTE)
-      return object.toAddress().plus(FIELD_BYTE_MARK_BASE_OFFSET).minus(index).loadByte() != 0;
-    else
-      return isElementUnlogged(object, wordOffsetFromFieldIndex(index), bitMaskFromIndex(index));
+    return isElementUnlogged(object, wordOffsetFromFieldIndex(index), bitMaskFromIndex(index));
   }
 
   @Inline
@@ -501,14 +486,7 @@ public class ObjectModel {
       VM._assert(ObjectModel.getTIB(object).getType().isClassType());
       VM._assert(!isFieldBarrierExcludedType(object));
     }
-
-    if (FIELD_BARRIER_USE_BYTE) {
-      Address markAddr = object.toAddress().plus(metaData.toInt());
-      markAddr.store((byte) 0);
-      return markAddr;
-    } else {
-      return nonAtomicMarkAsLogged(object, wordOffsetFromMetadata(metaData), bitMaskFromMetadata(metaData));
-    }
+    return nonAtomicMarkAsLogged(object, wordOffsetFromMetadata(metaData), bitMaskFromMetadata(metaData));
   }
 
   /*
@@ -525,15 +503,7 @@ public class ObjectModel {
       VM._assert(ObjectModel.getTIB(object).getType().isArrayType());
       VM._assert(!isFieldBarrierExcludedType(object));
     }
-
-    if (FIELD_BARRIER_USE_BYTE) {
-      Address markAddr = object.toAddress().plus(FIELD_BYTE_MARK_BASE_OFFSET).minus(index);
-      if (VM.VerifyAssertions) VM._assert(markAddr.LT(getObjectEndAddress(object.toObject())));
-      markAddr.store((byte) 0);
-      return markAddr;
-    } else {
-      return nonAtomicMarkAsLogged(object, wordOffsetFromFieldIndex(index), bitMaskFromIndex(index));
-    }
+    return nonAtomicMarkAsLogged(object, wordOffsetFromFieldIndex(index), bitMaskFromIndex(index));
   }
 
   /**

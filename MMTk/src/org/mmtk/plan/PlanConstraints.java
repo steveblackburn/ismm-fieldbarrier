@@ -310,7 +310,5 @@ import org.vmmagic.pragma.*;
 
   public boolean useFieldBarrierForAAStore() { return false; }
 
-  public boolean fieldBarrierUseByte() { return true; }
-
   public boolean fieldBarrierSpaceEval() { return false; }
 }

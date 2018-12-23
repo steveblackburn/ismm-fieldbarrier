@@ -53,11 +53,7 @@ public class RCBaseConstraints extends StopTheWorldConstraints {
   }
 
   @Override
-  public boolean fieldBarrierUseByte() { return Plan.FIELD_BARRIER_USE_BYTE; }
-
-  @Override
   public boolean useFieldBarrierForPutfield() { return Plan.USE_FIELD_BARRIER_FOR_PUTFIELD; }
-
   @Override
   public boolean useFieldBarrierForAAStore() { return Plan.USE_FIELD_BARRIER_FOR_AASTORE; }
 }
