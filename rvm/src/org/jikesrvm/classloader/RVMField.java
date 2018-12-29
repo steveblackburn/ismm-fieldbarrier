@@ -69,6 +69,9 @@ public final class RVMField extends RVMMember {
    */
   protected Word fieldMarkMetadata = Word.zero();
 
+  protected static final int NO_REF_FIELD_ORDINAL = -1;
+  private int referenceFieldOrdinal = NO_REF_FIELD_ORDINAL;
+
   /**
    * Create a field.
    *
@@ -191,6 +194,7 @@ public final class RVMField extends RVMMember {
   /**
    * @return {@code true} if this field holds a reference
    */
+  @Uninterruptible
   public boolean isReferenceType() {
     return reference;
   }
@@ -622,6 +626,22 @@ public final class RVMField extends RVMMember {
 
   public final Word getFieldMarkMetaData() {
     return fieldMarkMetadata;
+  }
+
+  public final void setReferenceFieldOrdinal(int ordinal) {
+    if (VM.VerifyAssertions) VM._assert(isReferenceType());
+    if (VM.VerifyAssertions) VM._assert(!isStatic());
+    if (VM.VerifyAssertions) VM._assert(referenceFieldOrdinal == NO_REF_FIELD_ORDINAL || referenceFieldOrdinal == ordinal);
+
+    referenceFieldOrdinal = ordinal;
+  }
+
+  @Uninterruptible
+  public final int getReferenceFieldOrdinal() {
+    if (VM.VerifyAssertions) VM._assert(isReferenceType());
+    if (VM.VerifyAssertions) VM._assert(!isStatic());
+    if (VM.VerifyAssertions) VM._assert(referenceFieldOrdinal != NO_REF_FIELD_ORDINAL);
+    return referenceFieldOrdinal;
   }
 
 }

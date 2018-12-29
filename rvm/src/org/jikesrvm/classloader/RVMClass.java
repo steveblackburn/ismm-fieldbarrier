@@ -30,8 +30,8 @@ import static org.jikesrvm.classloader.ClassLoaderConstants.CLASS_LOADED;
 import static org.jikesrvm.classloader.ClassLoaderConstants.CLASS_RESOLVED;
 import static org.jikesrvm.classloader.ClassLoaderConstants.CP_MEMBER;
 import static org.jikesrvm.classloader.ClassLoaderConstants.CP_UTF;
-import static org.jikesrvm.mm.mminterface.MemoryManagerConstants.FIELD_BARRIER_SPACE_EVAL;
-import static org.jikesrvm.mm.mminterface.MemoryManagerConstants.USE_FIELD_BARRIER_FOR_PUTFIELD;
+import static org.jikesrvm.classloader.RVMField.NO_REF_FIELD_ORDINAL;
+import static org.jikesrvm.mm.mminterface.MemoryManagerConstants.*;
 import static org.jikesrvm.objectmodel.ObjectModel.getFieldMarkMetadata;
 import static org.jikesrvm.runtime.JavaSizeConstants.BYTES_IN_DOUBLE;
 import static org.jikesrvm.runtime.JavaSizeConstants.BYTES_IN_INT;
@@ -1310,17 +1310,18 @@ public final class RVMClass extends RVMType {
       int j = 0;
       for (RVMField field : instanceFields) {
         if (field.isTraced()) {
-          referenceOffsets[j++] = field.getOffset().toInt();
-          if (USE_FIELD_BARRIER_FOR_PUTFIELD)
+          if (USE_FIELD_BARRIER_FOR_PUTFIELD) {
+            field.setReferenceFieldOrdinal(j);
             field.fieldMarkMetadata = getFieldMarkMetadata(field);
+          }
+          referenceOffsets[j++] = field.getOffset().toInt();
         }
       }
     }
 
     // calculate field mark bytes
-    if ((USE_FIELD_BARRIER_FOR_PUTFIELD || FIELD_BARRIER_SPACE_EVAL) && !isRuntimeTable() && !isBootRecordType() && getNumberOfReferenceFields() > 0) {
-      int numReferences = (instanceSize + 3) >> 2; // FIXME very conservative estimate
-      int fieldMarkBytes = ObjectModel.fieldMarkBytes(numReferences);
+    if ((USE_FIELD_BARRIER_FOR_PUTFIELD || FIELD_BARRIER_SPACE_EVAL) && !isRuntimeTable() && !isBootRecordType() && referenceFieldCount > 0) {
+      int fieldMarkBytes = ObjectModel.fieldMarkBytes(referenceFieldCount);
       setAlignedFieldMarkBytes(fieldMarkBytes);
     }
 
@@ -1403,6 +1404,17 @@ public final class RVMClass extends RVMType {
     }
 
     if (VM.TraceClassLoading && VM.runningVM) VM.sysWriteln("RVMClass: (end)   resolve " + this);
+  }
+
+  /* reverse look up of ordinal for field, given the offset */
+  public int getFieldOrdinalFromOffset(Offset offset) {
+    for (int ord = 0; ord < referenceOffsets.length; ord++) {
+      if (referenceOffsets[ord] == offset.toInt())
+        return ord;
+    }
+    // should never be reached
+    if (VM.VerifyAssertions) VM._assert(false);
+    return NO_REF_FIELD_ORDINAL;
   }
 
   /**

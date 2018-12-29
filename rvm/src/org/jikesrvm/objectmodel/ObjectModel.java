@@ -409,7 +409,7 @@ public class ObjectModel {
       else
         numReferences = 0;
     }
-    if (numReferences == 0) return 0;
+    if (numReferences <= 0) return 0;
     int bytes = (numReferences+(BITS_IN_BYTE-1))>>LOG_BITS_IN_BYTE; // one byte/bit mark per reference in type
     return Memory.alignUp(bytes, MIN_ALIGNMENT);
   }
@@ -417,22 +417,13 @@ public class ObjectModel {
   @Inline
   public static Word getFieldMarkMetadata(RVMField field) {
     if (VM.VerifyAssertions) VM._assert(USE_FIELD_BARRIER_FOR_PUTFIELD);
-    return getFieldMarkMetadata(field.getOffset());
-  }
-
-  @Inline
-  private static Word getFieldMarkMetadata(Offset fieldOffset) {
-    int offset = fieldOffset.minus(FIELD_ZERO_OFFSET).toInt();
-    int fieldIndex = offset >> LOG_BYTES_IN_ADDRESS;
-    return metaDataFromFieldIndex(fieldIndex);
+    return metaDataFromFieldIndex(field.getReferenceFieldOrdinal());
   }
 
   @Inline
   public static Word getFieldMarkMetadata(ObjectReference object, Offset fieldOffset) {
-    if (VM.VerifyAssertions) VM._assert(!isFieldBarrierExcludedType(object));
-    if (VM.VerifyAssertions) VM._assert(ObjectModel.getTIB(object).getType().isClassType());
-
-    return getFieldMarkMetadata(fieldOffset);
+    if (VM.VerifyAssertions) VM._assert(USE_FIELD_BARRIER_FOR_PUTFIELD);
+    return metaDataFromFieldIndex(((RVMClass) (getTIB(object).getType())).getFieldOrdinalFromOffset(fieldOffset));
   }
 
   @Inline

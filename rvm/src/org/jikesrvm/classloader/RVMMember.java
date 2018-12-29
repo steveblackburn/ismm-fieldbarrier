@@ -27,6 +27,8 @@ public abstract class RVMMember extends AnnotatedElement {
 
   /** Initial value for a field offset - indicates field not laid out. */
   private static final int NO_OFFSET = Short.MIN_VALUE + 1;
+  /** Initial value for field reference ordinal */
+  private static final int NO_ORDINAL = NO_OFFSET;
 
   /**
    * The class that declared this member, available by calling
@@ -55,6 +57,8 @@ public abstract class RVMMember extends AnnotatedElement {
    * Set by {@link RVMClass#resolve()}
    */
   protected int offset;
+
+  private int referenceFieldOrdinal = NO_ORDINAL;
 
   /**
    * NOTE: Only {@link RVMClass} is allowed to create an instance of a RVMMember.
