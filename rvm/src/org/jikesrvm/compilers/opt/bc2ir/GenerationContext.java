@@ -692,7 +692,7 @@ public final class GenerationContext {
       prob = ((ConditionalBranchProfile) bp).getTakenProbability();
     } else {
       if (branchProfiles != null) {
-        VM.sysWrite("Warning: conditional branch profile entry not found");
+        VM.sysWriteln("Warning: conditional branch profile entry not found");
       }
       if (backwards) {
         prob = 0.9f;
