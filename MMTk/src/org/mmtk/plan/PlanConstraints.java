@@ -312,4 +312,5 @@ import org.vmmagic.pragma.*;
   public int fieldBarrierLowestAvailableBit() { return -1; }
   public int fieldBarrierHighestAvailableBit() { return -1; }
   public boolean fieldBarrierSpaceEval() { return false; }
+  public boolean fieldBarrierVerbose() { return false; }
 }

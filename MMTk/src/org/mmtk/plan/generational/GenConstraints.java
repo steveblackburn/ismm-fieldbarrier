@@ -109,5 +109,7 @@ public class GenConstraints extends StopTheWorldConstraints {
   public int fieldBarrierHighestAvailableBit() { return FIELD_BARRIER_HIGH_BIT; }
   @Override
   public boolean fieldBarrierSpaceEval() { return FIELD_BARRIER_SPACE_EVAL; }
+  @Override
+  public boolean fieldBarrierVerbose() { return FIELD_BARRIER_VERBOSE; }
 
 }

@@ -1323,6 +1323,18 @@ public final class RVMClass extends RVMType {
     if ((USE_FIELD_BARRIER_FOR_PUTFIELD || FIELD_BARRIER_SPACE_EVAL) && !isRuntimeTable() && !isBootRecordType() && referenceFieldCount > 0) {
       int fieldMarkBytes = ObjectModel.fieldMarkBytes(referenceFieldCount);
       setAlignedFieldMarkBytes(fieldMarkBytes);
+
+      if (FIELD_BARRIER_VERBOSE) {
+        VM.sysWrite(typeRef.name);
+        VM.sysWrite(" [");
+        for (RVMField field : instanceFields) {
+          if (field.isTraced()) {
+            VM.sysWrite(field.getReferenceFieldOrdinal() == 0 ? "" : ", ", field.getReferenceFieldOrdinal());
+          }
+        }
+        VM.sysWrite("] ", referenceFieldCount);
+        VM.sysWriteln(", ", fieldMarkBytes);
+      }
     }
 
     // Allocate space for <init> method pointers
@@ -1407,6 +1419,7 @@ public final class RVMClass extends RVMType {
   }
 
   /* reverse look up of ordinal for field, given the offset */
+  @Uninterruptible
   public int getFieldOrdinalFromOffset(Offset offset) {
     for (int ord = 0; ord < referenceOffsets.length; ord++) {
       if (referenceOffsets[ord] == offset.toInt())

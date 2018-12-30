@@ -44,6 +44,7 @@ public class MemoryManagerConstants {
   public static final int FIELD_BARRIER_LOWEST_AVAILABLE_BIT = Selected.Constraints.get().fieldBarrierLowestAvailableBit();
   public static final int FIELD_BARRIER_HIGHEST_AVAILABLE_BIT = Selected.Constraints.get().fieldBarrierHighestAvailableBit();
   public static final boolean FIELD_BARRIER_SPACE_EVAL = Selected.Constraints.get().fieldBarrierSpaceEval();
+  public static final boolean FIELD_BARRIER_VERBOSE = Selected.Constraints.get().fieldBarrierVerbose();
   public static final int FIELD_BARRIER_AASTORE_THRESHOLD = 0;
 }
 
