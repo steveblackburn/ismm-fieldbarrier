@@ -14,6 +14,7 @@ package org.mmtk.policy.immix;
 
 import org.mmtk.utility.ForwardingWord;
 import org.mmtk.utility.HeaderByte;
+import org.mmtk.utility.Log;
 import org.mmtk.vm.VM;
 import org.vmmagic.pragma.Inline;
 import org.vmmagic.pragma.Uninterruptible;
@@ -54,6 +55,13 @@ public class ObjectHeader {
   private static final byte MARK_AND_FORWARDING_MASK = (byte) (MARK_MASK | ForwardingWord.FORWARDING_MASK);
   public static final byte MARK_BASE_VALUE = MARK_INCREMENT;
 
+  static {
+    if (MAX_MARKCOUNT_BITS < 2) {
+      Log.write("MAX_MARKCOUNT_BITS must be two or more, but is ", MAX_MARKCOUNT_BITS);
+      Log.writeln(".  Most likely due to too many bits being consumed globally.  HeaderByte.USED_GLOBAL_BITS is ", HeaderByte.USED_GLOBAL_BITS);
+      VM.assertions._assert(false);
+    }
+  }
 
   /****************************************************************************
    *

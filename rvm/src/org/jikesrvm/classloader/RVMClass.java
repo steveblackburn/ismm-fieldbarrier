@@ -1321,7 +1321,8 @@ public final class RVMClass extends RVMType {
 
     // calculate field mark bytes
     if ((USE_FIELD_BARRIER_FOR_PUTFIELD || FIELD_BARRIER_SPACE_EVAL) && !isRuntimeTable() && !isBootRecordType() && referenceFieldCount > 0) {
-      int fieldMarkBytes = ObjectModel.fieldMarkBytes(referenceFieldCount);
+      int nonHeaderFieldMarkBits = referenceFieldCount - (FIELD_BARRIER_USE_GC_BYTE ? FIELD_BARRIER_HEADER_BITS : 0);
+      int fieldMarkBytes = ObjectModel.fieldMarkBytes(nonHeaderFieldMarkBits);
       setAlignedFieldMarkBytes(fieldMarkBytes);
 
       if (FIELD_BARRIER_VERBOSE) {
@@ -1333,6 +1334,9 @@ public final class RVMClass extends RVMType {
           }
         }
         VM.sysWrite("] ", referenceFieldCount);
+        VM.sysWrite(", ", nonHeaderFieldMarkBits);
+        VM.sysWrite(", ", FIELD_BARRIER_HIGHEST_AVAILABLE_BIT);
+        VM.sysWrite(", ", FIELD_BARRIER_LOWEST_AVAILABLE_BIT);
         VM.sysWriteln(", ", fieldMarkBytes);
       }
     }
