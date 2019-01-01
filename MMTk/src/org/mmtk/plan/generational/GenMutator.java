@@ -132,15 +132,10 @@ import org.vmmagic.unboxed.*;
   @Inline
   private void fastPath(ObjectReference src, Address slot, ObjectReference tgt, int mode, Word metaData) {
     if (Gen.GATHER_WRITE_BARRIER_STATS) Gen.wbFast.inc();
-    if ((Gen.USE_FIELD_BARRIER_FOR_PUTFIELD && mode == INSTANCE_FIELD) ||
-            (Gen.USE_FIELD_BARRIER_FOR_AASTORE && mode == ARRAY_ELEMENT)) {
-      if (FieldMarks.isFieldUnlogged(src, metaData, mode == ARRAY_ELEMENT)) {
-        if (Gen.GATHER_WRITE_BARRIER_STATS) Gen.wbFRSlow.inc();
-        if (mode == ARRAY_ELEMENT)
-          FieldMarks.logRefArrayElement(src, slot, metaData, fieldbuf);
-        else
-          FieldMarks.logScalarField(src, slot, metaData, fieldbuf);
-      }
+    if (Gen.USE_FIELD_BARRIER_FOR_PUTFIELD && mode == INSTANCE_FIELD) {
+      FieldMarks.scalarFieldBarrier(src, slot, metaData, fieldbuf);
+    } else if (Gen.USE_FIELD_BARRIER_FOR_AASTORE && mode == ARRAY_ELEMENT) {
+      FieldMarks.refArrayBarrier(src, slot, metaData, fieldbuf);
     } else if ((mode == ARRAY_ELEMENT && USE_OBJECT_BARRIER_FOR_AASTORE) ||
         (mode == INSTANCE_FIELD && USE_OBJECT_BARRIER_FOR_PUTFIELD)) {
       if (HeaderByte.isUnlogged(src)) {
