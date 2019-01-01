@@ -316,7 +316,14 @@ public class ObjectModel {
     if (VM.VerifyAssertions) VM._assert(fieldIndex >= 0);
 
     /* calculate the (negative) offset to the word we're concerned with */
-    Word wordoffset = Word.fromIntSignExtend(wordOffsetFromFieldIndex(fieldIndex, true)).lsh(WORD_OFFSET_SHIFT);
+    int offset;
+    if (FIELD_BARRIER_USE_GC_BYTE && fieldIndex < FIELD_BARRIER_HEADER_BITS)
+      offset = STATUS_OFFSET.toInt();
+    else {
+      offset = wordOffsetFromFieldIndex(FIELD_BARRIER_USE_GC_BYTE ? fieldIndex - FIELD_BARRIER_HEADER_BITS : fieldIndex);
+    }
+    Word wordoffset = Word.fromIntSignExtend(offset).lsh(WORD_OFFSET_SHIFT);
+
     /* encode the bitnumber we care about */
     Word bitnum;
     if (FIELD_BARRIER_USE_GC_BYTE) {
@@ -331,7 +338,12 @@ public class ObjectModel {
     /* compose the two */
     Word rtn = bitnum.or(wordoffset);
 
-    if (VM.VerifyAssertions) VM._assert(wordOffsetFromMetadata(rtn) == wordOffsetFromFieldIndex(fieldIndex, true));
+    if (VM.VerifyAssertions) {
+      if (FIELD_BARRIER_USE_GC_BYTE && fieldIndex < FIELD_BARRIER_HEADER_BITS)
+        VM._assert(wordOffsetFromMetadata(rtn) == STATUS_OFFSET.toInt());
+      else
+        VM._assert(wordOffsetFromMetadata(rtn) == wordOffsetFromFieldIndex(FIELD_BARRIER_USE_GC_BYTE ? fieldIndex - FIELD_BARRIER_HEADER_BITS : fieldIndex));
+    }
     return rtn;
   }
 
@@ -347,13 +359,7 @@ public class ObjectModel {
 
   private static final int FIELD_MARK_SHIFT = LOG_BITS_IN_WORD;
   @Inline
-  private static int wordOffsetFromFieldIndex(int fieldIndex, boolean scalar) {
-    if (FIELD_BARRIER_USE_GC_BYTE && scalar) {
-      if (fieldIndex < FIELD_BARRIER_HEADER_BITS)
-        return STATUS_OFFSET.toInt();
-      else
-        fieldIndex -= FIELD_BARRIER_HEADER_BITS;
-    }
+  private static int wordOffsetFromFieldIndex(int fieldIndex) {
     int wordnum = fieldIndex >> FIELD_MARK_SHIFT;
     int rtn = (GC_HEADER_OFFSET.toInt() - 4) - (wordnum << LOG_BYTES_IN_WORD);
     if (VM.VerifyAssertions) VM._assert(rtn < GC_HEADER_OFFSET.toInt());
@@ -492,7 +498,7 @@ public class ObjectModel {
       VM._assert(ObjectModel.getTIB(object).getType().isArrayType());
       VM._assert(!isFieldBarrierExcludedType(object));
     }
-    return isElementUnlogged(object, wordOffsetFromFieldIndex(index, false), bitMaskFromIndex(index));
+    return isElementUnlogged(object, wordOffsetFromFieldIndex(index), bitMaskFromIndex(index));
   }
 
   @Inline
@@ -540,7 +546,7 @@ public class ObjectModel {
       VM._assert(ObjectModel.getTIB(object).getType().isArrayType());
       VM._assert(!isFieldBarrierExcludedType(object));
     }
-    return nonAtomicMarkAsLogged(object, wordOffsetFromFieldIndex(index, false), bitMaskFromIndex(index));
+    return nonAtomicMarkAsLogged(object, wordOffsetFromFieldIndex(index), bitMaskFromIndex(index));
   }
 
   /**

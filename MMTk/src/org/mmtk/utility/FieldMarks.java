@@ -39,21 +39,21 @@ public class FieldMarks {
   @Inline
   public static void refArrayBarrier(ObjectReference src, Address slot, Word metaData, AddressPairDeque fieldbuf) {
     if (FIELD_BARRIER_AASTORE_OOL)
-      refArrayBarrierOOL(src, slot, metaData, fieldbuf);
+      refArrayBarrierOOL(src, slot, metaData.toInt(), fieldbuf);
     else
-      refArrayBarrierInline(src, slot, metaData, fieldbuf);
+      refArrayBarrierInline(src, slot, metaData.toInt(), fieldbuf);
   }
 
   @Inline
-  private static void refArrayBarrierInline(ObjectReference src, Address slot, Word metaData, AddressPairDeque fieldbuf) {
-    if (isRefArrayElementlogged(src, metaData))
-      logRefArrayElementOOL(src, slot, metaData, fieldbuf);
+  private static void refArrayBarrierInline(ObjectReference src, Address slot, int index, AddressPairDeque fieldbuf) {
+    if (VM.objectModel.isRefArrayElementUnlogged(src, index))
+      logRefArrayElementOOL(src, slot, index, fieldbuf);
   }
 
   @NoInline
-  private static void refArrayBarrierOOL(ObjectReference src, Address slot, Word metaData, AddressPairDeque fieldbuf) {
-    if (isRefArrayElementlogged(src, metaData))
-      logRefArrayElement(src, slot, metaData, fieldbuf);
+  private static void refArrayBarrierOOL(ObjectReference src, Address slot, int index, AddressPairDeque fieldbuf) {
+    if (VM.objectModel.isRefArrayElementUnlogged(src, index))
+      logRefArrayElement(src, slot, index, fieldbuf);
   }
 
 
@@ -66,25 +66,14 @@ public class FieldMarks {
   }
 
   @Inline
-  public static boolean isScalarFieldUnlogged(ObjectReference src, Word metaData) {
-    return VM.objectModel.isScalarFieldUnlogged(src, metaData);
-  }
-
-  @Inline
-  public static boolean isRefArrayElementlogged(ObjectReference src, Word metaData) {
-    return VM.objectModel.isRefArrayElementUnlogged(src, metaData.toInt());
-  }
-
-  @Inline
-  public static void logRefArrayElement(ObjectReference src, Address slot, Word metaData, AddressPairDeque fieldbuf) {
-    int index = metaData.toInt();
+  private static void logRefArrayElement(ObjectReference src, Address slot, int index, AddressPairDeque fieldbuf) {
     Address markAddr = VM.objectModel.nonAtomicMarkRefArrayElementAsLogged(src, index);
     fieldbuf.insert(slot, markAddr);
   }
 
   @NoInline
-  public static void logRefArrayElementOOL(ObjectReference src, Address slot, Word metaData, AddressPairDeque fieldbuf) {
-    logRefArrayElement(src, slot, metaData, fieldbuf);
+  private static void logRefArrayElementOOL(ObjectReference src, Address slot, int index, AddressPairDeque fieldbuf) {
+    logRefArrayElement(src, slot, index, fieldbuf);
   }
 
   @Inline
