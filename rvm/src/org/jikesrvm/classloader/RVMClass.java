@@ -1321,7 +1321,7 @@ public final class RVMClass extends RVMType {
 
     // calculate field mark bytes
     if ((USE_FIELD_BARRIER_FOR_PUTFIELD || FIELD_BARRIER_SPACE_EVAL) && !isRuntimeTable() && !isBootRecordType() && referenceFieldCount > 0) {
-      int nonHeaderFieldMarkBits = referenceFieldCount - (FIELD_BARRIER_USE_GC_BYTE ? FIELD_BARRIER_HEADER_BITS : 0);
+      int nonHeaderFieldMarkBits = referenceFieldCount - (FIELD_BARRIER_PF_USE_GC_BYTE ? FIELD_BARRIER_HEADER_BITS : 0);
       int fieldMarkBytes = ObjectModel.fieldMarkBytes(nonHeaderFieldMarkBits);
       setAlignedFieldMarkBytes(fieldMarkBytes);
 
