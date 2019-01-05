@@ -308,8 +308,7 @@ import org.vmmagic.pragma.*;
 
   public boolean useFieldBarrierForPutfield() { return false; }
   public boolean useFieldBarrierForAAStore() { return false; }
-  public boolean fieldBarrierPFUseGCByte() { return false; }
-  public boolean fieldBarrierAAUseGCByte() { return false; }
+  public boolean fieldBarrierUseGCByte() { return false; }
   public int fieldBarrierLowestAvailableBit() { return -1; }
   public int fieldBarrierHighestAvailableBit() { return -1; }
   public boolean fieldBarrierSpaceEval() { return false; }

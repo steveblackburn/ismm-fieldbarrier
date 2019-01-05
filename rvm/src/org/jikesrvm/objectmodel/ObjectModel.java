@@ -317,16 +317,16 @@ public class ObjectModel {
 
     /* calculate the (negative) offset to the word we're concerned with */
     int offset;
-    if (FIELD_BARRIER_PF_USE_GC_BYTE && fieldIndex < FIELD_BARRIER_HEADER_BITS)
+    if (FIELD_BARRIER_USE_GC_BYTE && fieldIndex < FIELD_BARRIER_HEADER_BITS)
       offset = STATUS_OFFSET.toInt();
     else {
-      offset = wordOffsetFromFieldIndex(FIELD_BARRIER_PF_USE_GC_BYTE ? fieldIndex - FIELD_BARRIER_HEADER_BITS : fieldIndex);
+      offset = wordOffsetFromFieldIndex(FIELD_BARRIER_USE_GC_BYTE ? fieldIndex - FIELD_BARRIER_HEADER_BITS : fieldIndex);
     }
     Word wordoffset = Word.fromIntSignExtend(offset).lsh(WORD_OFFSET_SHIFT);
 
     /* encode the bitnumber we care about */
     Word bitnum;
-    if (FIELD_BARRIER_PF_USE_GC_BYTE) {
+    if (FIELD_BARRIER_USE_GC_BYTE) {
       if (fieldIndex < FIELD_BARRIER_HEADER_BITS)
         bitnum = Word.fromIntSignExtend(fieldIndex+FIELD_BARRIER_LOWEST_AVAILABLE_BIT).and(BITNUM_MASK);
       else
@@ -339,10 +339,10 @@ public class ObjectModel {
     Word rtn = bitnum.or(wordoffset);
 
     if (VM.VerifyAssertions) {
-      if (FIELD_BARRIER_PF_USE_GC_BYTE && fieldIndex < FIELD_BARRIER_HEADER_BITS)
+      if (FIELD_BARRIER_USE_GC_BYTE && fieldIndex < FIELD_BARRIER_HEADER_BITS)
         VM._assert(wordOffsetFromMetadata(rtn) == STATUS_OFFSET.toInt());
       else
-        VM._assert(wordOffsetFromMetadata(rtn) == wordOffsetFromFieldIndex(FIELD_BARRIER_PF_USE_GC_BYTE ? fieldIndex - FIELD_BARRIER_HEADER_BITS : fieldIndex));
+        VM._assert(wordOffsetFromMetadata(rtn) == wordOffsetFromFieldIndex(FIELD_BARRIER_USE_GC_BYTE ? fieldIndex - FIELD_BARRIER_HEADER_BITS : fieldIndex));
     }
     return rtn;
   }
@@ -393,15 +393,15 @@ public class ObjectModel {
     if (isScalar) {
       if (VM.VerifyAssertions) VM._assert(USE_FIELD_BARRIER_FOR_PUTFIELD);
       cursor = end.minus(((RVMClass) tib.getType()).getAlignedFieldMarkBytes());
-      if (FIELD_BARRIER_PF_USE_GC_BYTE)
+      if (FIELD_BARRIER_USE_GC_BYTE)
         markHeaderFieldsAsUnlogged(bootImage, ref);
     } else {
       if (VM.VerifyAssertions) VM._assert(USE_FIELD_BARRIER_FOR_AASTORE);
       if (!(((RVMArray) tib.getType()).getElementType().isReferenceType()))
         return;
-      cursor = end.minus(((RVMArray) tib.getType()).getAlignedFieldMarkBytes(numElements));
-      if (FIELD_BARRIER_AA_USE_GC_BYTE)
+      if (FIELD_BARRIER_USE_GC_BYTE)
         markHeaderFieldsAsUnlogged(bootImage, ref);
+      cursor = end.minus(((RVMArray) tib.getType()).getAlignedFieldMarkBytes(numElements));
     }
     while (cursor.LT(end)) {
       bootImage.setByte(cursor, (byte) 0xff);
@@ -425,13 +425,13 @@ public class ObjectModel {
         if (VM.VerifyAssertions) VM._assert(isRefArray(tib));
         if (USE_FIELD_BARRIER_FOR_AASTORE) {
           cursor = end.minus(RVMArray.getAlignedFieldMarkBytesUnchecked(Magic.getArrayLength(obj)));
-          if (FIELD_BARRIER_AA_USE_GC_BYTE)
+          if (FIELD_BARRIER_USE_GC_BYTE)
             markHeaderFieldsAsUnlogged(obj);
         }
       } else {
         if (USE_FIELD_BARRIER_FOR_PUTFIELD) {
           cursor = end.minus(getScalarFieldMarkBytes(tib));
-          if (FIELD_BARRIER_PF_USE_GC_BYTE)
+          if (FIELD_BARRIER_USE_GC_BYTE)
             markHeaderFieldsAsUnlogged(obj);
         }
       }
@@ -476,7 +476,7 @@ public class ObjectModel {
 
   @Inline
   public static void clearFieldMarks(Word fieldMarkReference) {
-    if ((FIELD_BARRIER_PF_USE_GC_BYTE || FIELD_BARRIER_AA_USE_GC_BYTE )&& fieldMarkReference.and(Word.one()).EQ(Word.one())) {
+    if (FIELD_BARRIER_USE_GC_BYTE && fieldMarkReference.and(Word.one()).EQ(Word.one())) {
       Address addr = fieldMarkReference.and(Word.one().not()).toAddress();
       addr.store((byte) (addr.loadByte() | FIELD_BARRIER_HEADER_MASK));
     } else {
@@ -492,7 +492,7 @@ public class ObjectModel {
       VM._assert(ObjectModel.getTIB(object).getType().isClassType());
       VM._assert(!isFieldBarrierExcludedType(object));
       VM._assert(ObjectModel.getTIB(object).getType().asClass().getNumberOfReferenceFields() > 0);
-      VM._assert(FIELD_BARRIER_PF_USE_GC_BYTE == true || ObjectModel.getTIB(object).getType().asClass().getAlignedFieldMarkBytes() > 0);
+      VM._assert(FIELD_BARRIER_USE_GC_BYTE == true || ObjectModel.getTIB(object).getType().asClass().getAlignedFieldMarkBytes() > 0);
     }
     return isElementUnlogged(object, wordOffsetFromMetadata(metaData), bitMaskFromMetadata(metaData));
   }
@@ -532,7 +532,7 @@ public class ObjectModel {
       VM._assert(!isFieldBarrierExcludedType(object));
     }
     Address rtn = nonAtomicMarkAsLogged(object, wordOffsetFromMetadata(metaData), bitMaskFromMetadata(metaData));
-    if ((FIELD_BARRIER_PF_USE_GC_BYTE || FIELD_BARRIER_AA_USE_GC_BYTE) && encodesHeaderFieldMark(metaData)) {
+    if (FIELD_BARRIER_USE_GC_BYTE && encodesHeaderFieldMark(metaData)) {
       rtn = rtn.toWord().or(Word.one()).toAddress(); // set low-order bit here if we're messing with the object header
     }
     return rtn;

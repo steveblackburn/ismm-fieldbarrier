@@ -102,9 +102,7 @@ public class GenConstraints extends StopTheWorldConstraints {
   @Override
   public boolean useFieldBarrierForAAStore() { return USE_FIELD_BARRIER_FOR_AASTORE; }
   @Override
-  public boolean fieldBarrierPFUseGCByte() { return FIELD_BARRIER_PF_USE_GC_BYTE; }
-  @Override
-  public boolean fieldBarrierAAUseGCByte() { return FIELD_BARRIER_AA_USE_GC_BYTE; }
+  public boolean fieldBarrierUseGCByte() { return FIELD_BARRIER_USE_GC_BYTE; }
   @Override
   public int fieldBarrierLowestAvailableBit() { return FIELD_BARRIER_LOW_BIT; }
   @Override

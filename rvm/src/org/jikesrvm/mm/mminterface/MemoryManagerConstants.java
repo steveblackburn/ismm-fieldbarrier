@@ -40,8 +40,7 @@ public class MemoryManagerConstants {
   public static final boolean MOVES_CODE = false;
   public static final boolean USE_FIELD_BARRIER_FOR_PUTFIELD = Selected.Constraints.get().useFieldBarrierForPutfield();
   public static final boolean USE_FIELD_BARRIER_FOR_AASTORE = Selected.Constraints.get().useFieldBarrierForAAStore();
-  public static final boolean FIELD_BARRIER_PF_USE_GC_BYTE = Selected.Constraints.get().fieldBarrierPFUseGCByte();
-  public static final boolean FIELD_BARRIER_AA_USE_GC_BYTE = Selected.Constraints.get().fieldBarrierAAUseGCByte();
+  public static final boolean FIELD_BARRIER_USE_GC_BYTE = Selected.Constraints.get().fieldBarrierUseGCByte();
   public static final int FIELD_BARRIER_LOWEST_AVAILABLE_BIT = Selected.Constraints.get().fieldBarrierLowestAvailableBit();
   public static final int FIELD_BARRIER_HIGHEST_AVAILABLE_BIT = Selected.Constraints.get().fieldBarrierHighestAvailableBit();
   public static final int FIELD_BARRIER_HEADER_BITS = 1 + (FIELD_BARRIER_HIGHEST_AVAILABLE_BIT - FIELD_BARRIER_LOWEST_AVAILABLE_BIT);
