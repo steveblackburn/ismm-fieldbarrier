@@ -414,6 +414,11 @@ public class ObjectModel {
     writeAvailableByte(obj, (byte) (readAvailableByte(obj) | FIELD_BARRIER_HEADER_MASK));
   }
 
+  @Inline
+  static boolean areHeaderFieldsUnlogged(ObjectReference obj) {
+    return (readAvailableByte(obj) & FIELD_BARRIER_HEADER_MASK) == FIELD_BARRIER_HEADER_MASK;
+  }
+
   public static void markAllFieldsAsUnlogged(ObjectReference obj, ObjectReference t) {
     if (VM.VerifyAssertions) VM._assert(USE_FIELD_BARRIER_FOR_AASTORE || USE_FIELD_BARRIER_FOR_PUTFIELD || FIELD_BARRIER_SPACE_EVAL);
     TIB tib = Magic.addressAsTIB(t.toAddress());
@@ -440,6 +445,36 @@ public class ObjectModel {
         cursor = cursor.plus(1);
       }
     }
+  }
+
+  public static boolean areAllFieldsUnlogged(ObjectReference obj, ObjectReference t) {
+    if (VM.VerifyAssertions) VM._assert(USE_FIELD_BARRIER_FOR_AASTORE || USE_FIELD_BARRIER_FOR_PUTFIELD || FIELD_BARRIER_SPACE_EVAL);
+    TIB tib = Magic.addressAsTIB(t.toAddress());
+    if (hasFieldMarks(tib)) {
+      Address end = obj.toAddress().plus(GC_HEADER_OFFSET);
+      Address cursor = end;
+
+      if (isArray(tib)) {
+        if (VM.VerifyAssertions) VM._assert(isRefArray(tib));
+        if (USE_FIELD_BARRIER_FOR_AASTORE) {
+          cursor = end.minus(RVMArray.getAlignedFieldMarkBytesUnchecked(Magic.getArrayLength(obj)));
+          if (FIELD_BARRIER_USE_GC_BYTE && !areHeaderFieldsUnlogged(obj))
+            return false;
+        }
+      } else {
+        if (USE_FIELD_BARRIER_FOR_PUTFIELD) {
+          cursor = end.minus(getScalarFieldMarkBytes(tib));
+          if (FIELD_BARRIER_USE_GC_BYTE && !areHeaderFieldsUnlogged(obj))
+            return false;
+        }
+      }
+      while (cursor.LT(end)) {
+        if (cursor.loadByte() != (byte) 0xff)
+          return false;
+        cursor = cursor.plus(1);
+      }
+    }
+    return true;
   }
 
 

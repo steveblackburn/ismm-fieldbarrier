@@ -299,6 +299,10 @@ import org.vmmagic.unboxed.Word;
   public void markAllFieldsAsUnlogged(ObjectReference obj, ObjectReference tib) {
     org.jikesrvm.objectmodel.ObjectModel.markAllFieldsAsUnlogged(obj, tib);
   }
+  @Inline
+  public boolean areAllFieldsUnlogged(ObjectReference obj) {
+    return org.jikesrvm.objectmodel.ObjectModel.areAllFieldsUnlogged(obj, ObjectReference.fromObject(org.jikesrvm.objectmodel.JavaHeader.getTIB(obj.toObject())));
+  }
 
   @Inline
   public boolean isScalarFieldUnlogged(ObjectReference object, Word metaData) {

@@ -246,6 +246,7 @@ public abstract class ObjectModel {
   public abstract Address nonAtomicMarkRefArrayElementAsLogged(ObjectReference object, int index);
   public abstract void clearFieldMarks(Word fieldMarkReference);
   public abstract void markAllFieldsAsUnlogged(ObjectReference obj);
+  public abstract boolean areAllFieldsUnlogged(ObjectReference obj);
   public abstract void markAllFieldsAsUnlogged(ObjectReference obj, ObjectReference tib);
   public abstract int getFieldByteMarksForRefArray(ObjectReference array);
 

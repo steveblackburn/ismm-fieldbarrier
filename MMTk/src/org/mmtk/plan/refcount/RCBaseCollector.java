@@ -141,6 +141,7 @@ public abstract class RCBaseCollector extends StopTheWorldCollector {
               RCHeader.initRC(current);
             } else {
               if (RCHeader.initRC(current) == RCHeader.INC_NEW) {
+                VM.objectModel.markAllFieldsAsUnlogged(current);
                 modObjectBuffer.push(current);
               }
             }
@@ -150,12 +151,14 @@ public abstract class RCBaseCollector extends StopTheWorldCollector {
               RCHeader.incRC(current);
             } else {
               if (RCHeader.incRC(current) == RCHeader.INC_NEW) {
+                VM.objectModel.markAllFieldsAsUnlogged(current);
                 modObjectBuffer.push(current);
               }
             }
           }
         }
         if (!RCBase.BUILD_FOR_GENRC) modObjectBuffer.flushLocal();
+
         return;
       }
       while (!(current = newRootBuffer.pop()).isNull()) {
@@ -163,6 +166,7 @@ public abstract class RCBaseCollector extends StopTheWorldCollector {
           RCHeader.incRC(current);
         } else {
           if (RCHeader.incRC(current) == RCHeader.INC_NEW) {
+            VM.objectModel.markAllFieldsAsUnlogged(current);
             modObjectBuffer.push(current);
           }
         }
@@ -179,8 +183,7 @@ public abstract class RCBaseCollector extends StopTheWorldCollector {
         while (!(current = modObjectBuffer.pop()).isNull()) {
           if (!USE_FIELD_BARRIER)
             RCHeader.makeUnlogged(current);
-          else
-             VM.objectModel.markAllFieldsAsUnlogged(current);
+          else if (VM.VERIFY_ASSERTIONS) VM.assertions._assert(VM.objectModel.areAllFieldsUnlogged(current));
           if (!RCBase.BUILD_FOR_GENRC) {
             if (Space.isInSpace(RCBase.REF_COUNT, current)) {
               ExplicitFreeListSpace.testAndSetLiveBit(current);  // ? this is for newly allocated objects
