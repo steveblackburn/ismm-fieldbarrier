@@ -30,6 +30,7 @@ import java.io.IOException;
 
 import org.jikesrvm.VM;
 import org.jikesrvm.mm.mminterface.Barriers;
+import org.jikesrvm.mm.mminterface.MemoryManager;
 import org.jikesrvm.runtime.Magic;
 import org.jikesrvm.runtime.Statics;
 import org.vmmagic.pragma.Uninterruptible;
@@ -71,6 +72,7 @@ public final class RVMField extends RVMMember {
 
   protected static final int NO_REF_FIELD_ORDINAL = -1;
   private int referenceFieldOrdinal = NO_REF_FIELD_ORDINAL;
+  private static final Atom REF_FIELD = Atom.findOrCreateAsciiAtom("_referent");
 
   /**
    * Create a field.
@@ -90,7 +92,7 @@ public final class RVMField extends RVMMember {
     TypeReference typeRef = memRef.asFieldReference().getFieldContentsType();
     this.size = (byte)typeRef.getMemoryBytes();
     this.reference = typeRef.isReferenceType();
-    this.madeTraced = false;
+    this.madeTraced = (memRef.getName() == REF_FIELD && MemoryManager.referenceTypesUnsupported()) ? true: false;
     if (VM.runningVM && isUntraced()) {
       VM.sysFail("Untraced field " + toString() + " created at runtime!" +
           " Untraced fields must be resolved at build time to ensure that" +
@@ -176,6 +178,7 @@ public final class RVMField extends RVMMember {
    *
    * @return {@code true} if this field needs to be traced by the garbage collector
    */
+  @Uninterruptible
   public boolean isTraced() {
     return (reference && !isUntraced()) || madeTraced;
   }
@@ -258,6 +261,7 @@ public final class RVMField extends RVMMember {
    * @return {@code true} if this this field is invisible to the memory
    *  management system.
    */
+  @Uninterruptible
   public boolean isUntraced() {
     return hasUntracedAnnotation();
   }
@@ -629,7 +633,7 @@ public final class RVMField extends RVMMember {
   }
 
   public final void setReferenceFieldOrdinal(int ordinal) {
-    if (VM.VerifyAssertions) VM._assert(isReferenceType());
+    if (VM.VerifyAssertions) VM._assert(isTraced());
     if (VM.VerifyAssertions) VM._assert(!isStatic());
     if (VM.VerifyAssertions) VM._assert(referenceFieldOrdinal == NO_REF_FIELD_ORDINAL || referenceFieldOrdinal == ordinal);
 
@@ -638,7 +642,7 @@ public final class RVMField extends RVMMember {
 
   @Uninterruptible
   public final int getReferenceFieldOrdinal() {
-    if (VM.VerifyAssertions) VM._assert(isReferenceType());
+    if (VM.VerifyAssertions) VM._assert(isTraced());
     if (VM.VerifyAssertions) VM._assert(!isStatic());
     if (VM.VerifyAssertions) VM._assert(referenceFieldOrdinal != NO_REF_FIELD_ORDINAL);
     return referenceFieldOrdinal;

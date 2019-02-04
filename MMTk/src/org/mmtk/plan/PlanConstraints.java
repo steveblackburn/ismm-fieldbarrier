@@ -313,4 +313,6 @@ import org.vmmagic.pragma.*;
   public int fieldBarrierHighestAvailableBit() { return -1; }
   public boolean fieldBarrierSpaceEval() { return false; }
   public boolean fieldBarrierVerbose() { return false; }
+
+  public boolean referenceTypesUnsupported() { return false; }
 }

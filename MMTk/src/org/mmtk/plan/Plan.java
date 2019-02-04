@@ -104,6 +104,8 @@ public abstract class Plan {
   /* Do we support a log bit in the object header?  Some write barriers may use it */
   public static final boolean NEEDS_LOG_BIT_IN_HEADER = VM.activePlan.constraints().needsLogBitInHeader();
 
+  public static final boolean REFERENCE_TYPES_UNSUPPORTED = VM.activePlan.constraints().referenceTypesUnsupported();
+
   public static final boolean FIELD_BARRIER_SPACE_EVAL = false; // used to add (only) the space overhead of field barriers independent of whether barriers are used
   public static final boolean FIELD_BARRIER_VERBOSE = false; // verbose info at class loading time
   public static final boolean USE_FIELD_BARRIER_FOR_AASTORE = true; // use field barrier

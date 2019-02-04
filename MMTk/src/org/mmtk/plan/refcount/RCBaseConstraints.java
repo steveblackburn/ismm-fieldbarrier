@@ -56,4 +56,8 @@ public class RCBaseConstraints extends StopTheWorldConstraints {
   public boolean useFieldBarrierForPutfield() { return Plan.USE_FIELD_BARRIER_FOR_PUTFIELD; }
   @Override
   public boolean useFieldBarrierForAAStore() { return Plan.USE_FIELD_BARRIER_FOR_AASTORE; }
+
+  @Override
+  public boolean referenceTypesUnsupported() { return true; }
+
 }

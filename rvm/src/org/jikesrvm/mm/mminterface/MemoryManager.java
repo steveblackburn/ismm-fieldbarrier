@@ -140,6 +140,10 @@ public final class MemoryManager {
     booted = true;
   }
 
+  public static boolean referenceTypesUnsupported() {
+    return Plan.REFERENCE_TYPES_UNSUPPORTED;
+  }
+
   /**
    * Perform postBoot operations such as dealing with command line
    * options (this is called as soon as options have been parsed,
@@ -150,7 +154,12 @@ public final class MemoryManager {
     Selected.Plan.get().processOptions();
 
     if (Options.noReferenceTypes.getValue()) {
-      RVMType.JavaLangRefReferenceReferenceField.makeTraced();
+      if (Options.noReferenceTypes.getDefaultValue()) {
+        VM._assert(RVMType.JavaLangRefReferenceReferenceField.isTraced());
+      } else {
+        VM.sysWriteln("WARNING: disabling reference types at run-time is risky.  Be sure to check with assertions enabled");  // The problem here is that doing this changes the number of tracable fields in a type, and any build-time assumptions about this will now be undone.
+        RVMType.JavaLangRefReferenceReferenceField.makeTraced();
+      }
     }
 
     if (VM.BuildWithGCSpy) {
