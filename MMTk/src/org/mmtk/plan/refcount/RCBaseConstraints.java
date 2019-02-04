@@ -49,4 +49,6 @@ public class RCBaseConstraints extends StopTheWorldConstraints {
   public boolean buildForGenRC() {
     return false;
   }
+  @Override
+  public boolean referenceTypesUnsupported() { return true; }
 }

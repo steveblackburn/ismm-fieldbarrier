@@ -305,4 +305,6 @@ import org.vmmagic.pragma.*;
   public int maxNumGCThreads() {
     return Integer.MAX_VALUE;
   }
+
+  public boolean referenceTypesUnsupported() { return false; }
 }
