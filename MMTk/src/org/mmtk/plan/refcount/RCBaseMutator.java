@@ -27,6 +27,8 @@ import org.mmtk.vm.VM;
 import org.vmmagic.pragma.*;
 import org.vmmagic.unboxed.*;
 
+import static org.mmtk.plan.Plan.USE_FIELD_BARRIER_FOR_AASTORE;
+import static org.mmtk.plan.Plan.USE_FIELD_BARRIER_FOR_PUTFIELD;
 import static org.mmtk.plan.refcount.RCBase.BUILD_FOR_GENRC;
 import static org.mmtk.plan.refcount.RCBase.USE_FIELD_BARRIER;
 import static org.mmtk.utility.Constants.ARRAY_ELEMENT;
@@ -68,8 +70,8 @@ public class RCBaseMutator extends StopTheWorldMutator {
   public RCBaseMutator() {
     rc = new ExplicitFreeListLocal(RCBase.rcSpace);
     rclos = new LargeObjectLocal(RCBase.rcloSpace);
-    modObjectBuffer = USE_FIELD_BARRIER ? null : new ObjectReferenceDeque("mod obj", global().modObjectPool);
-    modFieldBuffer = USE_FIELD_BARRIER ? new AddressPairDeque("mod field", global().modFieldPool) : null;
+    modObjectBuffer = new ObjectReferenceDeque("mod obj", global().modObjectPool);
+    modFieldBuffer = new AddressPairDeque("mod field", global().modFieldPool);
     decBuffer = new RCDecBuffer(global().decPool);
     btSweepImmortal = new BTSweepImmortalScanner();
   }
@@ -160,8 +162,8 @@ public class RCBaseMutator extends StopTheWorldMutator {
     }
 
     if (phaseId == RCBase.PROCESS_MODBUFFER) {
-      if (!USE_FIELD_BARRIER) modObjectBuffer.flushLocal();
-      if (USE_FIELD_BARRIER) modFieldBuffer.flushLocal();
+      modObjectBuffer.flushLocal();
+      modFieldBuffer.flushLocal();
       return;
     }
 
@@ -175,8 +177,8 @@ public class RCBaseMutator extends StopTheWorldMutator {
         immortal.linearScan(btSweepImmortal);
       }
       rc.release();
-      if (VM.VERIFY_ASSERTIONS && !USE_FIELD_BARRIER) VM.assertions._assert(modObjectBuffer.isEmpty());
-      if (VM.VERIFY_ASSERTIONS && USE_FIELD_BARRIER) VM.assertions._assert(modFieldBuffer.isEmpty());
+      if (VM.VERIFY_ASSERTIONS) VM.assertions._assert(modObjectBuffer.isEmpty());
+      if (VM.VERIFY_ASSERTIONS) VM.assertions._assert(modFieldBuffer.isEmpty());
       if (!BUILD_FOR_GENRC) {
         if (VM.VERIFY_ASSERTIONS) VM.assertions._assert(decBuffer.isEmpty());
       }
@@ -189,8 +191,8 @@ public class RCBaseMutator extends StopTheWorldMutator {
   @Override
   public final void flushRememberedSets() {
     decBuffer.flushLocal();
-    if (!USE_FIELD_BARRIER) modObjectBuffer.flushLocal();
-    if (USE_FIELD_BARRIER) modFieldBuffer.flushLocal();
+    modObjectBuffer.flushLocal();
+    modFieldBuffer.flushLocal();
     assertRemsetsFlushed();
   }
 
@@ -198,8 +200,8 @@ public class RCBaseMutator extends StopTheWorldMutator {
   public final void assertRemsetsFlushed() {
     if (VM.VERIFY_ASSERTIONS) {
       VM.assertions._assert(decBuffer.isFlushed());
-      if (!USE_FIELD_BARRIER) VM.assertions._assert(modObjectBuffer.isFlushed());
-      if (USE_FIELD_BARRIER) VM.assertions._assert(modFieldBuffer.isFlushed());
+      VM.assertions._assert(modObjectBuffer.isFlushed());
+      VM.assertions._assert(modFieldBuffer.isFlushed());
     }
   }
 
@@ -222,7 +224,7 @@ public class RCBaseMutator extends StopTheWorldMutator {
   public void objectReferenceWrite(ObjectReference src, Address slot,
                            ObjectReference tgt, Word metaDataA,
                            Word metaDataB, Word metaDataC, int mode) {
-    if (USE_FIELD_BARRIER) {
+    if ((USE_FIELD_BARRIER_FOR_AASTORE && mode == ARRAY_ELEMENT) || (USE_FIELD_BARRIER_FOR_PUTFIELD && mode != ARRAY_ELEMENT)) {
       if (FieldMarks.isFieldUnlogged(src, metaDataC, mode == ARRAY_ELEMENT))
         coalescingFieldWriteBarrierSlow(src, slot, metaDataC, mode == ARRAY_ELEMENT);
     } else if (RCHeader.logRequired(src)) {
@@ -236,7 +238,7 @@ public class RCBaseMutator extends StopTheWorldMutator {
   public boolean objectReferenceTryCompareAndSwap(ObjectReference src, Address slot,
                                                ObjectReference old, ObjectReference tgt, Word metaDataA,
                                                Word metaDataB, Word metaDataC, int mode) {
-    if (USE_FIELD_BARRIER) {
+    if ((USE_FIELD_BARRIER_FOR_AASTORE && mode == ARRAY_ELEMENT) || (USE_FIELD_BARRIER_FOR_PUTFIELD && mode != ARRAY_ELEMENT)) {
       if (FieldMarks.isFieldUnlogged(src, metaDataC, mode == ARRAY_ELEMENT)) {
         coalescingFieldWriteBarrierSlow(src, slot, metaDataC, mode == ARRAY_ELEMENT);
       }
@@ -265,8 +267,8 @@ public class RCBaseMutator extends StopTheWorldMutator {
   @Inline
   public boolean objectReferenceBulkCopy(ObjectReference src, Offset srcOffset,
                               ObjectReference dst, Offset dstOffset, int bytes) {
-    if (USE_FIELD_BARRIER) { // FIXME: assumption that this only applies to arrays
-      coalescingFieldWriteBarrierSlow(dst, dstOffset, bytes);
+    if (USE_FIELD_BARRIER_FOR_AASTORE) { // FIXME: assumption that this only applies to arrays
+      coalescingFieldWriteBarrierBulkCopySlow(dst, dstOffset, bytes);
    } else if (RCHeader.logRequired(dst)) {
       coalescingObjectWriteBarrierSlow(dst);
     }
@@ -286,7 +288,7 @@ public class RCBaseMutator extends StopTheWorldMutator {
    */
   @NoInline
   private void coalescingObjectWriteBarrierSlow(ObjectReference srcObj) {
-    if (VM.VERIFY_ASSERTIONS) VM.assertions._assert(!USE_FIELD_BARRIER);
+    if (VM.VERIFY_ASSERTIONS) VM.assertions._assert(!USE_FIELD_BARRIER_FOR_PUTFIELD || !USE_FIELD_BARRIER_FOR_AASTORE);
     if (RCHeader.attemptToLogObject(srcObj)) {
       modObjectBuffer.push(srcObj);
       decBuffer.processChildren(srcObj);
@@ -297,7 +299,12 @@ public class RCBaseMutator extends StopTheWorldMutator {
 
   @NoInline
   private void coalescingFieldWriteBarrierSlow(ObjectReference src, Address slot, Word metaData, boolean isArray) {
-    if (VM.VERIFY_ASSERTIONS) VM.assertions._assert(USE_FIELD_BARRIER);
+    coalescingFieldWriteBarrierSlowInline(src, slot, metaData, isArray);
+  }
+
+  @Inline
+  private void coalescingFieldWriteBarrierSlowInline(ObjectReference src, Address slot, Word metaData, boolean isArray) {
+    if (VM.VERIFY_ASSERTIONS) VM.assertions._assert((USE_FIELD_BARRIER_FOR_PUTFIELD  && !isArray) || (USE_FIELD_BARRIER_FOR_AASTORE && isArray));
     if (RCHeader.prepareToLogFieldInObject(src)) {
       if (FieldMarks.isFieldUnlogged(src, metaData, isArray)) {
         ObjectReference tgt = slot.loadObjectReference();
@@ -310,14 +317,14 @@ public class RCBaseMutator extends StopTheWorldMutator {
     }
   }
 
-  private void coalescingFieldWriteBarrierSlow(ObjectReference dst, Offset dstOffset, int bytes) {
+  private void coalescingFieldWriteBarrierBulkCopySlow(ObjectReference dst, Offset dstOffset, int bytes) {
     // log each of the to-be-overwritten fields
-    if (VM.VERIFY_ASSERTIONS) VM.assertions._assert(USE_FIELD_BARRIER);
+    if (VM.VERIFY_ASSERTIONS) VM.assertions._assert(USE_FIELD_BARRIER_FOR_AASTORE);
     Address cursor = dst.toAddress().plus(dstOffset);
     Address end = cursor.plus(bytes);
     int index = dstOffset.toInt() >> LOG_BYTES_IN_ADDRESS;
     while (cursor.LT(end)) {
-      coalescingFieldWriteBarrierSlow(dst, cursor, Word.fromIntSignExtend(index), true);
+      coalescingFieldWriteBarrierSlowInline(dst, cursor, Word.fromIntSignExtend(index), true);
       cursor = cursor.plus(BYTES_IN_ADDRESS);
       index++;
     }

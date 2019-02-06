@@ -314,6 +314,11 @@ import org.vmmagic.unboxed.Word;
     return org.jikesrvm.objectmodel.ObjectModel.isRefArrayElementUnlogged(object, index);
   }
 
+  @Inline
+  public boolean hasFieldMarks(ObjectReference object) {
+    return org.jikesrvm.objectmodel.ObjectModel.hasFieldMarks(object);
+  }
+
   /**
    * @return The address of the word/byte containing the mark bit/byte that was logged
    */

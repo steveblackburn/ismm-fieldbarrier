@@ -288,8 +288,21 @@ public class ObjectModel {
   }
 
   @Inline
+  public static boolean hasFieldMarks(ObjectReference object) {
+    return hasFieldMarks(Magic.getTIBAtOffset(object, TIB_OFFSET));
+  }
+
+  @Inline
   public static boolean hasFieldMarks(TIB tib) {
-    boolean rtn = extractTibCode(tib) != HandInlinedScanning.primitiveArray();
+    int encoding = extractTibCode(tib);
+    boolean rtn;
+
+    if (USE_FIELD_BARRIER_FOR_AASTORE && USE_FIELD_BARRIER_FOR_PUTFIELD)
+      rtn = encoding != HandInlinedScanning.primitiveArray();
+    else if (USE_FIELD_BARRIER_FOR_AASTORE)
+      rtn = encoding == HandInlinedScanning.referenceArray();
+    else
+      rtn = encoding > HandInlinedScanning.primitiveArray() && encoding != HandInlinedScanning.referenceArray();
     if (VM.VerifyAssertions) {
       if (isFieldBarrierExcludedType(tib)) VM._assert(!rtn);
       if (USE_FIELD_BARRIER_FOR_AASTORE && isRefArray(tib)) VM._assert(rtn);

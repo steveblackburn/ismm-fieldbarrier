@@ -12,8 +12,7 @@
  */
 package org.mmtk.policy;
 
-import static org.mmtk.plan.Plan.FIELD_BARRIER_SPACE_EVAL;
-import static org.mmtk.plan.Plan.USE_FIELD_BARRIER;
+import static org.mmtk.plan.Plan.*;
 import static org.mmtk.utility.Constants.BYTES_IN_ADDRESS;
 import static org.mmtk.utility.Constants.LOG_BYTES_IN_PAGE;
 
@@ -112,7 +111,7 @@ public final class ExplicitLargeObjectSpace extends BaseLargeObjectSpace {
 
   private static final Address getCell(ObjectReference object) {
     if (VM.VERIFY_ASSERTIONS && USE_FIELD_BARRIER) VM.assertions._assert(VM.objectModel.isArray(object));
-    if (!(USE_FIELD_BARRIER || FIELD_BARRIER_SPACE_EVAL) || VM.objectModel.isPrimitiveArray(object)) {  //  FIXME this needs to use TIB encoding
+    if (!(USE_FIELD_BARRIER_FOR_AASTORE || FIELD_BARRIER_SPACE_EVAL) || VM.objectModel.isPrimitiveArray(object)) {  //  FIXME this needs to use TIB encoding
       return getCell(object.toAddress());
     } else {
       return getCell(object.toAddress().minus(VM.objectModel.getFieldByteMarksForRefArray(object)));

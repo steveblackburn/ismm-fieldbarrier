@@ -164,6 +164,7 @@ public class RCBase extends StopTheWorld {
   public static final int REF_COUNT = rcSpace.getDescriptor();
   public static final int REF_COUNT_LOS = rcloSpace.getDescriptor();
 
+  public final SharedDeque liveObjectPool = new SharedDeque("live", metaDataSpace, 1);
   public final SharedDeque modObjectPool = new SharedDeque("mod", metaDataSpace, 1);
   public final SharedDeque modFieldPool = new SharedDeque("fieldBufs",metaDataSpace, 2);
   public final SharedDeque decPool = new SharedDeque("dec", metaDataSpace, 1);
@@ -253,6 +254,7 @@ public class RCBase extends StopTheWorld {
 
     if (phaseId == CLOSURE) {
       rootTrace.prepare();
+      liveObjectPool.prepare();
       modObjectPool.prepare();
       modFieldPool.prepare();
       return;
@@ -277,6 +279,7 @@ public class RCBase extends StopTheWorld {
 
 
     if (phaseId == PROCESS_MODBUFFER) {
+      liveObjectPool.prepare();
       modObjectPool.prepare();
       modFieldPool.prepare();
       return;

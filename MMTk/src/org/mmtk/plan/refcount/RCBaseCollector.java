@@ -29,6 +29,8 @@ import org.vmmagic.unboxed.Address;
 import org.vmmagic.unboxed.ObjectReference;
 import org.vmmagic.unboxed.Word;
 
+import static org.mmtk.plan.Plan.USE_FIELD_BARRIER_FOR_AASTORE;
+import static org.mmtk.plan.Plan.USE_FIELD_BARRIER_FOR_PUTFIELD;
 import static org.mmtk.plan.refcount.RCBase.USE_FIELD_BARRIER;
 
 /**
@@ -50,6 +52,7 @@ public abstract class RCBaseCollector extends StopTheWorldCollector {
    */
   protected final ObjectReferenceDeque newRootBuffer;
   private final BTTraceLocal backupTrace;
+  private final ObjectReferenceDeque liveObjectBuffer;
   private final ObjectReferenceDeque modObjectBuffer;
   private final AddressPairDeque modFieldBuffer;
   private final ObjectReferenceDeque oldRootBuffer;
@@ -62,8 +65,9 @@ public abstract class RCBaseCollector extends StopTheWorldCollector {
   public RCBaseCollector() {
     newRootBuffer = new ObjectReferenceDeque("new-root", global().newRootPool);
     oldRootBuffer = new ObjectReferenceDeque("old-root", global().oldRootPool);
-    modObjectBuffer = new ObjectReferenceDeque("mod obj buf", global().modObjectPool); // FIXME this is used for both modified objects and new objects (should refactor to separate concerns)
-    modFieldBuffer = USE_FIELD_BARRIER ? new AddressPairDeque("mod field buf", global().modFieldPool) : null;
+    liveObjectBuffer = new ObjectReferenceDeque("live obj buf", global().liveObjectPool);
+    modObjectBuffer = new ObjectReferenceDeque("mod obj buf", global().modObjectPool); // for object barrier only
+    modFieldBuffer = new AddressPairDeque("mod field buf", global().modFieldPool); // for field barrier only
     decBuffer = new RCDecBuffer(global().decPool);
     backupTrace = new BTTraceLocal(global().backupTrace);
     zero = new RCZero();
@@ -91,6 +95,17 @@ public abstract class RCBaseCollector extends StopTheWorldCollector {
   public void collect() {
     if (RCBase.BUILD_FOR_GENRC) Phase.beginNewPhaseStack(Phase.scheduleComplex(global().genRCCollection));
     else Phase.beginNewPhaseStack(Phase.scheduleComplex(global().refCountCollection));
+  }
+
+  @Inline
+  public void enqueueReachableObject(ObjectReference object) {
+    if (USE_FIELD_BARRIER_FOR_PUTFIELD && USE_FIELD_BARRIER_FOR_AASTORE)
+      VM.objectModel.markAllFieldsAsUnlogged(object);
+    else if ((USE_FIELD_BARRIER_FOR_PUTFIELD || USE_FIELD_BARRIER_FOR_AASTORE) && VM.objectModel.hasFieldMarks(object))
+      VM.objectModel.markAllFieldsAsUnlogged(object);
+    else
+      RCHeader.makeUnlogged(object);
+    liveObjectBuffer.push(object);
   }
 
   @Override
@@ -140,24 +155,20 @@ public abstract class RCBaseCollector extends StopTheWorldCollector {
             if (RCBase.BUILD_FOR_GENRC) {
               RCHeader.initRC(current);
             } else {
-              if (RCHeader.initRC(current) == RCHeader.INC_NEW) {
-                VM.objectModel.markAllFieldsAsUnlogged(current);
-                modObjectBuffer.push(current);
-              }
+              if (RCHeader.initRC(current) == RCHeader.INC_NEW)
+                enqueueReachableObject(current);
             }
             backupTrace.processNode(current);
           } else {
             if (RCBase.BUILD_FOR_GENRC) {
               RCHeader.incRC(current);
             } else {
-              if (RCHeader.incRC(current) == RCHeader.INC_NEW) {
-                VM.objectModel.markAllFieldsAsUnlogged(current);
-                modObjectBuffer.push(current);
-              }
+              if (RCHeader.incRC(current) == RCHeader.INC_NEW)
+                enqueueReachableObject(current);
             }
           }
         }
-        if (!RCBase.BUILD_FOR_GENRC) modObjectBuffer.flushLocal();
+        if (!RCBase.BUILD_FOR_GENRC) liveObjectBuffer.flushLocal();
 
         return;
       }
@@ -165,25 +176,22 @@ public abstract class RCBaseCollector extends StopTheWorldCollector {
         if (RCBase.BUILD_FOR_GENRC) {
           RCHeader.incRC(current);
         } else {
-          if (RCHeader.incRC(current) == RCHeader.INC_NEW) {
-            VM.objectModel.markAllFieldsAsUnlogged(current);
-            modObjectBuffer.push(current);
-          }
+          if (RCHeader.incRC(current) == RCHeader.INC_NEW)
+            enqueueReachableObject(current);
         }
         oldRootBuffer.push(current);
       }
       oldRootBuffer.flushLocal();
-      if (!RCBase.BUILD_FOR_GENRC) modObjectBuffer.flushLocal();
+      if (!RCBase.BUILD_FOR_GENRC) liveObjectBuffer.flushLocal();
       return;
     }
 
     if (phaseId == RCBase.PROCESS_MODBUFFER) {
       ObjectReference current;
-      while (!(modObjectBuffer.isEmpty() && (!USE_FIELD_BARRIER || modFieldBuffer.isEmpty()))) {
-        while (!(current = modObjectBuffer.pop()).isNull()) {
-          if (!USE_FIELD_BARRIER)
-            RCHeader.makeUnlogged(current);
-          else if (VM.VERIFY_ASSERTIONS) VM.assertions._assert(VM.objectModel.areAllFieldsUnlogged(current));
+      while (!(liveObjectBuffer.isEmpty() && modObjectBuffer.isEmpty() && modFieldBuffer.isEmpty())) {
+        // live object buffer
+        while (!(current = liveObjectBuffer.pop()).isNull()) {
+          if (VM.VERIFY_ASSERTIONS && USE_FIELD_BARRIER) VM.assertions._assert(VM.objectModel.areAllFieldsUnlogged(current));
           if (!RCBase.BUILD_FOR_GENRC) {
             if (Space.isInSpace(RCBase.REF_COUNT, current)) {
               ExplicitFreeListSpace.testAndSetLiveBit(current);  // ? this is for newly allocated objects
@@ -191,14 +199,25 @@ public abstract class RCBaseCollector extends StopTheWorldCollector {
           }
           VM.scanning.scanObject(getModifiedProcessor(), current);
         }
+        // modified object buffer
+        while (!(current = modObjectBuffer.pop()).isNull()) {
+          if (VM.VERIFY_ASSERTIONS && USE_FIELD_BARRIER) VM.assertions._assert(VM.objectModel.areAllFieldsUnlogged(current));
+          if (!RCBase.BUILD_FOR_GENRC) {
+            if (Space.isInSpace(RCBase.REF_COUNT, current)) {
+              ExplicitFreeListSpace.testAndSetLiveBit(current);  // ? this is for newly allocated objects
+            }
+            RCHeader.makeUnlogged(current);
+          }
+          VM.scanning.scanObject(getModifiedProcessor(), current);
+        }
+        // field buffer
         Address slot;
-        while (USE_FIELD_BARRIER && !(slot = modFieldBuffer.pop1()).isZero()) {
+        while (!(slot = modFieldBuffer.pop1()).isZero()) {
           Word markAddressReference =  modFieldBuffer.pop2().toWord();
           VM.objectModel.clearFieldMarks(markAddressReference);
           getModifiedProcessor().processEdge(ObjectReference.nullReference(), slot);
         }
       }
-
       return;
     }
 
@@ -267,8 +286,9 @@ public abstract class RCBaseCollector extends StopTheWorldCollector {
       getRootTrace().release();
       if (VM.VERIFY_ASSERTIONS) {
         VM.assertions._assert(newRootBuffer.isEmpty());
+        VM.assertions._assert(liveObjectBuffer.isEmpty());
         VM.assertions._assert(modObjectBuffer.isEmpty());
-        VM.assertions._assert(!USE_FIELD_BARRIER || modFieldBuffer.isEmpty());
+        VM.assertions._assert(modFieldBuffer.isEmpty());
         VM.assertions._assert(decBuffer.isEmpty());
       }
       return;

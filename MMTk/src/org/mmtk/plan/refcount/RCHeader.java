@@ -12,6 +12,8 @@
  */
 package org.mmtk.plan.refcount;
 
+import static org.mmtk.plan.Plan.USE_FIELD_BARRIER_FOR_AASTORE;
+import static org.mmtk.plan.Plan.USE_FIELD_BARRIER_FOR_PUTFIELD;
 import static org.mmtk.plan.refcount.RCBase.GATHER_INC_DEC_STATS;
 import static org.mmtk.plan.refcount.RCBase.USE_FIELD_BARRIER;
 import static org.mmtk.utility.Constants.BITS_IN_BYTE;
@@ -78,7 +80,7 @@ public class RCHeader {
   @Inline
   @Uninterruptible
   public static boolean attemptToLogObject(ObjectReference object) {
-    if (VM.VERIFY_ASSERTIONS) VM.assertions._assert(!USE_FIELD_BARRIER);
+    if (VM.VERIFY_ASSERTIONS) VM.assertions._assert(!USE_FIELD_BARRIER_FOR_PUTFIELD || !USE_FIELD_BARRIER_FOR_AASTORE);
     Word oldValue;
     do {
       oldValue = VM.objectModel.prepareAvailableBits(object);
@@ -114,7 +116,7 @@ public class RCHeader {
   @Inline
   @Uninterruptible
   public static boolean prepareToLogFieldInObject(ObjectReference object) {
-    if (VM.VERIFY_ASSERTIONS) VM.assertions._assert(USE_FIELD_BARRIER);
+    if (VM.VERIFY_ASSERTIONS) VM.assertions._assert(USE_FIELD_BARRIER_FOR_PUTFIELD || USE_FIELD_BARRIER_FOR_AASTORE);
     Word oldValue;
     do {
       oldValue = VM.objectModel.prepareAvailableBits(object);

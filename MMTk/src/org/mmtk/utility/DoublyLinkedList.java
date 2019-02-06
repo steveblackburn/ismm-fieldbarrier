@@ -131,7 +131,7 @@ import org.vmmagic.unboxed.*;
 
   @Inline
   public void add(Address node) {
-    if (!isNode(node)) { Log.write("Add: ", node); Log.write(", ", isAligned(node) ? 0 : 1); Log.write(", ", node.loadAddress(PREV_OFFSET)); Log.writeln(", ", node.loadAddress(NEXT_OFFSET)); }
+    if (VM.VERIFY_ASSERTIONS && !isNode(node)) { Log.write("Add: ", node); Log.write(", ", isAligned(node) ? 0 : 1); Log.write(", ", node.loadAddress(PREV_OFFSET)); Log.writeln(", ", node.loadAddress(NEXT_OFFSET)); }
     if (VM.VERIFY_ASSERTIONS) VM.assertions._assert(isNode(node));
     if (lock != null) lock.acquire();
     node.store(Address.zero(), PREV_OFFSET);
