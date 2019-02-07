@@ -12,6 +12,7 @@
  */
 package org.mmtk.plan.refcount;
 
+import org.mmtk.plan.Plan;
 import org.mmtk.plan.StopTheWorldMutator;
 import org.mmtk.plan.refcount.backuptrace.BTSweepImmortalScanner;
 import org.mmtk.policy.ExplicitFreeListLocal;
@@ -27,8 +28,7 @@ import org.mmtk.vm.VM;
 import org.vmmagic.pragma.*;
 import org.vmmagic.unboxed.*;
 
-import static org.mmtk.plan.Plan.USE_FIELD_BARRIER_FOR_AASTORE;
-import static org.mmtk.plan.Plan.USE_FIELD_BARRIER_FOR_PUTFIELD;
+import static org.mmtk.plan.Plan.*;
 import static org.mmtk.plan.refcount.RCBase.BUILD_FOR_GENRC;
 import static org.mmtk.plan.refcount.RCBase.USE_FIELD_BARRIER;
 import static org.mmtk.utility.Constants.ARRAY_ELEMENT;
@@ -224,6 +224,8 @@ public class RCBaseMutator extends StopTheWorldMutator {
   public void objectReferenceWrite(ObjectReference src, Address slot,
                            ObjectReference tgt, Word metaDataA,
                            Word metaDataB, Word metaDataC, int mode) {
+    if (FIELD_BARRIER_STATS) Plan.fast.inc();
+
     if (USE_FIELD_BARRIER_FOR_AASTORE && mode == ARRAY_ELEMENT)
       FieldMarks.refArrayCoalescingBarrier(src, slot, metaDataC, modFieldBuffer, decBuffer);
     else if (USE_FIELD_BARRIER_FOR_PUTFIELD && mode != ARRAY_ELEMENT)
@@ -288,9 +290,11 @@ public class RCBaseMutator extends StopTheWorldMutator {
   @NoInline
   private void coalescingObjectWriteBarrierSlow(ObjectReference srcObj) {
     if (VM.VERIFY_ASSERTIONS) VM.assertions._assert(!USE_FIELD_BARRIER_FOR_PUTFIELD || !USE_FIELD_BARRIER_FOR_AASTORE);
+    if (FIELD_BARRIER_STATS) Plan.slow.inc();
     if (RCHeader.attemptToLogObject(srcObj)) {
+      if (FIELD_BARRIER_STATS) Plan.wordsLogged.inc(); // mod buffer
       modObjectBuffer.push(srcObj);
-      decBuffer.processChildren(srcObj);
+      decBuffer.processChildren(srcObj);  // stats maintained by callee
       RCHeader.makeLogged(srcObj);
       if (VM.VERIFY_ASSERTIONS) VM.assertions._assert(!RCHeader.logRequired(srcObj));
     }
@@ -301,13 +305,17 @@ public class RCBaseMutator extends StopTheWorldMutator {
   @Inline
   private void coalescingFieldWriteBarrierSlowInline(ObjectReference src, Address slot, Word metaData, boolean isArray) {
     if (VM.VERIFY_ASSERTIONS) VM.assertions._assert((USE_FIELD_BARRIER_FOR_PUTFIELD  && !isArray) || (USE_FIELD_BARRIER_FOR_AASTORE && isArray));
+    if (FIELD_BARRIER_STATS) Plan.slow.inc();
     if (RCHeader.prepareToLogFieldInObject(src)) {
       if (FieldMarks.isFieldUnlogged(src, metaData, isArray)) {
         ObjectReference tgt = slot.loadObjectReference();
-        if (!tgt.isNull())
+        if (!tgt.isNull()) {
+          if (FIELD_BARRIER_STATS) Plan.wordsLogged.inc(); // dec buffer
           decBuffer.push(tgt);
+        }
         Address markAddr = isArray ? VM.objectModel.nonAtomicMarkRefArrayElementAsLogged(src, metaData.toInt()) : VM.objectModel.nonAtomicMarkScalarFieldAsLogged(src, metaData);
         modFieldBuffer.insert(slot, markAddr);
+        if (FIELD_BARRIER_STATS) { Plan.bulkWordsLogged.inc(); Plan.wordsLogged.inc();} // mod buffer
       }
       RCHeader.finishLogging(src);
     }

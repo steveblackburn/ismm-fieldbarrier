@@ -12,11 +12,14 @@
  */
 package org.mmtk.utility.deque;
 
+import org.mmtk.plan.Plan;
 import org.mmtk.plan.TransitiveClosure;
 import org.mmtk.vm.VM;
 
 import org.vmmagic.pragma.*;
 import org.vmmagic.unboxed.*;
+
+import static org.mmtk.plan.Plan.FIELD_BARRIER_STATS;
 
 /**
  * This class is a combination of a Deque and a TraceStep, designed to include
@@ -82,6 +85,7 @@ public abstract class ObjectReferenceBuffer extends TransitiveClosure {
    */
   @Inline
   public final void push(ObjectReference object) {
+    if (FIELD_BARRIER_STATS) Plan.wordsLogged.inc();
     values.push(object);
   }
 
@@ -92,6 +96,7 @@ public abstract class ObjectReferenceBuffer extends TransitiveClosure {
    */
   @Inline
   public final void pushOOL(ObjectReference object) {
+    if (FIELD_BARRIER_STATS) Plan.wordsLogged.inc();
     values.pushOOL(object);
   }
 

@@ -1,5 +1,6 @@
 package org.mmtk.utility;
 
+import org.mmtk.plan.Plan;
 import org.mmtk.plan.refcount.RCDecBuffer;
 import org.mmtk.plan.refcount.RCHeader;
 import org.mmtk.utility.deque.AddressPairDeque;
@@ -117,12 +118,14 @@ public class FieldMarks {
   @Inline
   private static void logFieldCoalescing(ObjectReference src, Address slot, Word metaData, boolean isArray, AddressPairDeque fieldbuf, RCDecBuffer decBuffer) {
     if (VM.VERIFY_ASSERTIONS) VM.assertions._assert((USE_FIELD_BARRIER_FOR_PUTFIELD  && !isArray) || (USE_FIELD_BARRIER_FOR_AASTORE && isArray));
+    if (FIELD_BARRIER_STATS) Plan.slow.inc();
     if (RCHeader.prepareToLogFieldInObject(src)) {
       if (isFieldUnlogged(src, metaData, isArray)) {
         ObjectReference tgt = slot.loadObjectReference();
         if (!tgt.isNull())
           decBuffer.push(tgt);
         Address markAddr = isArray ? VM.objectModel.nonAtomicMarkRefArrayElementAsLogged(src, metaData.toInt()) : VM.objectModel.nonAtomicMarkScalarFieldAsLogged(src, metaData);
+        if (FIELD_BARRIER_STATS) Plan.wordsLogged.inc();
         fieldbuf.insert(slot, markAddr);
       }
       RCHeader.finishLogging(src);
@@ -143,6 +146,7 @@ public class FieldMarks {
   @Inline
   private static void logRefArrayElement(ObjectReference src, Address slot, int index, AddressPairDeque fieldbuf) {
     Address markAddr = VM.objectModel.nonAtomicMarkRefArrayElementAsLogged(src, index);
+    if (FIELD_BARRIER_STATS) Plan.wordsLogged.inc();
     fieldbuf.insert(slot, markAddr);
   }
 
@@ -154,6 +158,7 @@ public class FieldMarks {
   @Inline
   public static void logScalarField(ObjectReference src, Address slot, Word metaData, AddressPairDeque fieldbuf) {
     Address markAddr = VM.objectModel.nonAtomicMarkScalarFieldAsLogged(src, metaData);
+    if (FIELD_BARRIER_STATS) Plan.wordsLogged.inc();
     fieldbuf.insert(slot, markAddr);
   }
 

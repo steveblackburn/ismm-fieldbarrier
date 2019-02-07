@@ -29,6 +29,7 @@ import org.mmtk.utility.heap.layout.HeapLayout;
 import org.mmtk.utility.Log;
 import org.mmtk.utility.options.*;
 import org.mmtk.utility.sanitychecker.SanityChecker;
+import org.mmtk.utility.statistics.EventCounter;
 import org.mmtk.utility.statistics.Timer;
 import org.mmtk.utility.statistics.Stats;
 import org.mmtk.vm.VM;
@@ -114,6 +115,7 @@ public abstract class Plan {
   public static final boolean FIELD_BARRIER_PUTFIELD_OOL = false; // force aa barrier out of line
   public static final boolean USE_FIELD_BARRIER = USE_FIELD_BARRIER_FOR_AASTORE || USE_FIELD_BARRIER_FOR_PUTFIELD;
   public static final boolean FIELD_BARRIER_USE_GC_BYTE = true && USE_FIELD_BARRIER;
+  public static final boolean FIELD_BARRIER_STATS = true;
 
   /** The space that holds any VM specific objects (e.g. a boot image) */
   public static final Space vmSpace = VM.memory.getVMSpace();
@@ -150,6 +152,10 @@ public abstract class Plan {
 
   /** Timer that counts total time */
   public static final Timer totalTime = new Timer("time");
+  public static final EventCounter slow = FIELD_BARRIER_STATS ? new EventCounter("slow") : null;
+  public static final EventCounter fast = FIELD_BARRIER_STATS ? new EventCounter("fast") : null;
+  public static final EventCounter wordsLogged = FIELD_BARRIER_STATS ? new EventCounter("logged") : null;
+  public static final EventCounter bulkWordsLogged = FIELD_BARRIER_STATS ? new EventCounter("bulk") : null;
 
   /** Support for allocation-site identification */
   protected static int allocationSiteCount = 0;
