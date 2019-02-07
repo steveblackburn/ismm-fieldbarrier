@@ -1,5 +1,7 @@
 package org.mmtk.utility;
 
+import org.mmtk.plan.refcount.RCDecBuffer;
+import org.mmtk.plan.refcount.RCHeader;
 import org.mmtk.utility.deque.AddressPairDeque;
 import org.mmtk.vm.VM;
 import org.vmmagic.pragma.Inline;
@@ -9,11 +11,13 @@ import org.vmmagic.unboxed.Address;
 import org.vmmagic.unboxed.ObjectReference;
 import org.vmmagic.unboxed.Word;
 
-import static org.mmtk.plan.Plan.FIELD_BARRIER_AASTORE_OOL;
-import static org.mmtk.plan.Plan.FIELD_BARRIER_PUTFIELD_OOL;
+import static org.mmtk.plan.Plan.*;
+import static org.mmtk.plan.Plan.USE_FIELD_BARRIER_FOR_AASTORE;
 
 @Uninterruptible
 public class FieldMarks {
+
+  /* Simple logging field barriers (eg for generational collector) */
   @Inline
   public static void scalarFieldBarrier(ObjectReference src, Address slot, Word metaData, AddressPairDeque fieldbuf) {
     if (FIELD_BARRIER_PUTFIELD_OOL)
@@ -55,6 +59,77 @@ public class FieldMarks {
     if (VM.objectModel.isRefArrayElementUnlogged(src, index))
       logRefArrayElement(src, slot, index, fieldbuf);
   }
+
+
+  /* Coalescing field barriers, eg for reference counting */
+  @Inline
+  public static void scalarFieldCoalescingBarrier(ObjectReference src, Address slot, Word metaData, AddressPairDeque fieldbuf, RCDecBuffer decBuffer) {
+    if (FIELD_BARRIER_PUTFIELD_OOL)
+      scalarFieldCoalescingBarrierOOL(src, slot, metaData, fieldbuf, decBuffer);
+    else
+      scalarFieldCoalescingBarrierInline(src, slot, metaData, fieldbuf, decBuffer);
+  }
+
+  @Inline
+  private static void scalarFieldCoalescingBarrierInline(ObjectReference src, Address slot, Word metaData, AddressPairDeque fieldbuf, RCDecBuffer decBuffer) {
+    if (VM.objectModel.isScalarFieldUnlogged(src, metaData)) {
+      logScalarFieldCoalescingOOL(src, slot, metaData,fieldbuf, decBuffer);
+    }
+  }
+
+  @NoInline
+  private static void scalarFieldCoalescingBarrierOOL(ObjectReference src, Address slot, Word metaData, AddressPairDeque fieldbuf, RCDecBuffer decBuffer) {
+    if (VM.objectModel.isScalarFieldUnlogged(src, metaData)) {
+      logFieldCoalescing(src, slot, metaData, false, fieldbuf, decBuffer);
+    }
+  }
+
+  @NoInline
+  private static void logScalarFieldCoalescingOOL(ObjectReference src, Address slot, Word metaData, AddressPairDeque fieldbuf, RCDecBuffer decBuffer) {
+    logFieldCoalescing(src, slot, metaData, false, fieldbuf, decBuffer);
+  }
+
+  @Inline
+  public static void refArrayCoalescingBarrier(ObjectReference src, Address slot, Word metaData, AddressPairDeque fieldbuf, RCDecBuffer decBuffer) {
+    if (FIELD_BARRIER_AASTORE_OOL)
+      refArrayCoalescingBarrierOOL(src, slot, metaData.toInt(), fieldbuf, decBuffer);
+    else
+      refArrayCoalescingBarrierInline(src, slot, metaData.toInt(), fieldbuf, decBuffer);
+  }
+
+  @Inline
+  private static void refArrayCoalescingBarrierInline(ObjectReference src, Address slot, int index, AddressPairDeque fieldbuf, RCDecBuffer decBuffer) {
+    if (VM.objectModel.isRefArrayElementUnlogged(src, index))
+      logRefArrayElementCoalescingOOL(src, slot, index, fieldbuf, decBuffer);
+  }
+
+  @NoInline
+  private static void refArrayCoalescingBarrierOOL(ObjectReference src, Address slot, int index, AddressPairDeque fieldbuf, RCDecBuffer decBuffer) {
+    if (VM.objectModel.isRefArrayElementUnlogged(src, index))
+      logRefArrayElementCoalescingOOL(src, slot, index, fieldbuf, decBuffer);
+  }
+
+  @NoInline
+  private static void logRefArrayElementCoalescingOOL(ObjectReference src, Address slot, int index, AddressPairDeque fieldbuf, RCDecBuffer decBuffer) {
+    logFieldCoalescing(src, slot, Word.fromIntSignExtend(index), true, fieldbuf, decBuffer);
+  }
+
+  @Inline
+  private static void logFieldCoalescing(ObjectReference src, Address slot, Word metaData, boolean isArray, AddressPairDeque fieldbuf, RCDecBuffer decBuffer) {
+    if (VM.VERIFY_ASSERTIONS) VM.assertions._assert((USE_FIELD_BARRIER_FOR_PUTFIELD  && !isArray) || (USE_FIELD_BARRIER_FOR_AASTORE && isArray));
+    if (RCHeader.prepareToLogFieldInObject(src)) {
+      if (isFieldUnlogged(src, metaData, isArray)) {
+        ObjectReference tgt = slot.loadObjectReference();
+        if (!tgt.isNull())
+          decBuffer.push(tgt);
+        Address markAddr = isArray ? VM.objectModel.nonAtomicMarkRefArrayElementAsLogged(src, metaData.toInt()) : VM.objectModel.nonAtomicMarkScalarFieldAsLogged(src, metaData);
+        fieldbuf.insert(slot, markAddr);
+      }
+      RCHeader.finishLogging(src);
+    }
+  }
+
+
 
 
   @Inline

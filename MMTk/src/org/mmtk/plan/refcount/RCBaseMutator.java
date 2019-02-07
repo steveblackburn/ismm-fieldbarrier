@@ -224,12 +224,12 @@ public class RCBaseMutator extends StopTheWorldMutator {
   public void objectReferenceWrite(ObjectReference src, Address slot,
                            ObjectReference tgt, Word metaDataA,
                            Word metaDataB, Word metaDataC, int mode) {
-    if ((USE_FIELD_BARRIER_FOR_AASTORE && mode == ARRAY_ELEMENT) || (USE_FIELD_BARRIER_FOR_PUTFIELD && mode != ARRAY_ELEMENT)) {
-      if (FieldMarks.isFieldUnlogged(src, metaDataC, mode == ARRAY_ELEMENT))
-        coalescingFieldWriteBarrierSlow(src, slot, metaDataC, mode == ARRAY_ELEMENT);
-    } else if (RCHeader.logRequired(src)) {
+    if (USE_FIELD_BARRIER_FOR_AASTORE && mode == ARRAY_ELEMENT)
+      FieldMarks.refArrayCoalescingBarrier(src, slot, metaDataC, modFieldBuffer, decBuffer);
+    else if (USE_FIELD_BARRIER_FOR_PUTFIELD && mode != ARRAY_ELEMENT)
+      FieldMarks.scalarFieldCoalescingBarrier(src, slot, metaDataC, modFieldBuffer, decBuffer);
+    else if (RCHeader.logRequired(src))
       coalescingObjectWriteBarrierSlow(src);
-    }
     VM.barriers.objectReferenceWrite(src,tgt,metaDataA, metaDataB, mode);
   }
 
@@ -238,13 +238,12 @@ public class RCBaseMutator extends StopTheWorldMutator {
   public boolean objectReferenceTryCompareAndSwap(ObjectReference src, Address slot,
                                                ObjectReference old, ObjectReference tgt, Word metaDataA,
                                                Word metaDataB, Word metaDataC, int mode) {
-    if ((USE_FIELD_BARRIER_FOR_AASTORE && mode == ARRAY_ELEMENT) || (USE_FIELD_BARRIER_FOR_PUTFIELD && mode != ARRAY_ELEMENT)) {
-      if (FieldMarks.isFieldUnlogged(src, metaDataC, mode == ARRAY_ELEMENT)) {
-        coalescingFieldWriteBarrierSlow(src, slot, metaDataC, mode == ARRAY_ELEMENT);
-      }
-    } else if (RCHeader.logRequired(src)) {
+    if (USE_FIELD_BARRIER_FOR_AASTORE && mode == ARRAY_ELEMENT)
+      FieldMarks.refArrayCoalescingBarrier(src, slot, metaDataC, modFieldBuffer, decBuffer);
+    else if (USE_FIELD_BARRIER_FOR_PUTFIELD && mode != ARRAY_ELEMENT)
+      FieldMarks.scalarFieldCoalescingBarrier(src, slot, metaDataC, modFieldBuffer, decBuffer);
+    else if (RCHeader.logRequired(src))
       coalescingObjectWriteBarrierSlow(src);
-    }
     return VM.barriers.objectReferenceTryCompareAndSwap(src,old,tgt,metaDataA,metaDataB,mode);
   }
 
@@ -297,10 +296,7 @@ public class RCBaseMutator extends StopTheWorldMutator {
     }
   }
 
-  @NoInline
-  private void coalescingFieldWriteBarrierSlow(ObjectReference src, Address slot, Word metaData, boolean isArray) {
-    coalescingFieldWriteBarrierSlowInline(src, slot, metaData, isArray);
-  }
+
 
   @Inline
   private void coalescingFieldWriteBarrierSlowInline(ObjectReference src, Address slot, Word metaData, boolean isArray) {
