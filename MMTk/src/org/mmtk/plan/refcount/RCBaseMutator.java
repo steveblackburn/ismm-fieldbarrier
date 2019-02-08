@@ -240,6 +240,7 @@ public class RCBaseMutator extends StopTheWorldMutator {
   public boolean objectReferenceTryCompareAndSwap(ObjectReference src, Address slot,
                                                ObjectReference old, ObjectReference tgt, Word metaDataA,
                                                Word metaDataB, Word metaDataC, int mode) {
+    if (FIELD_BARRIER_STATS) Plan.fast.inc();
     if (USE_FIELD_BARRIER_FOR_AASTORE && mode == ARRAY_ELEMENT)
       FieldMarks.refArrayCoalescingBarrier(src, slot, metaDataC, modFieldBuffer, decBuffer);
     else if (USE_FIELD_BARRIER_FOR_PUTFIELD && mode != ARRAY_ELEMENT)
@@ -290,6 +291,7 @@ public class RCBaseMutator extends StopTheWorldMutator {
   @NoInline
   private void coalescingObjectWriteBarrierSlow(ObjectReference srcObj) {
     if (VM.VERIFY_ASSERTIONS) VM.assertions._assert(!USE_FIELD_BARRIER_FOR_PUTFIELD || !USE_FIELD_BARRIER_FOR_AASTORE);
+    if (FIELD_BARRIER_STATS) Plan.dbgA.inc();
     if (FIELD_BARRIER_STATS) Plan.slow.inc();
     if (RCHeader.attemptToLogObject(srcObj)) {
       if (FIELD_BARRIER_STATS) Plan.wordsLogged.inc(); // mod buffer
@@ -304,10 +306,13 @@ public class RCBaseMutator extends StopTheWorldMutator {
 
   @Inline
   private void coalescingFieldWriteBarrierSlowInline(ObjectReference src, Address slot, Word metaData, boolean isArray) {
-    if (VM.VERIFY_ASSERTIONS) VM.assertions._assert((USE_FIELD_BARRIER_FOR_PUTFIELD  && !isArray) || (USE_FIELD_BARRIER_FOR_AASTORE && isArray));
-    if (FIELD_BARRIER_STATS) Plan.slow.inc();
-    if (RCHeader.prepareToLogFieldInObject(src)) {
-      if (FieldMarks.isFieldUnlogged(src, metaData, isArray)) {
+    if (VM.VERIFY_ASSERTIONS)
+      VM.assertions._assert((USE_FIELD_BARRIER_FOR_PUTFIELD && !isArray) || (USE_FIELD_BARRIER_FOR_AASTORE && isArray));
+    if (FIELD_BARRIER_STATS) Plan.dbgA.inc();
+    if (FieldMarks.isFieldUnlogged(src, metaData, isArray)) {
+      if (FIELD_BARRIER_STATS) Plan.slow.inc();
+      if (RCHeader.prepareToLogFieldInObject(src)) {
+        if (FIELD_BARRIER_STATS) Plan.dbgB.inc();
         ObjectReference tgt = slot.loadObjectReference();
         if (!tgt.isNull()) {
           if (FIELD_BARRIER_STATS) Plan.wordsLogged.inc(); // dec buffer
@@ -315,9 +320,12 @@ public class RCBaseMutator extends StopTheWorldMutator {
         }
         Address markAddr = isArray ? VM.objectModel.nonAtomicMarkRefArrayElementAsLogged(src, metaData.toInt()) : VM.objectModel.nonAtomicMarkScalarFieldAsLogged(src, metaData);
         modFieldBuffer.insert(slot, markAddr);
-        if (FIELD_BARRIER_STATS) { Plan.bulkWordsLogged.inc(2); Plan.wordsLogged.inc(2);} // mod buffer
+        if (FIELD_BARRIER_STATS) {
+          Plan.bulkWordsLogged.inc(2);
+          Plan.wordsLogged.inc(2);
+        } // mod buffer
+        RCHeader.finishLogging(src);
       }
-      RCHeader.finishLogging(src);
     }
   }
 

@@ -156,6 +156,8 @@ public abstract class Plan {
   public static final EventCounter fast = FIELD_BARRIER_STATS ? new EventCounter("fast") : null;
   public static final EventCounter wordsLogged = FIELD_BARRIER_STATS ? new EventCounter("logged") : null;
   public static final EventCounter bulkWordsLogged = FIELD_BARRIER_STATS ? new EventCounter("bulk") : null;
+  public static final EventCounter dbgA = FIELD_BARRIER_STATS ? new EventCounter("dbgA") : null;
+  public static final EventCounter dbgB = FIELD_BARRIER_STATS ? new EventCounter("dbgB") : null;
 
   /** Support for allocation-site identification */
   protected static int allocationSiteCount = 0;
