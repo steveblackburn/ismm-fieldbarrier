@@ -315,7 +315,7 @@ public class RCBaseMutator extends StopTheWorldMutator {
         }
         Address markAddr = isArray ? VM.objectModel.nonAtomicMarkRefArrayElementAsLogged(src, metaData.toInt()) : VM.objectModel.nonAtomicMarkScalarFieldAsLogged(src, metaData);
         modFieldBuffer.insert(slot, markAddr);
-        if (FIELD_BARRIER_STATS) { Plan.bulkWordsLogged.inc(); Plan.wordsLogged.inc();} // mod buffer
+        if (FIELD_BARRIER_STATS) { Plan.bulkWordsLogged.inc(2); Plan.wordsLogged.inc(2);} // mod buffer
       }
       RCHeader.finishLogging(src);
     }

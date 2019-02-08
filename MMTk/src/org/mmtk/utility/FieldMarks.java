@@ -147,6 +147,7 @@ public class FieldMarks {
   private static void logRefArrayElement(ObjectReference src, Address slot, int index, AddressPairDeque fieldbuf) {
     Address markAddr = VM.objectModel.nonAtomicMarkRefArrayElementAsLogged(src, index);
     if (FIELD_BARRIER_STATS) Plan.wordsLogged.inc();
+    if (FIELD_BARRIER_STATS) Plan.slow.inc();
     fieldbuf.insert(slot, markAddr);
   }
 
@@ -159,6 +160,7 @@ public class FieldMarks {
   public static void logScalarField(ObjectReference src, Address slot, Word metaData, AddressPairDeque fieldbuf) {
     Address markAddr = VM.objectModel.nonAtomicMarkScalarFieldAsLogged(src, metaData);
     if (FIELD_BARRIER_STATS) Plan.wordsLogged.inc();
+    if (FIELD_BARRIER_STATS) Plan.slow.inc();
     fieldbuf.insert(slot, markAddr);
   }
 

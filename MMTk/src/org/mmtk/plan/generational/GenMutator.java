@@ -149,6 +149,7 @@ import org.vmmagic.unboxed.*;
     } else {
       if (!Gen.inNursery(slot) && Gen.inNursery(tgt)) {
         if (Gen.GATHER_WRITE_BARRIER_STATS) Gen.wbSlow.inc();
+        if (FIELD_BARRIER_STATS) Plan.slow.inc();
         remset.insert(slot);
       }
     }
@@ -231,6 +232,7 @@ import org.vmmagic.unboxed.*;
     if (!Gen.inNursery(dst)) { // FIXME This seems OK, but is it?  -- rewrote to use field barrier, but made no difference, and this makes sense, so pretty convinced that this is OK.
       Address start = dst.toAddress().plus(dstOffset);
       arrayRemset.insert(start, start.plus(bytes));
+      if (FIELD_BARRIER_STATS) { Plan.bulkWordsLogged.inc(2); Plan.wordsLogged.inc(2);}
     }
     return false;
   }
