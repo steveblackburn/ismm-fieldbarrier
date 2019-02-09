@@ -302,33 +302,6 @@ public class RCBaseMutator extends StopTheWorldMutator {
     }
   }
 
-
-
-  @Inline
-  private void coalescingFieldWriteBarrierSlowInline(ObjectReference src, Address slot, Word metaData, boolean isArray) {
-    if (VM.VERIFY_ASSERTIONS)
-      VM.assertions._assert((USE_FIELD_BARRIER_FOR_PUTFIELD && !isArray) || (USE_FIELD_BARRIER_FOR_AASTORE && isArray));
-    if (FIELD_BARRIER_STATS) Plan.dbgA.inc();
-    if (FieldMarks.isFieldUnlogged(src, metaData, isArray)) {
-      if (FIELD_BARRIER_STATS) Plan.slow.inc();
-      if (RCHeader.prepareToLogFieldInObject(src)) {
-        if (FIELD_BARRIER_STATS) Plan.dbgB.inc();
-        ObjectReference tgt = slot.loadObjectReference();
-        if (!tgt.isNull()) {
-          if (FIELD_BARRIER_STATS) Plan.wordsLogged.inc(); // dec buffer
-          decBuffer.push(tgt);
-        }
-        Address markAddr = isArray ? VM.objectModel.nonAtomicMarkRefArrayElementAsLogged(src, metaData.toInt()) : VM.objectModel.nonAtomicMarkScalarFieldAsLogged(src, metaData);
-        modFieldBuffer.insert(slot, markAddr);
-        if (FIELD_BARRIER_STATS) {
-          Plan.bulkWordsLogged.inc(2);
-          Plan.wordsLogged.inc(2);
-        } // mod buffer
-        RCHeader.finishLogging(src);
-      }
-    }
-  }
-
   private void coalescingFieldWriteBarrierBulkCopySlow(ObjectReference dst, Offset dstOffset, int bytes) {
     // log each of the to-be-overwritten fields
     if (VM.VERIFY_ASSERTIONS) VM.assertions._assert(USE_FIELD_BARRIER_FOR_AASTORE);
@@ -336,29 +309,10 @@ public class RCBaseMutator extends StopTheWorldMutator {
     Address end = cursor.plus(bytes);
     int index = dstOffset.toInt() >> LOG_BYTES_IN_ADDRESS;
     while (cursor.LT(end)) {
-      coalescingFieldWriteBarrierSlowInline(dst, cursor, Word.fromIntSignExtend(index), true);
+      FieldMarks.refArrayCoalescingBarrier(dst, cursor, Word.fromIntSignExtend(index), modFieldBuffer, decBuffer);
       cursor = cursor.plus(BYTES_IN_ADDRESS);
       index++;
     }
-
-    /*  FIXME the above code has unnecessary synchronization.   The code below does not work.  Why?
-    if (RCHeader.prepareToLogFieldInObject(dst)) {
-      Address cursor = dst.toAddress().plus(dstOffset);
-      Address end = cursor.plus(bytes);
-      int index = dstOffset.toInt() >> LOG_BYTES_IN_ADDRESS;
-      while (cursor.LT(end)) {
-        if (VM.objectModel.isFieldUnlogged(dst, index)) {
-          decBuffer.push(cursor.loadObjectReference());
-          Word mark = VM.objectModel.nonAtomicMarkRefArrayElementAsLogged(dst, index);
-          modFieldBuffer.insert(cursor, mark.toAddress());
-        }
-        cursor = cursor.plus(BYTES_IN_ADDRESS);
-        index++;
-      }
-      RCHeader.finishLogging(dst);
-    } else {
-      if (VM.VERIFY_ASSERTIONS) VM.assertions._assert(false);
-    } */
   }
 
   /****************************************************************************
