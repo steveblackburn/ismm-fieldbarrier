@@ -361,7 +361,7 @@ public class ObjectModel {
   }
 
   @Inline
-  private static int wordOffsetFromMetadata(Word metadata) {
+  public static int wordOffsetFromMetadata(Word metadata) {
     return metadata.rsha(WORD_OFFSET_SHIFT).toInt();
   }
 
@@ -372,7 +372,7 @@ public class ObjectModel {
 
   private static final int FIELD_MARK_SHIFT = LOG_BITS_IN_WORD;
   @Inline
-  private static int wordOffsetFromFieldIndex(int fieldIndex) {
+  public static int wordOffsetFromFieldIndex(int fieldIndex) {
     int wordnum = fieldIndex >> FIELD_MARK_SHIFT;
     int rtn = (GC_HEADER_OFFSET.toInt() - 4) - (wordnum << LOG_BYTES_IN_WORD);
     if (VM.VerifyAssertions) VM._assert(rtn < GC_HEADER_OFFSET.toInt());
@@ -381,13 +381,13 @@ public class ObjectModel {
   }
 
   @Inline
-  private static Word bitMaskFromMetadata(Word metadata) {
+  public static Word bitMaskFromMetadata(Word metadata) {
     int bitnum = metadata.and(BITNUM_MASK).toInt();
     return Word.fromIntSignExtend(1<<bitnum);
   }
 
   @Inline
-  private static Word bitMaskFromIndex(int index) {
+  public static Word bitMaskFromIndex(int index) {
     return Word.fromIntSignExtend(1<<(index & (BITS_IN_WORD-1)));
   }
 

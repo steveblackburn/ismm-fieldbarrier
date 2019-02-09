@@ -335,6 +335,25 @@ import org.vmmagic.unboxed.Word;
     return org.jikesrvm.objectmodel.ObjectModel.nonAtomicMarkRefArrayElementAsLogged(object, index);
   }
 
+  @Inline
+  public int wordOffsetFromMetadata(Word metadata) {
+    return org.jikesrvm.objectmodel.ObjectModel.wordOffsetFromMetadata(metadata);
+  }
+
+  @Inline
+  public int wordOffsetFromIndex(int index) {
+    return org.jikesrvm.objectmodel.ObjectModel.wordOffsetFromFieldIndex(index);
+  }
+
+  @Inline
+  public Word bitMaskFromMetadata(Word metadata) {
+    return org.jikesrvm.objectmodel.ObjectModel.bitMaskFromMetadata(metadata);
+  }
+
+  public Word bitMaskFromIndex(int index) {
+    return org.jikesrvm.objectmodel.ObjectModel.bitMaskFromIndex(index);
+  }
+
 
   @Inline
   public void clearFieldMarks(Word fieldMarkReference) {
