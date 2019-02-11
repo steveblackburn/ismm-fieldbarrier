@@ -117,42 +117,28 @@ public class FieldMarks {
 
   @Inline
   private static void logFieldCoalescing(ObjectReference src, Address slot, Word metaData, boolean isArray, AddressPairDeque fieldbuf, RCDecBuffer decBuffer) {
-    if (VM.VERIFY_ASSERTIONS)  VM.assertions._assert((USE_FIELD_BARRIER_FOR_PUTFIELD && !isArray) || (USE_FIELD_BARRIER_FOR_AASTORE && isArray));
+    if (VM.VERIFY_ASSERTIONS) VM.assertions._assert((USE_FIELD_BARRIER_FOR_PUTFIELD && !isArray) || (USE_FIELD_BARRIER_FOR_AASTORE && isArray));
     if (FIELD_BARRIER_STATS) Plan.slow.inc();
-    if (false) {
-      int wordOffset = isArray ? VM.objectModel.wordOffsetFromIndex(metaData.toInt()) : VM.objectModel.wordOffsetFromMetadata(metaData);
-      Address markAddress = src.toAddress().plus(wordOffset);
-      Word bitmask = isArray ? VM.objectModel.bitMaskFromIndex(metaData.toInt()) : VM.objectModel.bitMaskFromMetadata(metaData);
-      ObjectReference oldReference = slot.loadObjectReference();
+    int wordOffset = isArray ? VM.objectModel.wordOffsetFromIndex(metaData.toInt()) : VM.objectModel.wordOffsetFromMetadata(metaData);
+    Address markAddress = src.toAddress().plus(wordOffset);
+    Word bitmask = isArray ? VM.objectModel.bitMaskFromIndex(metaData.toInt()) : VM.objectModel.bitMaskFromMetadata(metaData);
+    ObjectReference oldReference = slot.loadObjectReference();
 
-      /* race to set field mark bit */
-      Word oldMarks;
-      do {
-        oldMarks = markAddress.prepareWord();
-        if (oldMarks.and(bitmask).isZero())
-          return; // field already logged (or being logged); must not create log entry
-      } while (!markAddress.attempt(oldMarks, oldMarks.xor(bitmask)));
+    /* race to set field mark bit */
+    Word oldMarks;
+    do {
+      oldMarks = markAddress.prepareWord();
+      if (oldMarks.and(bitmask).isZero())
+        return; // field already logged (or being logged); must not create log entry
+    } while (!markAddress.attempt(oldMarks, oldMarks.xor(bitmask)));
 
-      /* won race, so we are first to be updating this field, so log info */
-      if (!oldReference.isNull()) {
-        if (FIELD_BARRIER_STATS) Plan.wordsLogged.inc();
-        decBuffer.push(oldReference);
-      }
-      if (FIELD_BARRIER_STATS) Plan.wordsLogged.inc(2);
-      fieldbuf.insert(slot, markAddress);
-    } else {
-      if (RCHeader.prepareToLogFieldInObject(src)) {
-        if (isFieldUnlogged(src, metaData, isArray)) {
-          ObjectReference tgt = slot.loadObjectReference();
-          if (!tgt.isNull())
-            decBuffer.push(tgt);
-          Address markAddr = isArray ? VM.objectModel.nonAtomicMarkRefArrayElementAsLogged(src, metaData.toInt()) : VM.objectModel.nonAtomicMarkScalarFieldAsLogged(src, metaData);
-          if (FIELD_BARRIER_STATS) Plan.wordsLogged.inc();
-          fieldbuf.insert(slot, markAddr);
-        }
-        RCHeader.finishLogging(src);
-      }
+    /* won race, so we are first to be updating this field, so log info */
+    if (!oldReference.isNull()) {
+      if (FIELD_BARRIER_STATS) Plan.wordsLogged.inc();
+      decBuffer.push(oldReference);
     }
+    if (FIELD_BARRIER_STATS) Plan.wordsLogged.inc(2);
+    fieldbuf.insert(slot, markAddress);
   }
 
   @Inline

@@ -115,7 +115,7 @@ public abstract class Plan {
   public static final boolean FIELD_BARRIER_PUTFIELD_OOL = false; // force aa barrier out of line
   public static final boolean USE_FIELD_BARRIER = USE_FIELD_BARRIER_FOR_AASTORE || USE_FIELD_BARRIER_FOR_PUTFIELD;
   public static final boolean FIELD_BARRIER_USE_GC_BYTE = true && USE_FIELD_BARRIER;
-  public static final boolean FIELD_BARRIER_STATS = true;
+  public static final boolean FIELD_BARRIER_STATS = false;
 
   /** The space that holds any VM specific objects (e.g. a boot image) */
   public static final Space vmSpace = VM.memory.getVMSpace();
