@@ -17,6 +17,7 @@ import static org.jikesrvm.objectmodel.JavaHeaderConstants.*;
 import static org.jikesrvm.objectmodel.MiscHeader.REQUESTED_BITS;
 import static org.jikesrvm.runtime.JavaSizeConstants.BYTES_IN_INT;
 import static org.jikesrvm.runtime.UnboxedSizeConstants.LOG_BYTES_IN_ADDRESS;
+import static org.mmtk.plan.Plan.LOG_FIELD_BARRIER_ARRAY_QUANTUM;
 import static org.mmtk.plan.Plan.USE_FIELD_BARRIER;
 
 import org.jikesrvm.VM;

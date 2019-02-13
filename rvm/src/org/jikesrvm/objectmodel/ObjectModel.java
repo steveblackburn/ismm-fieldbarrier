@@ -18,6 +18,7 @@ import static org.jikesrvm.objectmodel.JavaHeader.STATUS_OFFSET;
 import static org.jikesrvm.objectmodel.JavaHeader.TIB_OFFSET;
 import static org.jikesrvm.objectmodel.JavaHeaderConstants.*;
 import static org.jikesrvm.runtime.JavaSizeConstants.BYTES_IN_INT;
+import static org.mmtk.plan.Plan.LOG_FIELD_BARRIER_ARRAY_QUANTUM;
 import static org.mmtk.utility.Constants.*;
 
 import org.jikesrvm.VM;
@@ -494,7 +495,7 @@ public class ObjectModel {
   @Inline
   public static int getFieldByteMarksForRefArray(ObjectReference array) {
     if (VM.VerifyAssertions) VM._assert(Magic.getObjectType(array.toObject()).isArrayType());
-    return fieldMarkBytes(Magic.getArrayLength(array.toObject()));
+    return fieldMarkBytes(Magic.getArrayLength(array.toObject())>>LOG_FIELD_BARRIER_ARRAY_QUANTUM);
   }
 
   @Inline
@@ -552,6 +553,7 @@ public class ObjectModel {
       VM._assert(ObjectModel.getTIB(object).getType().isArrayType());
       VM._assert(!isFieldBarrierExcludedType(object));
     }
+    index = index >> LOG_FIELD_BARRIER_ARRAY_QUANTUM;
     return isElementUnlogged(object, wordOffsetFromFieldIndex(index), bitMaskFromIndex(index));
   }
 
@@ -600,6 +602,7 @@ public class ObjectModel {
       VM._assert(ObjectModel.getTIB(object).getType().isArrayType());
       VM._assert(!isFieldBarrierExcludedType(object));
     }
+    index = index >> LOG_FIELD_BARRIER_ARRAY_QUANTUM;
     return nonAtomicMarkAsLogged(object, wordOffsetFromFieldIndex(index), bitMaskFromIndex(index));
   }
 

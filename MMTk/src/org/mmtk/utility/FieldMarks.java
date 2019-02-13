@@ -2,7 +2,6 @@ package org.mmtk.utility;
 
 import org.mmtk.plan.Plan;
 import org.mmtk.plan.refcount.RCDecBuffer;
-import org.mmtk.plan.refcount.RCHeader;
 import org.mmtk.utility.deque.AddressPairDeque;
 import org.mmtk.vm.VM;
 import org.vmmagic.pragma.Inline;
@@ -14,6 +13,8 @@ import org.vmmagic.unboxed.Word;
 
 import static org.mmtk.plan.Plan.*;
 import static org.mmtk.plan.Plan.USE_FIELD_BARRIER_FOR_AASTORE;
+import static org.mmtk.plan.refcount.RCHeader.BEING_LOGGED;
+import static org.mmtk.utility.Constants.*;
 
 @Uninterruptible
 public class FieldMarks {
@@ -116,29 +117,140 @@ public class FieldMarks {
   }
 
   @Inline
-  private static void logFieldCoalescing(ObjectReference src, Address slot, Word metaData, boolean isArray, AddressPairDeque fieldbuf, RCDecBuffer decBuffer) {
-    if (VM.VERIFY_ASSERTIONS) VM.assertions._assert((USE_FIELD_BARRIER_FOR_PUTFIELD && !isArray) || (USE_FIELD_BARRIER_FOR_AASTORE && isArray));
-    if (FIELD_BARRIER_STATS) Plan.slow.inc();
-    int wordOffset = isArray ? VM.objectModel.wordOffsetFromIndex(metaData.toInt()) : VM.objectModel.wordOffsetFromMetadata(metaData);
-    Address markAddress = src.toAddress().plus(wordOffset);
-    Word bitmask = isArray ? VM.objectModel.bitMaskFromIndex(metaData.toInt()) : VM.objectModel.bitMaskFromMetadata(metaData);
-    ObjectReference oldReference = slot.loadObjectReference();
-
-    /* race to set field mark bit */
-    Word oldMarks;
+  @Uninterruptible
+  private static boolean prepareToLogFieldInObject(ObjectReference object) {
+    if (VM.VERIFY_ASSERTIONS) VM.assertions._assert(USE_FIELD_BARRIER_FOR_PUTFIELD || USE_FIELD_BARRIER_FOR_AASTORE);
+    Word oldValue;
     do {
-      oldMarks = markAddress.prepareWord();
-      if (oldMarks.and(bitmask).isZero())
-        return; // field already logged (or being logged); must not create log entry
-    } while (!markAddress.attempt(oldMarks, oldMarks.xor(bitmask)));
-
-    /* won race, so we are first to be updating this field, so log info */
-    if (!oldReference.isNull()) {
-      if (FIELD_BARRIER_STATS) Plan.wordsLogged.inc();
-      decBuffer.push(oldReference);
+      oldValue = VM.objectModel.prepareAvailableBits(object);
+    } while ((oldValue.and(BEING_LOGGED).EQ(BEING_LOGGED)) ||
+            !VM.objectModel.attemptAvailableBits(object, oldValue, oldValue.or(BEING_LOGGED)));
+    if (VM.VERIFY_ASSERTIONS) {
+      Word value = VM.objectModel.readAvailableBitsWord(object);
+      VM.assertions._assert(value.and(BEING_LOGGED).EQ(BEING_LOGGED));
     }
+    return true;
+  }
+
+  @Inline
+  @Uninterruptible
+  private static void finishLogging(ObjectReference object) {
+    Word value = VM.objectModel.readAvailableBitsWord(object);
+    if (VM.VERIFY_ASSERTIONS) VM.assertions._assert(value.and(BEING_LOGGED).EQ(BEING_LOGGED));
+    VM.objectModel.writeAvailableBitsWord(object, value.and(BEING_LOGGED.not()));
+  }
+
+  @Inline
+  private static void logFieldCoalescing(ObjectReference src, Address slot, Word metaData, boolean isArray, AddressPairDeque fieldbuf, RCDecBuffer decBuffer) {
+    if (VM.VERIFY_ASSERTIONS)
+      VM.assertions._assert((USE_FIELD_BARRIER_FOR_PUTFIELD && !isArray) || (USE_FIELD_BARRIER_FOR_AASTORE && isArray));
+    if (FIELD_BARRIER_STATS) Plan.slow.inc();
+
+    if (FIELD_BARRIER_ARRAY_QUANTUM == 1) {
+      int wordOffset = isArray ? VM.objectModel.wordOffsetFromIndex(metaData.toInt()) : VM.objectModel.wordOffsetFromMetadata(metaData);
+      Address markAddress = src.toAddress().plus(wordOffset);
+      Word bitmask = isArray ? VM.objectModel.bitMaskFromIndex(metaData.toInt()) : VM.objectModel.bitMaskFromMetadata(metaData);
+      ObjectReference oldReference = slot.loadObjectReference();
+
+      /* race to set field mark bit */
+      Word oldMarks;
+      do {
+        oldMarks = markAddress.prepareWord();
+        if (oldMarks.and(bitmask).isZero())
+          return; // field already logged (or being logged); must not create log entry
+      } while (!markAddress.attempt(oldMarks, oldMarks.xor(bitmask)));
+
+      /* won race, so we are first to be updating this field, so log info */
+      if (!oldReference.isNull()) {
+        if (FIELD_BARRIER_STATS) Plan.wordsLogged.inc();
+        decBuffer.push(oldReference);
+      }
+      if (FIELD_BARRIER_STATS) Plan.wordsLogged.inc(2);
+      fieldbuf.insert(slot, markAddress);
+    } else {
+      if (prepareToLogFieldInObject(src)) {
+        if (isFieldUnlogged(src, metaData, isArray)) {
+          if (isArray && FIELD_BARRIER_ARRAY_QUANTUM > 1)
+            logArraySlots(src, metaData, fieldbuf, decBuffer);
+          else
+            logSlot(src, slot, metaData, isArray, fieldbuf, decBuffer);
+        }
+        finishLogging(src);
+      }
+    }
+  }
+
+  @Inline
+  private static void logSlot(ObjectReference src, Address slot, Word metaData, boolean isArray, AddressPairDeque fieldbuf, RCDecBuffer decBuffer) {
+    ObjectReference tgt = slot.loadObjectReference();
+    if (!tgt.isNull()) {
+      if (FIELD_BARRIER_STATS) Plan.wordsLogged.inc();
+      decBuffer.push(tgt);
+    }
+    Address markAddr = isArray ? VM.objectModel.nonAtomicMarkRefArrayElementAsLogged(src, metaData.toInt()) : VM.objectModel.nonAtomicMarkScalarFieldAsLogged(src, metaData);
     if (FIELD_BARRIER_STATS) Plan.wordsLogged.inc(2);
-    fieldbuf.insert(slot, markAddress);
+    fieldbuf.insert(slot, markAddr);
+  }
+
+  @Inline
+  private static void logArraySlots(ObjectReference src, Word metaData, AddressPairDeque fieldbuf, RCDecBuffer decBuffer) {
+    int index = metaData.toInt();
+    int len = VM.objectModel.getArrayLength(src);
+    int firstidx = index & ~(FIELD_BARRIER_ARRAY_QUANTUM -1);
+    int lastidx = firstidx + (FIELD_BARRIER_ARRAY_QUANTUM -1);
+    if (lastidx >= len - 1)
+      lastidx = len - 1;
+    Address cursor = src.toAddress().plus(firstidx<<LOG_BYTES_IN_ADDRESS);
+    Address sentinel =src.toAddress().plus(lastidx<<LOG_BYTES_IN_ADDRESS);
+
+    while (cursor.LE(sentinel)) {
+
+      ObjectReference tgt = cursor.loadObjectReference();
+      if (!tgt.isNull()) {
+        if (FIELD_BARRIER_STATS) Plan.wordsLogged.inc();
+        decBuffer.push(tgt);
+      }
+      cursor = cursor.plus(BYTES_IN_ADDRESS);
+    }
+
+    Address markAddr = VM.objectModel.nonAtomicMarkRefArrayElementAsLogged(src, metaData.toInt());
+    if (FIELD_BARRIER_STATS) Plan.wordsLogged.inc(2);
+    Address encodedSlot = encodeSlot(src.toAddress().plus(firstidx<<LOG_BYTES_IN_ADDRESS), markAddr, 1 + lastidx - firstidx);
+    fieldbuf.insert(encodedSlot, markAddr);
+  }
+
+  private static final int COUNT_SHIFT = BITS_IN_ADDRESS-8;
+  private static final Word MASK = Word.fromIntSignExtend((1<<COUNT_SHIFT)-1);
+
+  public static int fieldMarksRequired(int numElements) {
+    if (FIELD_BARRIER_ARRAY_QUANTUM == 1)
+      return numElements;
+    else
+      return (numElements + FIELD_BARRIER_ARRAY_QUANTUM - 1)>>LOG_FIELD_BARRIER_ARRAY_QUANTUM;
+  }
+
+  private static Address encodeSlot(Address slot, Address markAddr, int slots) {
+    if (VM.VERIFY_ASSERTIONS) VM.assertions._assert(slots < 256);
+    Address rtn = slot.toWord().and(MASK).or(Word.fromIntZeroExtend(slots).lsh(COUNT_SHIFT)).or(Word.one()).toAddress();
+    if (VM.VERIFY_ASSERTIONS) VM.assertions._assert(slot == extractSlot(rtn, markAddr));
+    if (VM.VERIFY_ASSERTIONS) VM.assertions._assert(slots == extractSlotCount(rtn));
+    if (VM.VERIFY_ASSERTIONS) VM.assertions._assert(isMultiSlot(rtn));
+    return rtn;
+  }
+
+  public static Address extractSlot(Address encoded, Address markAddress) {
+    Word hi = markAddress.toWord().and(MASK.not());
+    Word lo = encoded.toWord().and(MASK);
+
+    return hi.or(lo).and(Word.one().not()).toAddress();
+  }
+
+  public static int extractSlotCount(Address encoded) {
+    return encoded.toWord().rshl(COUNT_SHIFT).toInt();
+  }
+
+  public static boolean isMultiSlot(Address encoded) {
+    return encoded.toWord().and(Word.one()).EQ(Word.one());
   }
 
   @Inline

@@ -15,7 +15,6 @@ package org.mmtk.plan.refcount;
 import static org.mmtk.plan.Plan.USE_FIELD_BARRIER_FOR_AASTORE;
 import static org.mmtk.plan.Plan.USE_FIELD_BARRIER_FOR_PUTFIELD;
 import static org.mmtk.plan.refcount.RCBase.GATHER_INC_DEC_STATS;
-import static org.mmtk.plan.refcount.RCBase.USE_FIELD_BARRIER;
 import static org.mmtk.utility.Constants.BITS_IN_BYTE;
 
 import org.mmtk.vm.VM;
@@ -94,54 +93,6 @@ public class RCHeader {
       VM.assertions._assert(value.and(BEING_LOGGED).EQ(BEING_LOGGED));
     }
     return true;
-  }
-
-
-  /**
-   * Attempt to log <code>object</code> for coalescing RC. This is
-   * used to handle a race to log the object, and returns
-   * <code>true</code> if we are to log the object and
-   * <code>false</code> if we lost the race to log the object.
-   *
-   * <p>If this method returns <code>true</code>, it leaves the object
-   * in the <code>BEING_LOGGED</code> state.  It is the responsibility
-   * of the caller to change the object to <code>LOGGED</code> once
-   * the logging is complete.
-   *
-   * @see #makeLogged(ObjectReference)
-   * @param object The object in question
-   * @return <code>true</code> if the race to log
-   * <code>object</code>was won.
-   */
-  @Inline
-  @Uninterruptible
-  public static boolean prepareToLogFieldInObject(ObjectReference object) {
-    if (VM.VERIFY_ASSERTIONS) VM.assertions._assert(USE_FIELD_BARRIER_FOR_PUTFIELD || USE_FIELD_BARRIER_FOR_AASTORE);
-    Word oldValue;
-    do {
-      oldValue = VM.objectModel.prepareAvailableBits(object);
-    } while ((oldValue.and(BEING_LOGGED).EQ(BEING_LOGGED)) ||
-            !VM.objectModel.attemptAvailableBits(object, oldValue, oldValue.or(BEING_LOGGED)));
-    if (VM.VERIFY_ASSERTIONS) {
-      Word value = VM.objectModel.readAvailableBitsWord(object);
-      VM.assertions._assert(value.and(BEING_LOGGED).EQ(BEING_LOGGED));
-    }
-    return true;
-  }
-
-
-  /**
-   * Signify completion of logging <code>object</code>.
-   *
-   * @see #attemptToLogObject(ObjectReference)
-   * @param object The object whose state is to be changed.
-   */
-  @Inline
-  @Uninterruptible
-  public static void finishLogging(ObjectReference object) {
-    Word value = VM.objectModel.readAvailableBitsWord(object);
-    if (VM.VERIFY_ASSERTIONS) VM.assertions._assert(value.and(BEING_LOGGED).EQ(BEING_LOGGED));
-    VM.objectModel.writeAvailableBitsWord(object, value.and(BEING_LOGGED.not()));
   }
 
   /**

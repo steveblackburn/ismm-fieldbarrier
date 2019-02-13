@@ -20,6 +20,7 @@ import org.mmtk.plan.TransitiveClosure;
 import org.mmtk.plan.refcount.backuptrace.BTTraceLocal;
 import org.mmtk.policy.Space;
 import org.mmtk.policy.ExplicitFreeListSpace;
+import org.mmtk.utility.FieldMarks;
 import org.mmtk.utility.deque.AddressPairDeque;
 import org.mmtk.utility.deque.ObjectReferenceDeque;
 import org.mmtk.vm.VM;
@@ -29,9 +30,9 @@ import org.vmmagic.unboxed.Address;
 import org.vmmagic.unboxed.ObjectReference;
 import org.vmmagic.unboxed.Word;
 
-import static org.mmtk.plan.Plan.USE_FIELD_BARRIER_FOR_AASTORE;
-import static org.mmtk.plan.Plan.USE_FIELD_BARRIER_FOR_PUTFIELD;
+import static org.mmtk.plan.Plan.*;
 import static org.mmtk.plan.refcount.RCBase.USE_FIELD_BARRIER;
+import static org.mmtk.utility.Constants.BYTES_IN_ADDRESS;
 
 /**
  * This class implements the collector context for a reference counting collector.
@@ -214,8 +215,17 @@ public abstract class RCBaseCollector extends StopTheWorldCollector {
         Address slot;
         while (!(slot = modFieldBuffer.pop1()).isZero()) {
           Word markAddressReference =  modFieldBuffer.pop2().toWord();
+          if (FIELD_BARRIER_ARRAY_QUANTUM > 1 && FieldMarks.isMultiSlot(slot)) {
+            Address start = FieldMarks.extractSlot(slot, markAddressReference.toAddress());
+            int slots = FieldMarks.extractSlotCount(slot);
+            for (int i = 0; i < slots; i++) {
+              getModifiedProcessor().processEdge(ObjectReference.nullReference(), start);
+              start = start.plus(BYTES_IN_ADDRESS);
+            }
+          } else {
+            getModifiedProcessor().processEdge(ObjectReference.nullReference(), slot);
+          }
           VM.objectModel.clearFieldMarks(markAddressReference);
-          getModifiedProcessor().processEdge(ObjectReference.nullReference(), slot);
         }
       }
       return;

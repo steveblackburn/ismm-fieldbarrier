@@ -19,7 +19,9 @@ import static org.jikesrvm.HeapLayoutConstants.BOOT_IMAGE_DATA_START;
 import static org.jikesrvm.mm.mminterface.MemoryManagerConstants.*;
 import static org.jikesrvm.objectmodel.TIBLayoutConstants.IMT_METHOD_SLOTS;
 import static org.jikesrvm.runtime.ExitStatus.EXIT_STATUS_BOGUS_COMMAND_LINE_ARG;
+import static org.mmtk.plan.Plan.LOG_FIELD_BARRIER_ARRAY_QUANTUM;
 import static org.mmtk.utility.Constants.MIN_ALIGNMENT;
+import static org.mmtk.utility.FieldMarks.fieldMarksRequired;
 import static org.mmtk.utility.heap.layout.HeapParameters.MAX_SPACES;
 
 import java.lang.ref.PhantomReference;
@@ -545,7 +547,7 @@ public final class MemoryManager {
 
     if ((USE_FIELD_BARRIER_FOR_AASTORE || FIELD_BARRIER_SPACE_EVAL) && refArray && numElements > 0) {
       if (VM.VerifyAssertions) VM._assert(((RVMArray) tib.getType()).getElementType().isReferenceType());
-      int fieldmarkBytes = org.jikesrvm.runtime.Memory.alignUp(ObjectModel.fieldMarkBytes(numElements), align);
+      int fieldmarkBytes = org.jikesrvm.runtime.Memory.alignUp(ObjectModel.fieldMarkBytes(fieldMarksRequired(numElements)), align);
       size += fieldmarkBytes;
       prefix = fieldmarkBytes;
       if (VM.VerifyAssertions) VM._assert(prefix != 0);

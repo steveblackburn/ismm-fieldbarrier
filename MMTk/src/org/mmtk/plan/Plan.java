@@ -116,6 +116,8 @@ public abstract class Plan {
   public static final boolean USE_FIELD_BARRIER = USE_FIELD_BARRIER_FOR_AASTORE || USE_FIELD_BARRIER_FOR_PUTFIELD;
   public static final boolean FIELD_BARRIER_USE_GC_BYTE = true && USE_FIELD_BARRIER;
   public static final boolean FIELD_BARRIER_STATS = false;
+  public static final int LOG_FIELD_BARRIER_ARRAY_QUANTUM = 0;  // log_2 of the granularity at which array fields are logged
+  public static final int FIELD_BARRIER_ARRAY_QUANTUM = 1<<LOG_FIELD_BARRIER_ARRAY_QUANTUM;
 
   /** The space that holds any VM specific objects (e.g. a boot image) */
   public static final Space vmSpace = VM.memory.getVMSpace();

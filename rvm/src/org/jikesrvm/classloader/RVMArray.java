@@ -30,6 +30,8 @@ import static org.jikesrvm.runtime.JavaSizeConstants.LOG_BYTES_IN_LONG;
 import static org.jikesrvm.runtime.JavaSizeConstants.LOG_BYTES_IN_SHORT;
 import static org.jikesrvm.runtime.UnboxedSizeConstants.BYTES_IN_ADDRESS;
 import static org.jikesrvm.runtime.UnboxedSizeConstants.LOG_BYTES_IN_ADDRESS;
+import static org.mmtk.plan.Plan.LOG_FIELD_BARRIER_ARRAY_QUANTUM;
+import static org.mmtk.utility.FieldMarks.fieldMarksRequired;
 
 import org.jikesrvm.VM;
 import org.jikesrvm.architecture.ArchConstants;
@@ -242,7 +244,7 @@ public final class RVMArray extends RVMType {
   public int getInstanceSize(int numelts) {
     int size = getInstanceSizeNoPad(numelts);
     if ((USE_FIELD_BARRIER_FOR_AASTORE || FIELD_BARRIER_SPACE_EVAL) && referenceOffsets == REFARRAY_OFFSET_ARRAY) {
-      size += ObjectModel.fieldMarkBytes(numelts);
+      size += ObjectModel.fieldMarkBytes(numelts>>LOG_FIELD_BARRIER_ARRAY_QUANTUM);
     }
     return size;
   }
@@ -262,7 +264,7 @@ public final class RVMArray extends RVMType {
   @Uninterruptible
   public static int getAlignedFieldMarkBytesUnchecked(int numelts) {
     if (VM.VerifyAssertions) VM._assert(USE_FIELD_BARRIER_FOR_AASTORE || FIELD_BARRIER_SPACE_EVAL);
-    return ObjectModel.fieldMarkBytes(numelts);
+    return ObjectModel.fieldMarkBytes(fieldMarksRequired(numelts));
   }
 
   /**
