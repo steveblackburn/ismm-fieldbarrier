@@ -59,7 +59,7 @@ public class RCBase extends StopTheWorld {
   public static final short BT_CLOSURE             = Phase.createSimple("closure-bt");
 
   /** True if we are building for generational RC */
-  public static final boolean BUILD_FOR_GENRC = false; // FIXME this is causing a build error ((RCBaseConstraints) VM.activePlan.constraints()).buildForGenRC();
+  public static final boolean BUILD_FOR_GENRC = ((RCBaseConstraints) VM.activePlan.constraints()).buildForGenRC();
 
 
   /* Statistics */
