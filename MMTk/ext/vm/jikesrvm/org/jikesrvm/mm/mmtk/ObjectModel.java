@@ -25,6 +25,7 @@ import org.jikesrvm.mm.mminterface.MemoryManager;
 import org.jikesrvm.objectmodel.TIB;
 import org.jikesrvm.runtime.Magic;
 import org.mmtk.plan.CollectorContext;
+import org.mmtk.plan.Plan;
 import org.mmtk.utility.alloc.Allocator;
 import org.mmtk.vm.VM;
 import org.vmmagic.pragma.Inline;
@@ -274,6 +275,7 @@ import org.vmmagic.unboxed.Word;
   @Override
   @Inline
   public Address objectStartRef(ObjectReference object) {
+    // Plan.dbgA.inc();  empirically confirmed that this is never called from the mutator (ie cannot be a direct source of mutator slow-down)
     return org.jikesrvm.objectmodel.ObjectModel.objectStartRef(object);
   }
 
