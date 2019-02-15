@@ -222,6 +222,7 @@ public class FieldMarks {
   private static final int COUNT_SHIFT = BITS_IN_ADDRESS-8;
   private static final Word MASK = Word.fromIntSignExtend((1<<COUNT_SHIFT)-1);
 
+  @Inline
   public static int fieldMarksRequired(int numElements) {
     if (FIELD_BARRIER_ARRAY_QUANTUM == 1)
       return numElements;
