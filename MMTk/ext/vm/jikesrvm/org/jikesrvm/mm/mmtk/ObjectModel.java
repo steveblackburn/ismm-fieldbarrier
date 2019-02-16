@@ -275,7 +275,7 @@ import org.vmmagic.unboxed.Word;
   @Override
   @Inline
   public Address objectStartRef(ObjectReference object) {
-    // Plan.dbgA.inc();  empirically confirmed that this is never called from the mutator (ie cannot be a direct source of mutator slow-down)
+    // Plan.dbgA.inc();  empirically confirmed that this is never called from the mutator (ie cannot be a direct source of mutator pfslow-down)
     return org.jikesrvm.objectmodel.ObjectModel.objectStartRef(object);
   }
 

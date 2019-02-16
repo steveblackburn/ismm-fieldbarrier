@@ -85,7 +85,7 @@ public abstract class ObjectReferenceBuffer extends TransitiveClosure {
    */
   @Inline
   public final void push(ObjectReference object) {
-    if (FIELD_BARRIER_STATS) Plan.wordsLogged.inc();
+    if (FIELD_BARRIER_STATS) Plan.pfwordsLogged.inc();
     values.push(object);
   }
 
@@ -96,7 +96,7 @@ public abstract class ObjectReferenceBuffer extends TransitiveClosure {
    */
   @Inline
   public final void pushOOL(ObjectReference object) {
-    if (FIELD_BARRIER_STATS) Plan.wordsLogged.inc();
+    if (FIELD_BARRIER_STATS) Plan.pfwordsLogged.inc();
     values.pushOOL(object);
   }
 

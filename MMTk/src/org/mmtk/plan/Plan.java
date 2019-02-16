@@ -154,9 +154,12 @@ public abstract class Plan {
 
   /** Timer that counts total time */
   public static final Timer totalTime = new Timer("time");
-  public static final EventCounter slow = FIELD_BARRIER_STATS ? new EventCounter("slow") : null;
-  public static final EventCounter fast = FIELD_BARRIER_STATS ? new EventCounter("fast") : null;
-  public static final EventCounter wordsLogged = FIELD_BARRIER_STATS ? new EventCounter("logged") : null;
+  public static final EventCounter pfslow = FIELD_BARRIER_STATS ? new EventCounter("pfslow") : null;
+  public static final EventCounter pffast = FIELD_BARRIER_STATS ? new EventCounter("pffast") : null;
+  public static final EventCounter pfwordsLogged = FIELD_BARRIER_STATS ? new EventCounter("pflogged") : null;
+  public static final EventCounter aaslow = FIELD_BARRIER_STATS ? new EventCounter("aaslow") : null;
+  public static final EventCounter aafast = FIELD_BARRIER_STATS ? new EventCounter("aafast") : null;
+  public static final EventCounter aawordsLogged = FIELD_BARRIER_STATS ? new EventCounter("aalogged") : null;
   public static final EventCounter bulkWordsLogged = FIELD_BARRIER_STATS ? new EventCounter("bulk") : null;
   public static final EventCounter dbgA = FIELD_BARRIER_STATS ? new EventCounter("dbgA") : null;
   public static final EventCounter dbgB = FIELD_BARRIER_STATS ? new EventCounter("dbgB") : null;

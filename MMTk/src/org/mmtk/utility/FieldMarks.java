@@ -144,7 +144,7 @@ public class FieldMarks {
   private static void logFieldCoalescing(ObjectReference src, Address slot, Word metaData, boolean isArray, AddressPairDeque fieldbuf, RCDecBuffer decBuffer) {
     if (VM.VERIFY_ASSERTIONS)
       VM.assertions._assert((USE_FIELD_BARRIER_FOR_PUTFIELD && !isArray) || (USE_FIELD_BARRIER_FOR_AASTORE && isArray));
-    if (FIELD_BARRIER_STATS) Plan.slow.inc();
+    if (FIELD_BARRIER_STATS) Plan.pfslow.inc();
 
     if (FIELD_BARRIER_ARRAY_QUANTUM == 1) {
       int wordOffset = isArray ? VM.objectModel.wordOffsetFromIndex(metaData.toInt()) : VM.objectModel.wordOffsetFromMetadata(metaData);
@@ -162,10 +162,10 @@ public class FieldMarks {
 
       /* won race, so we are first to be updating this field, so log info */
       if (!oldReference.isNull()) {
-        if (FIELD_BARRIER_STATS) Plan.wordsLogged.inc();
+        if (FIELD_BARRIER_STATS) Plan.pfwordsLogged.inc();
         decBuffer.push(oldReference);
       }
-      if (FIELD_BARRIER_STATS) Plan.wordsLogged.inc(2);
+      if (FIELD_BARRIER_STATS) Plan.pfwordsLogged.inc(2);
       fieldbuf.insert(slot, markAddress);
     } else {
       if (prepareToLogFieldInObject(src)) {
@@ -184,11 +184,11 @@ public class FieldMarks {
   private static void logSlot(ObjectReference src, Address slot, Word metaData, boolean isArray, AddressPairDeque fieldbuf, RCDecBuffer decBuffer) {
     ObjectReference tgt = slot.loadObjectReference();
     if (!tgt.isNull()) {
-      if (FIELD_BARRIER_STATS) Plan.wordsLogged.inc();
+      if (FIELD_BARRIER_STATS) { if (!isArray) Plan.pfwordsLogged.inc(); else Plan.aawordsLogged.inc(); }
       decBuffer.push(tgt);
     }
     Address markAddr = isArray ? VM.objectModel.nonAtomicMarkRefArrayElementAsLogged(src, metaData.toInt()) : VM.objectModel.nonAtomicMarkScalarFieldAsLogged(src, metaData);
-    if (FIELD_BARRIER_STATS) Plan.wordsLogged.inc(2);
+    if (FIELD_BARRIER_STATS) { if (!isArray) Plan.pfwordsLogged.inc(2); else Plan.aawordsLogged.inc(2); }
     fieldbuf.insert(slot, markAddr);
   }
 
@@ -207,14 +207,14 @@ public class FieldMarks {
 
       ObjectReference tgt = cursor.loadObjectReference();
       if (!tgt.isNull()) {
-        if (FIELD_BARRIER_STATS) Plan.wordsLogged.inc();
+        if (FIELD_BARRIER_STATS) Plan.aawordsLogged.inc();
         decBuffer.push(tgt);
       }
       cursor = cursor.plus(BYTES_IN_ADDRESS);
     }
 
     Address markAddr = VM.objectModel.nonAtomicMarkRefArrayElementAsLogged(src, metaData.toInt());
-    if (FIELD_BARRIER_STATS) Plan.wordsLogged.inc(2);
+    if (FIELD_BARRIER_STATS) Plan.aawordsLogged.inc(2);
     Address encodedSlot = encodeSlot(src.toAddress().plus(firstidx<<LOG_BYTES_IN_ADDRESS), markAddr, 1 + lastidx - firstidx);
     fieldbuf.insert(encodedSlot, markAddr);
   }
@@ -265,8 +265,8 @@ public class FieldMarks {
   @Inline
   private static void logRefArrayElement(ObjectReference src, Address slot, int index, AddressPairDeque fieldbuf) {
     Address markAddr = VM.objectModel.nonAtomicMarkRefArrayElementAsLogged(src, index);
-    if (FIELD_BARRIER_STATS) Plan.wordsLogged.inc();
-    if (FIELD_BARRIER_STATS) Plan.slow.inc();
+    if (FIELD_BARRIER_STATS) Plan.aawordsLogged.inc();
+    if (FIELD_BARRIER_STATS) Plan.aaslow.inc();
     fieldbuf.insert(slot, markAddr);
   }
 
@@ -278,8 +278,8 @@ public class FieldMarks {
   @Inline
   public static void logScalarField(ObjectReference src, Address slot, Word metaData, AddressPairDeque fieldbuf) {
     Address markAddr = VM.objectModel.nonAtomicMarkScalarFieldAsLogged(src, metaData);
-    if (FIELD_BARRIER_STATS) Plan.wordsLogged.inc();
-    if (FIELD_BARRIER_STATS) Plan.slow.inc();
+    if (FIELD_BARRIER_STATS) Plan.pfwordsLogged.inc();
+    if (FIELD_BARRIER_STATS) Plan.pfslow.inc();
     fieldbuf.insert(slot, markAddr);
   }
 
