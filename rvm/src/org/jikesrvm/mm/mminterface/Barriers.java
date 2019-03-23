@@ -1430,4 +1430,100 @@ public class Barriers {
       VM._assert(VM.NOT_REACHED);
     return false;
   }
+
+
+  /*
+   * The following is used for examining the generated code for write barriers.
+   *
+   * 1.  Create a FastAdaptive build of the configuration whose barriers are
+   *     to be checked.
+   *
+   * 2.  Look inside the RVM.map file to find the code offsets of the three
+   *     methods below.
+   *
+   *     For example:
+   *      grep -a "code     0x" dist/FastAdaptiveRefCount_pftest_x86_64-linux/RVM.map | cut -c27-200 | sort | grep -B1 -A1 "Barriers; >...DBG"
+   *      0x647907d0          < BootstrapCL, Lorg/jikesrvm/compilers/opt/escape/MethodSummary; >.setParameterMayEscapeThread (IZ)V
+   *      0x647908a8          < BootstrapCL, Lorg/jikesrvm/mm/mminterface/Barriers; >.aaDBGfixed (Ljava/lang/String;)V
+   *      0x64790960          < BootstrapCL, Lorg/jikesrvm/mm/mminterface/Barriers; >.aaDBG (Ljava/lang/String;I)V
+   *      0x64790a5c          < BootstrapCL, Lorg/jikesrvm/mm/mminterface/Barriers; >.pfDBG (Ljava/lang/String;)V
+   *      0x64790ad8          < BootstrapCL, Ljava/lang/SecurityManager; >.checkPackageList (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
+   *
+   * 3.  Find the address of the method after the highest address above.
+   *
+   *     For example:
+   *     .     .          code     0x64790ad8          < BootstrapCL, Ljava/lang/SecurityManager; >.checkPackageList (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
+   *
+   * 4.  Determine the relative code offsets (subtract
+   *     org.jikesrvm.HeapLayoutConstants.BOOT_IMAGE_CODE_START from the
+   *     addresses above), and work out the bounds of each method.
+   *
+   *     For example, if BOOT_IMAGE_CODE_START is 0x64000000:
+   *
+   *     pfDBG       790a5c 790ad8
+   *     aaDBG       790960 790a5c
+   *     aaDBGfixed  7908a8 790960
+   *
+   * 5.  Dump the asm for the respective methods.
+   *
+   *     objdump -D -m i386 -b binary --start-address=0x790a5c --stop-address=0x790ad8 ./dist/production_x86_64-linux/RVM.code.image >> pfDBG.s
+   *     objdump -D -m i386 -b binary --start-address=0x790960 --stop-address=0x790a5c ./dist/production_x86_64-linux/RVM.code.image >> aaDBG.s
+   *     objdump -D -m i386 -b binary --start-address=0x7908a8 --stop-address=0x790960 ./dist/production_x86_64-linux/RVM.code.image >> aaDBGfixed.s
+   *
+   * If you repeat the above for a build without barriers (eg FastAdaptiveSemiSpace),
+   * then comparing the asm with and without barriers will reveal the instruction
+   * sequence of the barrier.
+   *
+   * The following bash script will dump the asm for one of the following methods...
+   *
+   * --
+   * #! /bin/bash
+   * #
+   * # arg1: path to build directory
+   * # arg2: method name
+   * #
+   * build=$1
+   * method=$2
+   * map="$build/RVM.map"
+   * image="$build/RVM.code.image"
+   *
+   * codestart=`grep "# Bootimage code:" $map | cut -d ' ' -f4 | cut -c1-8`
+   * codestart="0x$codestart"
+   *
+   * mrx=".$method\s"
+   * methodstart=`grep -a Barriers $map | grep -a $mrx | tr -s ' ' | cut -d ' ' -f 4`
+   * methodend=`grep -a ".     .          code" $map | tr -s ' ' | cut -d' ' -f4 | sort | grep -A1 $methodstart | tail -1`
+   *
+   * startaddr=`printf "0x%x" $(($methodstart - $codestart))`
+   * stopaddr=`printf "0x%x" $(($methodend - $codestart))`
+   *
+   * objdump -D -m i386 -b binary --start-address=$startaddr --stop-address=$stopaddr $image
+   * --
+   */
+  Object pftest = null;
+  Object[] aatest = null;
+
+  /*
+   * This method should produce a regular putfield reference write barrier.
+   */
+  private void pfDBG(String tmp) {
+    pftest = tmp;
+  }
+
+  /*
+   * This method should produce a regular aastore reference write barrier,
+   * with the array offset unknown.
+   */
+  private void aaDBG(String tmp, int i) {
+    aatest[i] = tmp;
+  }
+
+  /*
+   * This method should produce a regular aastore reference write barrier,
+   * with the array offset known.
+   */
+  private void aaDBGfixed(String tmp) {
+    aatest[0] = tmp;
+  }
+
 }
