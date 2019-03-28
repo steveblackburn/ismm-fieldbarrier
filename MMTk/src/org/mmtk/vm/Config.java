@@ -24,11 +24,15 @@ public class Config {
 
   /** Zero pages on release? */
   public final boolean ZERO_PAGES_ON_RELEASE;
+  
+   /** Pinning bit? */
+  public final boolean PINNING_BIT;
 
   Config(BuildTimeConfig config) {
     ACTIVE_PLAN            = config.getPlanName();
     HEADER_MARK_BITS        = config.getBooleanProperty("mmtk.headerMarkBit",true);
     ZERO_PAGES_ON_RELEASE  = config.getBooleanProperty("mmtk.zeroPagesOnRelease",false);
+    PINNING_BIT        = config.getBooleanProperty("mmtk.pinningBit",false);
   }
 
   public void printConfig() {
@@ -37,6 +41,7 @@ public class Config {
     Log.writeln(ACTIVE_PLAN);
     Log.writeln("HEADER_MARK_BITS = ", HEADER_MARK_BITS);
     Log.writeln("ZERO_PAGES_ON_RELEASE = ", ZERO_PAGES_ON_RELEASE);
+    Log.writeln("PINNING_BIT = ", PINNING_BIT);
     Log.writeln("====================================================");
   }
 
@@ -45,6 +50,7 @@ public class Config {
     Xml.configItem("plan",ACTIVE_PLAN);
     Xml.configItem("header-mark-bit",HEADER_MARK_BITS);
     Xml.configItem("zero-pages-on-release",ZERO_PAGES_ON_RELEASE);
+    Xml.configItem("pinning-bit",PINNING_BIT);
     Log.writeln("</config>");
   }
 }
