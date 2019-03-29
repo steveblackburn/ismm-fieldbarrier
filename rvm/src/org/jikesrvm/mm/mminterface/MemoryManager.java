@@ -157,6 +157,7 @@ public final class MemoryManager {
 
     if (Options.noReferenceTypes.getValue()) {
       if (Options.noReferenceTypes.getDefaultValue()) {
+        RVMType.JavaLangRefReferenceReferenceField.makeTraced(); // FIXME This needs to be cleaned up---workaround for RCImmix which currently does not support reference types
         if (VM.VerifyAssertions) VM._assert(RVMType.JavaLangRefReferenceReferenceField.isTraced());
       } else {
         VM.sysWriteln("WARNING: disabling reference types at run-time is risky.  Be sure to check with assertions enabled");  // The problem here is that doing this changes the number of tracable fields in a type, and any build-time assumptions about this will now be undone.

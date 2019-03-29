@@ -1,0 +1,37 @@
+12/10/2017
+Hi Rifat,
+
+It appears that there's no there's no synchronisation in the 'decLineRC' method in RCImmixObjectHeader, which might cause problems if multiple collector threads try to change the same line. Is this a bug?
+
+Zhansong Li 
+
+---
+12/10/2017
+Just checked incLineRC and it seems to have the same problem.
+
+---
+15/11/2017
+Hi Steve and Rifat,
+
+I made a commit on my gitlab repo that can reproduce the bug I encountered when doing the concurrent collector project this semester. I've added a second decPool for RCImmix and a second decBuffer corresponding to each decPool in RCImmixCollector and RCImmixMutator. currentDecPool in RCImmix controls which pool is being used for the collector and mutator. The process of switching pools and buffers is as follows:
+
+        - In the beginning, currentDecPool=0
+        - RCImmixMutators are created, the variable decBuffer refers to decBuffer0 since currentDecPool=0, then the mutators add decrements to decBuffer.
+        - The first collection begins, the RCImmixCollector assigns decBuffer to decBuffer0 based on currrentDecPool, processes all the decrements in the local buffer and the global pool.
+        - At this point, decBuffer1 should be empty because it hasn't been used yet, decBuffer0 should be empty as well since RCImmixCollector should have processed all the entries. These conditions are checked in RCImmixCollector and RCImmixMutator.
+        - At the end of the first collection, in SWITCH_DECPOOL phase, currentDecPool is set to 1 and decBuffers in all RCImmixMutators are switched to decBuffer1. The mutators now add decrements to decBuffer1.
+        - The next collection begins, RCImmixCollector assigns decBuffer to decBuffer1, then processes all the decrements.
+        - Now decBuffer1 should be empty because all the entries should have been processed and since all decrements should have been put in decBuffer1 and decPool1, decBuffer0 should be empty as well.(*)
+        - ...
+
+In the fail case documented in the file fop_fail, the checks in (*) fails. Specifically, it shows that decBuffer0 in one of the mutators is not empty even though no mutator should be putting decrements in this buffer after the end of the first collection when currentDecPool is changed to 1 and decBuffers in RCImmixMutators are switched to decBuffer1.
+
+This bug can cause issues during defrag because when references to an object from a previous epoch, say gc1 is processed *after* a defrag collection, if the object referenced is moved, then the reference from gc1 is stale and would cause an assertion in decLineRC that checks whether the address is on an unused block to fail.
+
+Initially, I thought this was due to the RCImmixMutator constructor getting a stale copy of currentDecPool, but even after making currentDecPool volatile the bug still occurs. It should also be noted that when I first encountered this bug I was experimenting with adding concurrent phases but it seems that here even without a concurrent phase this can still occur. The final build for my project doesn't have this bug but I have no idea how I managed to avoid it.
+
+Please let me know if you need more information.
+
+Cheers,
+Zhansong Li
+
