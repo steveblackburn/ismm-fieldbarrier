@@ -1506,6 +1506,7 @@ public class Barriers {
   /*
    * This method should produce a regular putfield reference write barrier.
    */
+  @Interruptible
   private void pfDBG(String tmp) {
     pftest = tmp;
   }
@@ -1514,6 +1515,7 @@ public class Barriers {
    * This method should produce a regular aastore reference write barrier,
    * with the array offset unknown.
    */
+  @Interruptible
   private void aaDBG(String tmp, int i) {
     aatest[i] = tmp;
   }
@@ -1522,6 +1524,7 @@ public class Barriers {
    * This method should produce a regular aastore reference write barrier,
    * with the array offset known.
    */
+  @Interruptible
   private void aaDBGfixed(String tmp) {
     aatest[0] = tmp;
   }
