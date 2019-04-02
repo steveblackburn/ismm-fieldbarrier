@@ -12,9 +12,13 @@
  */
 package org.mmtk.policy.rcimmix;
 
+import static org.mmtk.plan.Plan.USE_FIELD_BARRIER_FOR_AASTORE;
+import static org.mmtk.plan.Plan.USE_FIELD_BARRIER_FOR_PUTFIELD;
+import static org.mmtk.plan.refcount.RCBase.GATHER_INC_DEC_STATS;
 import static org.mmtk.utility.Constants.BITS_IN_BYTE;
 import static org.mmtk.utility.Constants.BITS_IN_ADDRESS;
 
+import org.mmtk.plan.rcimmix.RCImmix;
 import org.mmtk.utility.ForwardingWord;
 import org.mmtk.vm.VM;
 import org.vmmagic.pragma.Inline;
@@ -43,7 +47,7 @@ public class RCImmixObjectHeader {
   public static final int      LOG_BIT  = 0;
   public static final Word     LOGGED = Word.zero();                            //...00000
   public static final Word     UNLOGGED   = Word.one();                         //...00001
-  public static final Word BEING_LOGGED = Word.one().lsh(2).minus(Word.one());  //...00011
+  public static final Word BEING_LOGGED = Word.one().lsh(1);                    //...00010
   public static final Word LOGGING_MASK = LOGGED.or(UNLOGGED).or(BEING_LOGGED); //...00011
 
   /**
@@ -78,29 +82,30 @@ public class RCImmixObjectHeader {
    */
   @Inline
   @Uninterruptible
-  public static boolean attemptToLog(ObjectReference object) {
+  public static boolean attemptToLogObject(ObjectReference object) {
+    if (VM.VERIFY_ASSERTIONS) VM.assertions._assert(!USE_FIELD_BARRIER_FOR_PUTFIELD || !USE_FIELD_BARRIER_FOR_AASTORE);
     Word oldValue;
     do {
       oldValue = VM.objectModel.prepareAvailableBits(object);
       if (oldValue.and(LOGGING_MASK).EQ(LOGGED)) {
         return false;
       }
-    } while ((oldValue.and(LOGGING_MASK).EQ(BEING_LOGGED)) ||
+    } while ((oldValue.and(BEING_LOGGED).EQ(BEING_LOGGED)) ||
              !VM.objectModel.attemptAvailableBits(object, oldValue, oldValue.or(BEING_LOGGED)));
     if (VM.VERIFY_ASSERTIONS) {
       Word value = VM.objectModel.readAvailableBitsWord(object);
-      VM.assertions._assert(value.and(LOGGING_MASK).EQ(BEING_LOGGED));
+      VM.assertions._assert(value.and(BEING_LOGGED).EQ(BEING_LOGGED));
     }
     return true;
   }
 
 
   /**
-   * Signify completion of logging <code>object</code>.
+   * Mark as unlogged and signify completion of logging <code>object</code>.
    *
    * <code>object</code> is left in the <code>LOGGED</code> state.
    *
-   * @see #attemptToLog(ObjectReference)
+   * @see #attemptToLogObject(ObjectReference)
    * @param object The object whose state is to be changed.
    */
   @Inline

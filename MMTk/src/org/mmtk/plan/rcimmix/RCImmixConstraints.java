@@ -12,7 +12,10 @@
  */
 package org.mmtk.plan.rcimmix;
 
+import static org.mmtk.plan.Plan.*;
 import static org.mmtk.policy.rcimmix.RCImmixConstants.MAX_IMMIX_OBJECT_BYTES;
+import static org.mmtk.utility.HeaderByte.FIELD_BARRIER_HIGH_BIT;
+import static org.mmtk.utility.HeaderByte.FIELD_BARRIER_LOW_BIT;
 
 import org.mmtk.plan.StopTheWorldConstraints;
 import org.vmmagic.pragma.*;
@@ -39,4 +42,18 @@ public class RCImmixConstraints extends StopTheWorldConstraints {
   public boolean movesObjects() { return true;}
   @Override
   public int maxNonLOSCopyBytes() { return MAX_IMMIX_OBJECT_BYTES; }
+  @Override
+  public boolean useFieldBarrierForPutfield() { return USE_FIELD_BARRIER_FOR_PUTFIELD; }
+  @Override
+  public boolean useFieldBarrierForAAStore() { return USE_FIELD_BARRIER_FOR_AASTORE; }
+  @Override
+  public boolean fieldBarrierUseGCByte() { return FIELD_BARRIER_USE_GC_BYTE; }
+  @Override
+  public int fieldBarrierLowestAvailableBit() { return FIELD_BARRIER_LOW_BIT; }
+  @Override
+  public int fieldBarrierHighestAvailableBit() { return FIELD_BARRIER_HIGH_BIT; }
+  @Override
+  public boolean fieldBarrierSpaceEval() { return FIELD_BARRIER_SPACE_EVAL; }
+  @Override
+  public boolean fieldBarrierVerbose() { return FIELD_BARRIER_VERBOSE; }
 }

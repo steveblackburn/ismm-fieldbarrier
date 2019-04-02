@@ -109,9 +109,9 @@ public abstract class Plan {
 
   public static final boolean FIELD_BARRIER_SPACE_EVAL = false; // used to add (only) the space overhead of field barriers independent of whether barriers are used
   public static final boolean FIELD_BARRIER_VERBOSE = false; // verbose info at class loading time
-  public static final boolean USE_FIELD_BARRIER_FOR_AASTORE = false; // use field barrier
+  public static final boolean USE_FIELD_BARRIER_FOR_AASTORE = true; // use field barrier
   public static final boolean FIELD_BARRIER_AASTORE_OOL = false; // force aa barrier out of line
-  public static final boolean USE_FIELD_BARRIER_FOR_PUTFIELD = false; // use field barrier
+  public static final boolean USE_FIELD_BARRIER_FOR_PUTFIELD = true; // use field barrier
   public static final boolean FIELD_BARRIER_PUTFIELD_OOL = false; // force aa barrier out of line
   public static final boolean USE_FIELD_BARRIER = USE_FIELD_BARRIER_FOR_AASTORE || USE_FIELD_BARRIER_FOR_PUTFIELD;
   public static final boolean FIELD_BARRIER_USE_GC_BYTE = true && USE_FIELD_BARRIER;

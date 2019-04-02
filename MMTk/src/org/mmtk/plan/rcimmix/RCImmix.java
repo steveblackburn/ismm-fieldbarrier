@@ -119,7 +119,9 @@ public class RCImmix extends StopTheWorld {
   public static final int REF_COUNT = rcSpace.getDescriptor();
   public static final int REF_COUNT_LOS = rcloSpace.getDescriptor();
 
-  public final SharedDeque modPool = new SharedDeque("mod", metaDataSpace, 1);
+  public final SharedDeque liveObjectPool = new SharedDeque("live", metaDataSpace, 1);
+  public final SharedDeque modObjectPool = new SharedDeque("mod", metaDataSpace, 1);
+  public final SharedDeque modFieldPool = new SharedDeque("modField", metaDataSpace, 2);
   public final SharedDeque decPool = new SharedDeque("dec", metaDataSpace, 1);
   public final SharedDeque newRootPool = new SharedDeque("newRoot", metaDataSpace, 1);
   public final SharedDeque newRootBackPool = new SharedDeque("newRootBack", metaDataSpace, 1);
@@ -232,7 +234,9 @@ public class RCImmix extends StopTheWorld {
     }
 
     if (phaseId == PROCESS_MODBUFFER) {
-      modPool.prepare();
+      liveObjectPool.prepare();
+      modObjectPool.prepare();
+      modFieldPool.prepare();
       return;
     }
 

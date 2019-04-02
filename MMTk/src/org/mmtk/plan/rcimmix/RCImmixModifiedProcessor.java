@@ -40,7 +40,7 @@ public final class RCImmixModifiedProcessor extends TransitiveClosure {
     if (RCImmix.isRCObject(object)) {
       if (RCImmix.CC_BACKUP_TRACE && RCImmix.performCycleCollection) {
         if (RCImmixObjectHeader.remainRC(object) == RCImmixObjectHeader.INC_NEW) {
-          collector.getModBuffer().push(object);
+          collector.enqueueReachableObject(object);
         }
       } else {
         if (RCImmix.RC_SURVIVOR_COPY) {
@@ -50,7 +50,7 @@ public final class RCImmixModifiedProcessor extends TransitiveClosure {
             if (Space.isInSpace(RCImmix.REF_COUNT, object)) {
               RCImmixObjectHeader.incLines(object);
             }
-            collector.getModBuffer().push(object);
+            collector.enqueueReachableObject(object);
           }
         }
       }

@@ -21,9 +21,11 @@ import org.mmtk.plan.TransitiveClosure;
 import org.mmtk.policy.Space;
 import org.mmtk.policy.rcimmix.RCImmixCollectorLocal;
 import org.mmtk.policy.rcimmix.RCImmixObjectHeader;
+import org.mmtk.utility.FieldMarks;
 import org.mmtk.utility.ForwardingWord;
 import org.mmtk.utility.alloc.RCImmixAllocator;
 import org.mmtk.utility.deque.AddressDeque;
+import org.mmtk.utility.deque.AddressPairDeque;
 import org.mmtk.utility.deque.ObjectReferenceDeque;
 import org.mmtk.vm.VM;
 import org.vmmagic.pragma.Inline;
@@ -31,6 +33,9 @@ import org.vmmagic.pragma.Uninterruptible;
 import org.vmmagic.unboxed.Address;
 import org.vmmagic.unboxed.ObjectReference;
 import org.vmmagic.unboxed.Word;
+
+import static org.mmtk.plan.Plan.*;
+import static org.mmtk.utility.Constants.BYTES_IN_ADDRESS;
 
 /**
  * This class implements the collector context for RCImmix collector.
@@ -46,7 +51,9 @@ public class RCImmixCollector extends StopTheWorldCollector {
   public TraceLocal backupTrace;
   private final RCImmixBTTraceLocal backTrace;
   private final RCImmixBTDefragTraceLocal defragTrace;
-  private final ObjectReferenceDeque modBuffer;
+  private final ObjectReferenceDeque modObjectBuffer;
+  private final ObjectReferenceDeque liveObjectBuffer;
+  private final AddressPairDeque modFieldBuffer;
   private final ObjectReferenceDeque oldRootBuffer;
   private final RCImmixDecBuffer decBuffer;
   public final RCImmixZero zero;
@@ -64,7 +71,9 @@ public class RCImmixCollector extends StopTheWorldCollector {
     newRootPointerBackBuffer = new AddressDeque("new-root-back", global().newRootBackPool);
     oldRootBuffer = new ObjectReferenceDeque("old-root", global().oldRootPool);
     decBuffer = new RCImmixDecBuffer(global().decPool);
-    modBuffer = new ObjectReferenceDeque("mod buf", global().modPool);
+    liveObjectBuffer = new ObjectReferenceDeque("live obj buf", global().liveObjectPool);
+    modObjectBuffer = new ObjectReferenceDeque("mod obj buf", global().modObjectPool); // for object barrier only
+    modFieldBuffer = new AddressPairDeque("mod field buf", global().modFieldPool); // for field barrier only
     backTrace = new RCImmixBTTraceLocal(global().backupTrace);
     defragTrace = new RCImmixBTDefragTraceLocal(global().backupTrace);
     zero = new RCImmixZero();
@@ -100,6 +109,17 @@ public class RCImmixCollector extends StopTheWorldCollector {
   @Override
   public void collect() {
     Phase.beginNewPhaseStack(Phase.scheduleComplex(global().collection));
+  }
+
+  @Inline
+  public void enqueueReachableObject(ObjectReference object) {
+    if (USE_FIELD_BARRIER_FOR_PUTFIELD && USE_FIELD_BARRIER_FOR_AASTORE)
+      VM.objectModel.markAllFieldsAsUnlogged(object);
+    else if ((USE_FIELD_BARRIER_FOR_PUTFIELD || USE_FIELD_BARRIER_FOR_AASTORE) && VM.objectModel.hasFieldMarks(object))
+      VM.objectModel.markAllFieldsAsUnlogged(object);
+    else
+      RCImmixObjectHeader.makeUnlogged(object);
+    liveObjectBuffer.push(object);
   }
 
   @Override
@@ -149,7 +169,7 @@ public class RCImmixCollector extends StopTheWorldCollector {
         if (RCImmix.isRCObject(current)) {
           if (RCImmix.CC_BACKUP_TRACE && RCImmix.performCycleCollection) {
             if (RCImmixObjectHeader.incRC(current) == RCImmixObjectHeader.INC_NEW) {
-              modBuffer.push(current);
+              enqueueReachableObject(current);
             }
             newRootPointerBackBuffer.push(address);
           } else {
@@ -160,14 +180,14 @@ public class RCImmixCollector extends StopTheWorldCollector {
                 if (Space.isInSpace(RCImmix.REF_COUNT, current)) {
                   RCImmixObjectHeader.incLines(current);
                 }
-                modBuffer.push(current);
+                enqueueReachableObject(current);
               }
               oldRootBuffer.push(current);
             }
           }
         }
       }
-      modBuffer.flushLocal();
+      liveObjectBuffer.flushLocal();
       if (RCImmix.CC_BACKUP_TRACE && RCImmix.performCycleCollection) {
         newRootPointerBackBuffer.flushLocal();
       } else {
@@ -178,9 +198,40 @@ public class RCImmixCollector extends StopTheWorldCollector {
 
     if (phaseId == RCImmix.PROCESS_MODBUFFER) {
       ObjectReference current;
-      while(!(current = modBuffer.pop()).isNull()) {
-        RCImmixObjectHeader.makeUnlogged(current);
-        VM.scanning.scanObject(getModifiedProcessor(), current);
+
+      while (!(liveObjectBuffer.isEmpty() && modObjectBuffer.isEmpty() && modFieldBuffer.isEmpty())) {
+        // live object buffer
+        while (!(current = liveObjectBuffer.pop()).isNull()) {
+          if (VM.VERIFY_ASSERTIONS && USE_FIELD_BARRIER)
+            VM.assertions._assert(VM.objectModel.areAllFieldsUnlogged(current));
+          VM.scanning.scanObject(getModifiedProcessor(), current);
+        }
+        // modified object buffer
+        while (!(current = modObjectBuffer.pop()).isNull()) {
+          if (VM.VERIFY_ASSERTIONS && USE_FIELD_BARRIER)
+            VM.assertions._assert(VM.objectModel.areAllFieldsUnlogged(current));
+          RCImmixObjectHeader.makeUnlogged(current);
+          VM.scanning.scanObject(getModifiedProcessor(), current);
+        }
+        // field buffer
+        Address slot;
+        while (!(slot = modFieldBuffer.pop1()).isZero()) {
+          Word markAddressReference = modFieldBuffer.pop2().toWord();
+          if (FIELD_BARRIER_ARRAY_QUANTUM > 1 && FieldMarks.isMultiSlot(slot)) {
+            Address start = FieldMarks.extractSlot(slot, markAddressReference.toAddress());
+            int slots = FieldMarks.extractSlotCount(slot);
+            for (int i = 0; i < slots; i++) {
+              getModifiedProcessor().processEdge(ObjectReference.nullReference(), start);
+              start = start.plus(BYTES_IN_ADDRESS);
+            }
+          } else {
+            getModifiedProcessor().processEdge(ObjectReference.nullReference(), slot);
+          }
+          VM.objectModel.clearFieldMarks(markAddressReference);
+        }
+//        while(!(current = modObjectBuffer.pop()).isNull()) {
+//        RCImmixObjectHeader.makeUnlogged(current);
+//        VM.scanning.scanObject(getModifiedProcessor(), current);
       }
       return;
     }
@@ -254,7 +305,9 @@ public class RCImmixCollector extends StopTheWorldCollector {
       rc.release(true);
       if (VM.VERIFY_ASSERTIONS) {
         VM.assertions._assert(newRootPointerBuffer.isEmpty());
-        VM.assertions._assert(modBuffer.isEmpty());
+        VM.assertions._assert(liveObjectBuffer.isEmpty());
+        VM.assertions._assert(modObjectBuffer.isEmpty());
+        VM.assertions._assert(modFieldBuffer.isEmpty());
         VM.assertions._assert(decBuffer.isEmpty());
       }
       return;
@@ -279,10 +332,10 @@ public class RCImmixCollector extends StopTheWorldCollector {
     return getRootTrace();
   }
 
-  /** @return The current modBuffer instance. */
+  /** @return The current modObjectBuffer instance. */
   @Inline
-  public final ObjectReferenceDeque getModBuffer() {
-    return modBuffer;
+  public final ObjectReferenceDeque getModObjectBuffer() {
+    return modObjectBuffer;
   }
 
    /****************************************************************************
@@ -358,14 +411,14 @@ public class RCImmixCollector extends StopTheWorldCollector {
              }
              slot.store(newObject);
              RCImmixObjectHeader.incLines(newObject);
-             modBuffer.push(newObject);
+             modObjectBuffer.push(newObject);
              if (root) oldRootBuffer.push(newObject);
            }
          }
        }
      } else {
        if (RCImmixObjectHeader.incRC(object) == RCImmixObjectHeader.INC_NEW) {
-         modBuffer.push(object);
+         modObjectBuffer.push(object);
        }
        if (root) oldRootBuffer.push(object);
      }

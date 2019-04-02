@@ -13,14 +13,19 @@
 package org.mmtk.plan.rcimmix;
 
 
+import static org.mmtk.plan.Plan.*;
 import static org.mmtk.policy.rcimmix.RCImmixConstants.BYTES_IN_LINE;
+import static org.mmtk.utility.Constants.*;
 
+import org.mmtk.plan.Plan;
 import org.mmtk.plan.StopTheWorldMutator;
 import org.mmtk.policy.LargeObjectLocal;
 import org.mmtk.policy.Space;
 import org.mmtk.policy.rcimmix.RCImmixMutatorLocal;
 import org.mmtk.policy.rcimmix.RCImmixObjectHeader;
+import org.mmtk.utility.FieldMarks;
 import org.mmtk.utility.alloc.Allocator;
+import org.mmtk.utility.deque.AddressPairDeque;
 import org.mmtk.utility.deque.ObjectReferenceDeque;
 import org.mmtk.vm.VM;
 import org.vmmagic.pragma.*;
@@ -37,10 +42,11 @@ public class RCImmixMutator extends StopTheWorldMutator {
    */
   protected final RCImmixMutatorLocal rc;
   private final LargeObjectLocal rclos;
-  private final ObjectReferenceDeque modBuffer;
+  private final ObjectReferenceDeque modObjectBuffer;
+  private final AddressPairDeque modFieldBuffer;
   private final RCImmixDecBuffer decBuffer;
 
-  /************************************************************************
+  /************************************************************å************
    *
    * Initialization
    */
@@ -51,7 +57,8 @@ public class RCImmixMutator extends StopTheWorldMutator {
   public RCImmixMutator() {
     rc = new RCImmixMutatorLocal(RCImmix.rcSpace, false);
     rclos = new LargeObjectLocal(RCImmix.rcloSpace);
-    modBuffer = new ObjectReferenceDeque("mod", global().modPool);
+    modObjectBuffer = new ObjectReferenceDeque("mod", global().modObjectPool);
+    modFieldBuffer = new AddressPairDeque("mod field", global().modFieldPool);
     decBuffer = new RCImmixDecBuffer(global().decPool);
   }
 
@@ -132,7 +139,8 @@ public class RCImmixMutator extends StopTheWorldMutator {
     }
 
     if (phaseId == RCImmix.PROCESS_MODBUFFER) {
-      modBuffer.flushLocal();
+      modObjectBuffer.flushLocal();
+      modFieldBuffer.flushLocal();
       return;
     }
 
@@ -143,7 +151,8 @@ public class RCImmixMutator extends StopTheWorldMutator {
 
     if (phaseId == RCImmix.RELEASE) {
       rc.release();
-      if (VM.VERIFY_ASSERTIONS) VM.assertions._assert(modBuffer.isEmpty());
+      if (VM.VERIFY_ASSERTIONS) VM.assertions._assert(modObjectBuffer.isEmpty());
+      if (VM.VERIFY_ASSERTIONS) VM.assertions._assert(modFieldBuffer.isEmpty());
       if (VM.VERIFY_ASSERTIONS) VM.assertions._assert(decBuffer.isEmpty());
       return;
     }
@@ -154,7 +163,8 @@ public class RCImmixMutator extends StopTheWorldMutator {
   @Override
   public final void flushRememberedSets() {
     decBuffer.flushLocal();
-    modBuffer.flushLocal();
+    modObjectBuffer.flushLocal();
+    modFieldBuffer.flushLocal();
     assertRemsetsFlushed();
   }
 
@@ -162,7 +172,8 @@ public class RCImmixMutator extends StopTheWorldMutator {
   public final void assertRemsetsFlushed() {
     if (VM.VERIFY_ASSERTIONS) {
       VM.assertions._assert(decBuffer.isFlushed());
-      VM.assertions._assert(modBuffer.isFlushed());
+      VM.assertions._assert(modObjectBuffer.isFlushed());
+      VM.assertions._assert(modFieldBuffer.isFlushed());
     }
   }
 
@@ -184,10 +195,16 @@ public class RCImmixMutator extends StopTheWorldMutator {
   public void objectReferenceWrite(ObjectReference src, Address slot,
                                    ObjectReference tgt, Word metaDataA,
                                    Word metaDataB, Word metaDataC, int mode) {
-    if (RCImmixObjectHeader.logRequired(src)) {
+    if (FIELD_BARRIER_STATS) { if (mode != ARRAY_ELEMENT) Plan.pffast.inc(); else Plan.aafast.inc(); }
+    if (USE_FIELD_BARRIER_FOR_AASTORE && mode == ARRAY_ELEMENT)
+      FieldMarks.refArrayCoalescingBarrier(src, slot, metaDataC, modFieldBuffer, decBuffer);
+    else if (USE_FIELD_BARRIER_FOR_PUTFIELD && mode != ARRAY_ELEMENT)
+      FieldMarks.scalarFieldCoalescingBarrier(src, slot, metaDataC, modFieldBuffer, decBuffer);
+    else if (RCImmixObjectHeader.logRequired(src)) {
+      if (FIELD_BARRIER_STATS) { if (mode != ARRAY_ELEMENT) Plan.pfslow.inc(); else Plan.aaslow.inc(); }
       coalescingWriteBarrierSlow(src);
     }
-    VM.barriers.objectReferenceWrite(src,tgt,metaDataA, metaDataB, mode);
+    VM.barriers.objectReferenceWrite(src, tgt, metaDataA, metaDataB, mode);
   }
 
   @Override
@@ -195,7 +212,13 @@ public class RCImmixMutator extends StopTheWorldMutator {
   public boolean objectReferenceTryCompareAndSwap(ObjectReference src, Address slot,
                                                   ObjectReference old, ObjectReference tgt, Word metaDataA,
                                                   Word metaDataB, Word metaDataC, int mode) {
-    if (RCImmixObjectHeader.logRequired(src)) {
+    if (FIELD_BARRIER_STATS) { if (mode != ARRAY_ELEMENT) Plan.pffast.inc(); else Plan.aafast.inc(); }
+    if (USE_FIELD_BARRIER_FOR_AASTORE && mode == ARRAY_ELEMENT)
+      FieldMarks.refArrayCoalescingBarrier(src, slot, metaDataC, modFieldBuffer, decBuffer);
+    else if (USE_FIELD_BARRIER_FOR_PUTFIELD && mode != ARRAY_ELEMENT)
+      FieldMarks.scalarFieldCoalescingBarrier(src, slot, metaDataC, modFieldBuffer, decBuffer);
+    else if (RCImmixObjectHeader.logRequired(src)) {
+      if (FIELD_BARRIER_STATS) { if (mode != ARRAY_ELEMENT) Plan.pfslow.inc(); else Plan.aaslow.inc(); }
       coalescingWriteBarrierSlow(src);
     }
     return VM.barriers.objectReferenceTryCompareAndSwap(src,old,tgt,metaDataA,metaDataB,mode);
@@ -223,7 +246,9 @@ public class RCImmixMutator extends StopTheWorldMutator {
   @Inline
   public boolean objectReferenceBulkCopy(ObjectReference src, Offset srcOffset,
                               ObjectReference dst, Offset dstOffset, int bytes) {
-    if (RCImmixObjectHeader.logRequired(dst)) {
+    if (USE_FIELD_BARRIER_FOR_AASTORE) { // FIXME: assumption that this only applies to arrays
+      coalescingFieldWriteBarrierBulkCopySlow(dst, dstOffset, bytes);
+    } else if (RCImmixObjectHeader.logRequired(dst)) {
       coalescingWriteBarrierSlow(dst);
     }
     return false;
@@ -242,10 +267,25 @@ public class RCImmixMutator extends StopTheWorldMutator {
    */
   @NoInline
   private void coalescingWriteBarrierSlow(ObjectReference srcObj) {
-    if (RCImmixObjectHeader.attemptToLog(srcObj)) {
-      modBuffer.push(srcObj);
+    if (VM.VERIFY_ASSERTIONS) VM.assertions._assert(!USE_FIELD_BARRIER_FOR_PUTFIELD || !USE_FIELD_BARRIER_FOR_AASTORE);
+    if (RCImmixObjectHeader.attemptToLogObject(srcObj)) {
+      if (FIELD_BARRIER_STATS) Plan.pfwordsLogged.inc(); // mod buffer
+      modObjectBuffer.push(srcObj);
       decBuffer.processChildren(srcObj);
       RCImmixObjectHeader.makeLogged(srcObj);
+    }
+  }
+
+  private void coalescingFieldWriteBarrierBulkCopySlow(ObjectReference dst, Offset dstOffset, int bytes) {
+    // log each of the to-be-overwritten fields
+    if (VM.VERIFY_ASSERTIONS) VM.assertions._assert(USE_FIELD_BARRIER_FOR_AASTORE);
+    Address cursor = dst.toAddress().plus(dstOffset);
+    Address end = cursor.plus(bytes);
+    int index = dstOffset.toInt() >> LOG_BYTES_IN_ADDRESS;
+    while (cursor.LT(end)) {
+      FieldMarks.refArrayCoalescingBarrier(dst, cursor, Word.fromIntSignExtend(index), modFieldBuffer, decBuffer);
+      cursor = cursor.plus(BYTES_IN_ADDRESS);
+      index++;
     }
   }
 
