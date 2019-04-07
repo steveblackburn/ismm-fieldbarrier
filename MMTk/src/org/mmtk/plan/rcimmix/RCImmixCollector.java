@@ -202,14 +202,12 @@ public class RCImmixCollector extends StopTheWorldCollector {
       while (!(liveObjectBuffer.isEmpty() && modObjectBuffer.isEmpty() && modFieldBuffer.isEmpty())) {
         // live object buffer
         while (!(current = liveObjectBuffer.pop()).isNull()) {
-          if (VM.VERIFY_ASSERTIONS && USE_FIELD_BARRIER)
-            VM.assertions._assert(VM.objectModel.areAllFieldsUnlogged(current));
+          if (VM.VERIFY_ASSERTIONS && USE_FIELD_BARRIER) VM.assertions._assert(VM.objectModel.areAllFieldsUnlogged(current));
           VM.scanning.scanObject(getModifiedProcessor(), current);
         }
         // modified object buffer
         while (!(current = modObjectBuffer.pop()).isNull()) {
-          if (VM.VERIFY_ASSERTIONS && USE_FIELD_BARRIER)
-            VM.assertions._assert(VM.objectModel.areAllFieldsUnlogged(current));
+          if (VM.VERIFY_ASSERTIONS && USE_FIELD_BARRIER) VM.assertions._assert(VM.objectModel.areAllFieldsUnlogged(current));
           RCImmixObjectHeader.makeUnlogged(current);
           VM.scanning.scanObject(getModifiedProcessor(), current);
         }
@@ -411,14 +409,14 @@ public class RCImmixCollector extends StopTheWorldCollector {
              }
              slot.store(newObject);
              RCImmixObjectHeader.incLines(newObject);
-             modObjectBuffer.push(newObject);
+             enqueueReachableObject(object);
              if (root) oldRootBuffer.push(newObject);
            }
          }
        }
      } else {
        if (RCImmixObjectHeader.incRC(object) == RCImmixObjectHeader.INC_NEW) {
-         modObjectBuffer.push(object);
+         enqueueReachableObject(object);
        }
        if (root) oldRootBuffer.push(object);
      }
