@@ -47,7 +47,7 @@ public class RCImmix extends StopTheWorld {
   public static final short PROCESS_DECBUFFER      = Phase.createSimple("decs");
 
   /** Is cycle collection enabled? */
-  public static final boolean CC_ENABLED           = true;
+  public static final boolean CC_ENABLED           = false;
   /** Force full cycle collection at each GC? */
   public static boolean CC_FORCE_FULL        = false;
   /** Use backup tracing for cycle collection (currently the only option) */

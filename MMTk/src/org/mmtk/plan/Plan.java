@@ -114,7 +114,7 @@ public abstract class Plan {
   public static final boolean USE_FIELD_BARRIER_FOR_PUTFIELD = true; // use field barrier
   public static final boolean FIELD_BARRIER_PUTFIELD_OOL = false; // force aa barrier out of line
   public static final boolean USE_FIELD_BARRIER = USE_FIELD_BARRIER_FOR_AASTORE || USE_FIELD_BARRIER_FOR_PUTFIELD;
-  public static final boolean FIELD_BARRIER_USE_GC_BYTE = true && USE_FIELD_BARRIER;
+  public static final boolean FIELD_BARRIER_USE_GC_BYTE = false && USE_FIELD_BARRIER;
   public static final boolean FIELD_BARRIER_STATS = false;
   public static final int LOG_FIELD_BARRIER_ARRAY_QUANTUM = 0;  // log_2 of the granularity at which array fields are logged
   public static final int FIELD_BARRIER_ARRAY_QUANTUM = 1<<LOG_FIELD_BARRIER_ARRAY_QUANTUM;
