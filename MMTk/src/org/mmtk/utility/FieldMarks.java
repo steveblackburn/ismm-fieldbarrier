@@ -29,37 +29,11 @@ public class FieldMarks {
   }
 
   @Inline
-  private static void scalarFieldBarrierInline(ObjectReference src, Address slot, Word metaData, AddressPairDeque fieldbuf) {
-    if (VM.objectModel.isScalarFieldUnlogged(src, metaData)) {
-      logScalarFieldOOL(src, slot, metaData, fieldbuf);
-    }
-  }
-
-  @NoInline
-  private static void scalarFieldBarrierOOL(ObjectReference src, Address slot, Word metaData, AddressPairDeque fieldbuf) {
-    if (VM.objectModel.isScalarFieldUnlogged(src, metaData)) {
-      logScalarField(src, slot, metaData, fieldbuf);
-    }
-  }
-
-  @Inline
   public static void refArrayBarrier(ObjectReference src, Address slot, Word metaData, AddressPairDeque fieldbuf) {
     if (FIELD_BARRIER_AASTORE_OOL)
       refArrayBarrierOOL(src, slot, metaData.toInt(), fieldbuf);
     else
       refArrayBarrierInline(src, slot, metaData.toInt(), fieldbuf);
-  }
-
-  @Inline
-  private static void refArrayBarrierInline(ObjectReference src, Address slot, int index, AddressPairDeque fieldbuf) {
-    if (VM.objectModel.isRefArrayElementUnlogged(src, index))
-      logRefArrayElementOOL(src, slot, index, fieldbuf);
-  }
-
-  @NoInline
-  private static void refArrayBarrierOOL(ObjectReference src, Address slot, int index, AddressPairDeque fieldbuf) {
-    if (VM.objectModel.isRefArrayElementUnlogged(src, index))
-      logRefArrayElement(src, slot, index, fieldbuf);
   }
 
   /* Coalescing field barriers, eg for reference counting */
@@ -72,25 +46,6 @@ public class FieldMarks {
   }
 
   @Inline
-  private static void scalarFieldCoalescingBarrierInline(ObjectReference src, Address slot, Word metaData, AddressPairDeque fieldbuf, ObjectReferenceBuffer decBuffer) {
-    if (VM.objectModel.isScalarFieldUnlogged(src, metaData)) {
-      logScalarFieldCoalescingOOL(src, slot, metaData, fieldbuf, decBuffer);
-    }
-  }
-
-  @NoInline
-  private static void scalarFieldCoalescingBarrierOOL(ObjectReference src, Address slot, Word metaData, AddressPairDeque fieldbuf, ObjectReferenceBuffer decBuffer) {
-    if (VM.objectModel.isScalarFieldUnlogged(src, metaData)) {
-      logFieldCoalescing(src, slot, metaData, false, fieldbuf, decBuffer);
-    }
-  }
-
-  @NoInline
-  private static void logScalarFieldCoalescingOOL(ObjectReference src, Address slot, Word metaData, AddressPairDeque fieldbuf, ObjectReferenceBuffer decBuffer) {
-    logFieldCoalescing(src, slot, metaData, false, fieldbuf, decBuffer);
-  }
-
-  @Inline
   public static void refArrayCoalescingBarrier(ObjectReference src, Address slot, Word metaData, AddressPairDeque fieldbuf, ObjectReferenceBuffer decBuffer) {
     if (FIELD_BARRIER_AASTORE_OOL)
       refArrayCoalescingBarrierOOL(src, slot, metaData.toInt(), fieldbuf, decBuffer);
@@ -98,22 +53,64 @@ public class FieldMarks {
       refArrayCoalescingBarrierInline(src, slot, metaData.toInt(), fieldbuf, decBuffer);
   }
 
+
+
+  @Inline
+  private static void scalarFieldBarrierInline(ObjectReference src, Address slot, Word metaData, AddressPairDeque fieldbuf) {
+    if (VM.objectModel.isScalarFieldUnlogged(src, metaData)) {
+      logScalarFieldOOL(src, slot, metaData, fieldbuf);
+    }
+  }
+  @NoInline
+  private static void scalarFieldBarrierOOL(ObjectReference src, Address slot, Word metaData, AddressPairDeque fieldbuf) {
+    if (VM.objectModel.isScalarFieldUnlogged(src, metaData)) {
+      logScalarField(src, slot, metaData, fieldbuf);
+    }
+  }
+  @Inline
+  private static void refArrayBarrierInline(ObjectReference src, Address slot, int index, AddressPairDeque fieldbuf) {
+    if (VM.objectModel.isRefArrayElementUnlogged(src, index))
+      logRefArrayElementOOL(src, slot, index, fieldbuf);
+  }
+  @NoInline
+  private static void refArrayBarrierOOL(ObjectReference src, Address slot, int index, AddressPairDeque fieldbuf) {
+    if (VM.objectModel.isRefArrayElementUnlogged(src, index))
+      logRefArrayElement(src, slot, index, fieldbuf);
+  }
+
+
+
+  @Inline
+  private static void scalarFieldCoalescingBarrierInline(ObjectReference src, Address slot, Word metaData, AddressPairDeque fieldbuf, ObjectReferenceBuffer decBuffer) {
+    if (VM.objectModel.isScalarFieldUnlogged(src, metaData)) {
+      logScalarFieldCoalescingOOL(src, slot, metaData, fieldbuf, decBuffer);
+    }
+  }
+  @NoInline
+  private static void scalarFieldCoalescingBarrierOOL(ObjectReference src, Address slot, Word metaData, AddressPairDeque fieldbuf, ObjectReferenceBuffer decBuffer) {
+    if (VM.objectModel.isScalarFieldUnlogged(src, metaData)) {
+      logFieldCoalescing(src, slot, metaData, false, fieldbuf, decBuffer);
+    }
+  }
+  @NoInline
+  private static void logScalarFieldCoalescingOOL(ObjectReference src, Address slot, Word metaData, AddressPairDeque fieldbuf, ObjectReferenceBuffer decBuffer) {
+    logFieldCoalescing(src, slot, metaData, false, fieldbuf, decBuffer);
+  }
   @Inline
   private static void refArrayCoalescingBarrierInline(ObjectReference src, Address slot, int index, AddressPairDeque fieldbuf, ObjectReferenceBuffer decBuffer) {
     if (VM.objectModel.isRefArrayElementUnlogged(src, index))
       logRefArrayElementCoalescingOOL(src, slot, index, fieldbuf, decBuffer);
   }
-
   @NoInline
   private static void refArrayCoalescingBarrierOOL(ObjectReference src, Address slot, int index, AddressPairDeque fieldbuf, ObjectReferenceBuffer decBuffer) {
     if (VM.objectModel.isRefArrayElementUnlogged(src, index))
       logRefArrayElementCoalescingOOL(src, slot, index, fieldbuf, decBuffer);
   }
-
   @NoInline
   private static void logRefArrayElementCoalescingOOL(ObjectReference src, Address slot, int index, AddressPairDeque fieldbuf, ObjectReferenceBuffer decBuffer) {
     logFieldCoalescing(src, slot, Word.fromIntSignExtend(index), true, fieldbuf, decBuffer);
   }
+
 
   @Inline
   @Uninterruptible
@@ -130,7 +127,6 @@ public class FieldMarks {
     }
     return true;
   }
-
   @Inline
   @Uninterruptible
   private static void finishLogging(ObjectReference object) {
@@ -143,7 +139,16 @@ public class FieldMarks {
   private static void logFieldCoalescing(ObjectReference src, Address slot, Word metaData, boolean isArray, AddressPairDeque fieldbuf, ObjectReferenceBuffer decBuffer) {
     if (VM.VERIFY_ASSERTIONS)
       VM.assertions._assert((USE_FIELD_BARRIER_FOR_PUTFIELD && !isArray) || (USE_FIELD_BARRIER_FOR_AASTORE && isArray));
-    if (FIELD_BARRIER_STATS) Plan.pfslow.inc();
+
+    if (FIELD_BARRIER_STATS) {
+      if (isArray) {
+        Plan.aawordsLogged.inc();
+        Plan.aaslow.inc();
+      } else {
+        Plan.pfwordsLogged.inc();
+        Plan.pfslow.inc();
+      }
+    }
 
     if (FIELD_BARRIER_ARRAY_QUANTUM == 1) {
       int wordOffset = isArray ? VM.objectModel.wordOffsetFromIndex(metaData.toInt()) : VM.objectModel.wordOffsetFromMetadata(metaData);
