@@ -283,6 +283,7 @@ public class RCImmixMutator extends StopTheWorldMutator {
     Address end = cursor.plus(bytes);
     int index = dstOffset.toInt() >> LOG_BYTES_IN_ADDRESS;
     while (cursor.LT(end)) {
+      if (FIELD_BARRIER_STATS) bulkWordsLogged.inc();
       FieldMarks.refArrayCoalescingBarrier(dst, cursor, Word.fromIntSignExtend(index), modFieldBuffer, decBuffer);
       cursor = cursor.plus(BYTES_IN_ADDRESS);
       index++;
