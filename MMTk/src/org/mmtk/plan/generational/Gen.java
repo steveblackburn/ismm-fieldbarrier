@@ -62,8 +62,8 @@ public abstract class Gen extends StopTheWorld {
   private static final float WORST_CASE_COPY_EXPANSION = 1.5f; // worst case for addition of one word overhead due to address based hashing
   public static final boolean IGNORE_REMSETS = false;
   public static final boolean USE_NON_HEAP_OBJECT_REFERENCE_WRITE_BARRIER = false;
-  public static final boolean USE_OBJECT_BARRIER_FOR_AASTORE = false; // choose between slot and object barriers
-  public static final boolean USE_OBJECT_BARRIER_FOR_PUTFIELD = false; // choose between slot and object barriers
+  public static final boolean USE_OBJECT_BARRIER_FOR_AASTORE = true; // choose between slot and object barriers
+  public static final boolean USE_OBJECT_BARRIER_FOR_PUTFIELD = true; // choose between slot and object barriers
   public static final boolean USE_OBJECT_BARRIER = USE_OBJECT_BARRIER_FOR_AASTORE || USE_OBJECT_BARRIER_FOR_PUTFIELD;
 
   /** Fraction of available virtual memory to give to the nursery (if contiguous) */
