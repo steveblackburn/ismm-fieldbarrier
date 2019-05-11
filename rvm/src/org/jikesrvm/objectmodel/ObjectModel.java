@@ -290,23 +290,24 @@ public class ObjectModel {
 
   @Inline
   public static boolean hasFieldMarks(ObjectReference object) {
-    return hasFieldMarks(Magic.getTIBAtOffset(object, TIB_OFFSET));
+    return hasFieldMarks(object, Magic.getTIBAtOffset(object, TIB_OFFSET));
   }
 
   @Inline
-  public static boolean hasFieldMarks(TIB tib) {
+  private static boolean hasFieldMarks(ObjectReference object, TIB tib) {
     int encoding = extractTibCode(tib);
     boolean rtn;
 
-    if (USE_FIELD_BARRIER_FOR_AASTORE && USE_FIELD_BARRIER_FOR_PUTFIELD)
-      rtn = encoding != HandInlinedScanning.primitiveArray();
-    else if (USE_FIELD_BARRIER_FOR_AASTORE)
-      rtn = encoding == HandInlinedScanning.referenceArray();
-    else
-      rtn = encoding > HandInlinedScanning.primitiveArray() && encoding != HandInlinedScanning.referenceArray();
+     if (encoding == HandInlinedScanning.referenceArray())
+       rtn = USE_FIELD_BARRIER_FOR_AASTORE && Magic.getArrayLength(object) >= FIELD_BARRIER_AASTORE_THRESHOLD;
+     else if (encoding == HandInlinedScanning.primitiveArray())
+       rtn = false;
+     else
+       rtn = USE_FIELD_BARRIER_FOR_PUTFIELD && encoding > HandInlinedScanning.primitiveArray();
+
     if (VM.VerifyAssertions) {
       if (isFieldBarrierExcludedType(tib)) VM._assert(!rtn);
-      if (USE_FIELD_BARRIER_FOR_AASTORE && isRefArray(tib)) VM._assert(rtn);
+      if (USE_FIELD_BARRIER_FOR_AASTORE && isRefArray(tib) && Magic.getArrayLength(object) >= FIELD_BARRIER_AASTORE_THRESHOLD) VM._assert(rtn);
       if (USE_FIELD_BARRIER_FOR_PUTFIELD && !isArray(tib) && ((RVMClass) tib.getType()).getNumberOfReferenceFields() > 0) VM._assert(rtn);
     }
     return rtn;
@@ -314,7 +315,7 @@ public class ObjectModel {
 
   @Inline static int getScalarFieldMarkBytes(TIB tib) {
     if (USE_FIELD_BARRIER_FOR_PUTFIELD) {
-      if (VM.VerifyAssertions) VM._assert(hasFieldMarks(tib));
+      //if (VM.VerifyAssertions) VM._assert(hasFieldMarks(tib));
       return ((RVMClass) tib.getType()).getAlignedFieldMarkBytes();
     } else
       return 0;
@@ -436,7 +437,7 @@ public class ObjectModel {
   public static void markAllFieldsAsUnlogged(ObjectReference obj, ObjectReference t) {
     if (VM.VerifyAssertions) VM._assert(USE_FIELD_BARRIER_FOR_AASTORE || USE_FIELD_BARRIER_FOR_PUTFIELD || FIELD_BARRIER_SPACE_EVAL);
     TIB tib = Magic.addressAsTIB(t.toAddress());
-    if (hasFieldMarks(tib)) {
+    if (hasFieldMarks(obj, tib)) {
       Address end = obj.toAddress().plus(GC_HEADER_OFFSET);
       Address cursor = end;
 
@@ -464,7 +465,7 @@ public class ObjectModel {
   public static boolean areAllFieldsUnlogged(ObjectReference obj, ObjectReference t) {
     if (VM.VerifyAssertions) VM._assert(USE_FIELD_BARRIER_FOR_AASTORE || USE_FIELD_BARRIER_FOR_PUTFIELD || FIELD_BARRIER_SPACE_EVAL);
     TIB tib = Magic.addressAsTIB(t.toAddress());
-    if (hasFieldMarks(tib)) {
+    if (hasFieldMarks(obj, tib)) {
       Address end = obj.toAddress().plus(GC_HEADER_OFFSET);
       Address cursor = end;
 
@@ -495,7 +496,9 @@ public class ObjectModel {
   @Inline
   public static int getFieldByteMarksForRefArray(ObjectReference array) {
     if (VM.VerifyAssertions) VM._assert(Magic.getObjectType(array.toObject()).isArrayType());
-    return fieldMarkBytes(Magic.getArrayLength(array.toObject())>>LOG_FIELD_BARRIER_ARRAY_QUANTUM);
+    int numReferences = Magic.getArrayLength(array.toObject());
+    if (numReferences < FIELD_BARRIER_AASTORE_THRESHOLD) return 0;
+    return fieldMarkBytes(numReferences>>LOG_FIELD_BARRIER_ARRAY_QUANTUM);
   }
 
   @Inline
@@ -506,7 +509,6 @@ public class ObjectModel {
       else
         numReferences = 0;
     }
-    if (numReferences <= 0) return 0;
     int bytes = (numReferences+(BITS_IN_BYTE-1))>>LOG_BITS_IN_BYTE; // one byte/bit mark per reference in type
     return Memory.alignUp(bytes, MIN_ALIGNMENT);
   }
@@ -541,6 +543,12 @@ public class ObjectModel {
       VM._assert(ObjectModel.getTIB(object).getType().isClassType());
       VM._assert(!isFieldBarrierExcludedType(object));
       VM._assert(ObjectModel.getTIB(object).getType().asClass().getNumberOfReferenceFields() > 0);
+      if (ObjectModel.getTIB(object).getType().asClass().getAlignedFieldMarkBytes() == 0) {
+        VM.sysWriteln(ObjectModel.getTIB(object).getType().asClass().getDescriptor());
+     //   VM.sysWriteln(ObjectModel.getTIB(object).getType().asClass().getSignature());
+        VM.sysWriteln(ObjectModel.getTIB(object).getType().asClass().getNumberOfReferenceFields());
+        VM.sysWriteln(ObjectModel.getTIB(object).getType().asClass().getAlignedFieldMarkBytes());
+      }
       VM._assert(FIELD_BARRIER_USE_GC_BYTE == true || ObjectModel.getTIB(object).getType().asClass().getAlignedFieldMarkBytes() > 0);
     }
     return isElementUnlogged(object, wordOffsetFromMetadata(metaData), bitMaskFromMetadata(metaData));

@@ -135,7 +135,7 @@ import org.vmmagic.unboxed.*;
     if (FIELD_BARRIER_STATS) { if (mode == INSTANCE_FIELD) Plan.pffast.inc(); else Plan.aafast.inc(); }
     if (Gen.USE_FIELD_BARRIER_FOR_PUTFIELD && mode == INSTANCE_FIELD) {
       FieldMarks.scalarFieldBarrier(src, slot, metaData, fieldbuf);
-    } else if (Gen.USE_FIELD_BARRIER_FOR_AASTORE && mode == ARRAY_ELEMENT) {
+    } else if (Gen.USE_FIELD_BARRIER_FOR_AASTORE && mode == ARRAY_ELEMENT && VM.objectModel.getArrayLength(src) >= FIELD_BARRIER_AASTORE_THRESHOLD) {
       FieldMarks.refArrayBarrier(src, slot, metaData, fieldbuf);
     } else if ((mode == ARRAY_ELEMENT && USE_OBJECT_BARRIER_FOR_AASTORE) ||
         (mode == INSTANCE_FIELD && USE_OBJECT_BARRIER_FOR_PUTFIELD)) {

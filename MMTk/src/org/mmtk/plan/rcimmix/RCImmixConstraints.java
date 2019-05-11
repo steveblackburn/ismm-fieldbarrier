@@ -47,6 +47,8 @@ public class RCImmixConstraints extends StopTheWorldConstraints {
   @Override
   public boolean useFieldBarrierForAAStore() { return USE_FIELD_BARRIER_FOR_AASTORE; }
   @Override
+  public int fieldBarrierAAStoreThreshold() { return FIELD_BARRIER_AASTORE_THRESHOLD; }
+  @Override
   public boolean fieldBarrierUseGCByte() { return FIELD_BARRIER_USE_GC_BYTE; }
   @Override
   public int fieldBarrierLowestAvailableBit() { return FIELD_BARRIER_LOW_BIT; }

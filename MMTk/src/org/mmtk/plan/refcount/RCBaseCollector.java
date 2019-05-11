@@ -100,7 +100,7 @@ public abstract class RCBaseCollector extends StopTheWorldCollector {
 
   @Inline
   public void enqueueReachableObject(ObjectReference object) {
-    if (USE_FIELD_BARRIER_FOR_PUTFIELD && USE_FIELD_BARRIER_FOR_AASTORE)
+    if (USE_FIELD_BARRIER_FOR_PUTFIELD && USE_FIELD_BARRIER_FOR_AASTORE && FIELD_BARRIER_AASTORE_THRESHOLD == 0) // ie threshold unused
       VM.objectModel.markAllFieldsAsUnlogged(object);
     else if ((USE_FIELD_BARRIER_FOR_PUTFIELD || USE_FIELD_BARRIER_FOR_AASTORE) && VM.objectModel.hasFieldMarks(object))
       VM.objectModel.markAllFieldsAsUnlogged(object);

@@ -83,7 +83,7 @@ public class RCImmixObjectHeader {
   @Inline
   @Uninterruptible
   public static boolean attemptToLogObject(ObjectReference object) {
-    if (VM.VERIFY_ASSERTIONS) VM.assertions._assert(!USE_FIELD_BARRIER_FOR_PUTFIELD || !USE_FIELD_BARRIER_FOR_AASTORE);
+    // if (VM.VERIFY_ASSERTIONS) VM.assertions._assert(!USE_FIELD_BARRIER_FOR_PUTFIELD || !USE_FIELD_BARRIER_FOR_AASTORE);
     Word oldValue;
     do {
       oldValue = VM.objectModel.prepareAvailableBits(object);

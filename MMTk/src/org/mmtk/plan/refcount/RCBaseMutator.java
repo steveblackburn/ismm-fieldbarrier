@@ -225,7 +225,7 @@ public class RCBaseMutator extends StopTheWorldMutator {
                            ObjectReference tgt, Word metaDataA,
                            Word metaDataB, Word metaDataC, int mode) {
     if (FIELD_BARRIER_STATS) { if (mode != ARRAY_ELEMENT) Plan.pffast.inc(); else Plan.aafast.inc(); }
-    if (USE_FIELD_BARRIER_FOR_AASTORE && mode == ARRAY_ELEMENT)
+    if (USE_FIELD_BARRIER_FOR_AASTORE && mode == ARRAY_ELEMENT && VM.objectModel.getArrayLength(src) >= FIELD_BARRIER_AASTORE_THRESHOLD)
       FieldMarks.refArrayCoalescingBarrier(src, slot, metaDataC, modFieldBuffer, decBuffer);
     else if (USE_FIELD_BARRIER_FOR_PUTFIELD && mode != ARRAY_ELEMENT)
       FieldMarks.scalarFieldCoalescingBarrier(src, slot, metaDataC, modFieldBuffer, decBuffer);
@@ -242,7 +242,7 @@ public class RCBaseMutator extends StopTheWorldMutator {
                                                ObjectReference old, ObjectReference tgt, Word metaDataA,
                                                Word metaDataB, Word metaDataC, int mode) {
     if (FIELD_BARRIER_STATS) { if (mode != ARRAY_ELEMENT) Plan.pffast.inc(); else Plan.aafast.inc(); }
-    if (USE_FIELD_BARRIER_FOR_AASTORE && mode == ARRAY_ELEMENT)
+    if (USE_FIELD_BARRIER_FOR_AASTORE && mode == ARRAY_ELEMENT && VM.objectModel.getArrayLength(src) >= FIELD_BARRIER_AASTORE_THRESHOLD)
       FieldMarks.refArrayCoalescingBarrier(src, slot, metaDataC, modFieldBuffer, decBuffer);
     else if (USE_FIELD_BARRIER_FOR_PUTFIELD && mode != ARRAY_ELEMENT)
       FieldMarks.scalarFieldCoalescingBarrier(src, slot, metaDataC, modFieldBuffer, decBuffer);
@@ -272,7 +272,7 @@ public class RCBaseMutator extends StopTheWorldMutator {
   @Inline
   public boolean objectReferenceBulkCopy(ObjectReference src, Offset srcOffset,
                               ObjectReference dst, Offset dstOffset, int bytes) {
-    if (USE_FIELD_BARRIER_FOR_AASTORE) { // FIXME: assumption that this only applies to arrays
+    if (USE_FIELD_BARRIER_FOR_AASTORE && VM.objectModel.getArrayLength(src) >= FIELD_BARRIER_AASTORE_THRESHOLD) { // FIXME: assumption that this only applies to arrays
       coalescingFieldWriteBarrierBulkCopySlow(dst, dstOffset, bytes);
    } else if (RCHeader.logRequired(dst)) {
       coalescingObjectWriteBarrierSlow(dst);
