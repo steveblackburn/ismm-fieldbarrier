@@ -1,3 +1,16 @@
+## Field barrier
+
+This repo contains the code used to implement and evaluate the field barrier reported in my 2019 ISMM paper.
+
+#### Notes
+* The field barrier code is in the 'field' branch.
+* Revision 4648fd6d was used for almost all of the field barrier evaluation reported in the paper.
+  * Revision 813fbf99 was used for the reference counting evaluation.
+* The reference counting implementation contained in this repo is work-in-progress.
+* Please contact me directly if you have questions.
+
+
+
 ## Jikes Research Virtual Machine
 
 Jikes RVM (Research Virtual Machine) provides a flexible open testbed to prototype virtual machine technologies and experiment with a large variety of design alternatives. The system is licensed under the [EPL](http://www.eclipse.org/legal/epl-v10.html), an [OSI](http://www.opensource.org/) approved license. Jikes RVM runs on IA32 32 bit (64 bit support is work in progress) and PowerPC (big endian only).
