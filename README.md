@@ -4,8 +4,8 @@ This repo contains the code used to implement and evaluate the field barrier rep
 
 #### Notes
 * The field barrier code is in the 'field' branch.
-* Revision 4648fd6d was used for almost all of the field barrier evaluation reported in the paper.
-  * Revision ccbffb74 was used for the reference counting evaluation.
+* Revision 4648fd6d6603881eca650dc484170d26cebceeb2 was used for almost all of the field barrier evaluation reported in the paper.
+  * Revision ccbffb745bc2e0c8674208d243a42b8b64c85ee1 was used for the reference counting evaluation.
 * The reference counting implementation at the head of this repo is work-in-progress.
 * I will continue to update the repo post-publication
 * Please contact me directly if you have questions.
